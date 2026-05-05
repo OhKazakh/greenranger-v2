@@ -1,26 +1,180 @@
+/* ── Google Fonts must come before all other rules ── */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap");
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* Fonts */
+  --font-heading: "Plus Jakarta Sans", sans-serif;
+  --font-sans: "DM Sans", sans-serif;
+  --font-mono: var(--font-geist-mono);
+
+  /* Colour aliases → CSS vars below */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Brand tokens available as Tailwind classes */
+  --color-forest: var(--forest);
+  --color-sand: var(--sand);
+  --color-teal: var(--teal);
+  --color-teal-dark: var(--teal-dark);
+
+  /* Radius */
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ════════════════════════════════
+   LIGHT MODE — Off-white civic look
+   ════════════════════════════════ */
+:root {
+  /* Brand */
+  --forest: #1b4332;
+  --sand: #e9d8a6;
+  --teal: #2ec4b6;
+  --teal-dark: #1da89c;
+
+  /* shadcn surface tokens */
+  --background: #fafaf5;          /* off-white */
+  --foreground: #111816;          /* near-black with green tint */
+  --card: #ffffff;
+  --card-foreground: #111816;
+  --popover: #ffffff;
+  --popover-foreground: #111816;
+  --primary: #1b4332;             /* forest green */
+  --primary-foreground: #fafaf5;
+  --secondary: #e9d8a6;           /* warm sand */
+  --secondary-foreground: #1b4332;
+  --muted: #f0efe8;
+  --muted-foreground: #6b7280;
+  --accent: #2ec4b6;              /* teal */
+  --accent-foreground: #ffffff;
+  --destructive: #dc2626;
+  --border: #e2e1d9;
+  --input: #e2e1d9;
+  --ring: #2ec4b6;
+  --radius: 0.625rem;
+}
+
+/* ════════════════════════════════
+   DARK MODE — Deep charcoal
+   ════════════════════════════════ */
+.dark {
+  --background: #1a1a2e;          /* deep charcoal-blue */
+  --foreground: #e8e8e0;
+  --card: #1f2937;
+  --card-foreground: #e8e8e0;
+  --popover: #1f2937;
+  --popover-foreground: #e8e8e0;
+  --primary: #2ec4b6;             /* teal as primary in dark */
+  --primary-foreground: #1a1a2e;
+  --secondary: #1b4332;           /* forest as secondary bg */
+  --secondary-foreground: #e8e8e0;
+  --muted: #252535;
+  --muted-foreground: #9ca3af;
+  --accent: #2ec4b6;
+  --accent-foreground: #1a1a2e;
+  --destructive: #ef4444;
+  --border: rgba(255,255,255,0.08);
+  --input: rgba(255,255,255,0.1);
+  --ring: #2ec4b6;
+}
+
+/* ════════════════════════════════
+   BASE STYLES
+   ════════════════════════════════ */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Plus Jakarta Sans", sans-serif;
+  }
+  html {
+    @apply scroll-smooth;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* ════════════════════════════════
+   LEAFLET OVERRIDES
+   (Leaflet injects its own CSS — we override only what clashes)
+   ════════════════════════════════ */
+.leaflet-container {
+  font-family: "DM Sans", sans-serif;
+  background: #e8e4d9; /* neutral tile bg before tiles load */
+}
+
+.leaflet-control-attribution {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+/* Hide default leaflet zoom (we use custom controls) */
+.leaflet-control-zoom {
+  display: none;
+}
+
+/* Cluster styles */
+.marker-cluster-small,
+.marker-cluster-medium,
+.marker-cluster-large {
+  background-color: rgba(46, 196, 182, 0.2) !important;
+}
+.marker-cluster-small div,
+.marker-cluster-medium div,
+.marker-cluster-large div {
+  background-color: rgba(46, 196, 182, 0.85) !important;
+  color: #fff !important;
+  font-family: "Plus Jakarta Sans", sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 13px !important;
+}
+
+/* ════════════════════════════════
+   UTILITY CLASSES
+   ════════════════════════════════ */
+@layer utilities {
+  .heading {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    @apply font-bold;
+  }
+  .fade-in {
+    animation: fadeIn 0.2s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .slide-up {
+    animation: slideUp 0.25s cubic-bezier(0.16,1,0.3,1);
+  }
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
 }
