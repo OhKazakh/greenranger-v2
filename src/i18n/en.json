@@ -18,6 +18,12 @@
     "categoryAll": "All points",
     "categoryHub": "Large centres",
     "categoryKiosk": "Kiosks",
+    "categoryLabel": "Type",
+    "resetView": "Reset view",
+    "pointsCount": "points",
+    "filterButton": "Filter",
+    "filtersTitle": "Filters",
+    "onMap": "On the map",
     "myLocation": "My location",
     "zoomIn": "Zoom in",
     "zoomOut": "Zoom out",
@@ -43,7 +49,12 @@
     "sunday": "Sunday",
     "closed": "Closed",
     "noPhotos": "No photos available",
-    "backToList": "Back to list"
+    "backToList": "Back to list",
+    "notFound": "Location not found",
+    "photoAlt": "photo"
+  },
+  "actions": {
+    "addAnother": "Add another"
   },
   "locations": {
     "title": "All recycling points",

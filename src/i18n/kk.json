@@ -18,6 +18,12 @@
     "categoryAll": "Барлық нүктелер",
     "categoryHub": "Ірі орталықтар",
     "categoryKiosk": "Киосктар",
+    "categoryLabel": "Түрі",
+    "resetView": "Көріністі тастау",
+    "pointsCount": "нүкте",
+    "filterButton": "Сүзгі",
+    "filtersTitle": "Сүзгілер",
+    "onMap": "Картада",
     "myLocation": "Менің орналасқан жерім",
     "zoomIn": "Жақындату",
     "zoomOut": "Алыстату",
@@ -43,7 +49,12 @@
     "sunday": "Жексенбі",
     "closed": "Жабық",
     "noPhotos": "Фото жоқ",
-    "backToList": "Тізімге оралу"
+    "backToList": "Тізімге оралу",
+    "notFound": "Нүкте табылмады",
+    "photoAlt": "фото"
+  },
+  "actions": {
+    "addAnother": "Тағы қосу"
   },
   "locations": {
     "title": "Барлық қайта өңдеу нүктелері",

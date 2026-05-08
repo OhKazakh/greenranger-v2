@@ -18,6 +18,12 @@
     "categoryAll": "Все пункты",
     "categoryHub": "Крупные центры",
     "categoryKiosk": "Киоски",
+    "categoryLabel": "Тип",
+    "resetView": "Сбросить вид",
+    "pointsCount": "пунктов",
+    "filterButton": "Фильтр",
+    "filtersTitle": "Фильтры",
+    "onMap": "На карте",
     "myLocation": "Моё местоположение",
     "zoomIn": "Приблизить",
     "zoomOut": "Отдалить",
@@ -43,7 +49,12 @@
     "sunday": "Воскресенье",
     "closed": "Закрыто",
     "noPhotos": "Фото отсутствуют",
-    "backToList": "Назад к списку"
+    "backToList": "Назад к списку",
+    "notFound": "Пункт не найден",
+    "photoAlt": "фото"
+  },
+  "actions": {
+    "addAnother": "Добавить ещё"
   },
   "locations": {
     "title": "Все пункты переработки",

@@ -34,7 +34,7 @@ type SubmitFormValues = z.infer<typeof submitSchema>;
 // ────────────────────────────────────────────────────────────
 
 export default function SubmitPage() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const [submitted, setSubmitted] = useState(false);
 
@@ -98,8 +98,8 @@ export default function SubmitPage() {
   if (submitted) {
     return (
       <div className="max-w-lg mx-auto px-4 sm:px-6 py-16 text-center">
-        <div className="w-14 h-14 rounded-full bg-[#1B4332]/10 flex items-center justify-center mx-auto mb-4">
-          <CheckCircle2 className="w-7 h-7 text-[#2EC4B6]" />
+        <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+          <CheckCircle2 className="w-7 h-7 text-accent" />
         </div>
         <h2 className="heading text-xl font-bold mb-2">{t("submit.successTitle")}</h2>
         <p className="text-muted-foreground text-sm mb-6">
@@ -204,7 +204,7 @@ export default function SubmitPage() {
                       )}
                     >
                       <span>{meta.icon}</span>
-                      {meta.label.ru}
+                      {meta.label[lang]}
                     </button>
                   );
                 })}
@@ -244,7 +244,7 @@ export default function SubmitPage() {
 
         {/* Map coordinate hint */}
         <p className="text-xs text-muted-foreground bg-muted rounded-lg px-3 py-2">
-          📍 {t("submit.mapHint")} — <span className="text-[#2EC4B6]">будет добавлено в следующей версии</span>
+          📍 {t("submit.mapHint")} — <span className="text-accent">будет добавлено в следующей версии</span>
         </p>
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>

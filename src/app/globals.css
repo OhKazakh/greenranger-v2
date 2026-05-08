@@ -1,5 +1,5 @@
-/* ── Google Fonts must come before all other rules ── */
-@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap");
+/* Google Fonts must come before Tailwind import */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -8,11 +8,11 @@
 
 @theme inline {
   /* Fonts */
-  --font-heading: "Plus Jakarta Sans", sans-serif;
-  --font-sans: "DM Sans", sans-serif;
-  --font-mono: var(--font-geist-mono);
+  --font-heading: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-mono: ui-monospace, "Cascadia Code", monospace;
 
-  /* Colour aliases → CSS vars below */
+  /* shadcn token aliases (resolve to vars below) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -32,13 +32,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Brand tokens available as Tailwind classes */
-  --color-forest: var(--forest);
-  --color-sand: var(--sand);
-  --color-teal: var(--teal);
-  --color-teal-dark: var(--teal-dark);
+  /* Brand tokens */
+  --color-navy: var(--navy);
+  --color-electric: var(--electric);
+  --color-electric-soft: var(--electric-soft);
 
-  /* Radius */
+  /* Radius scale */
   --radius-sm: calc(var(--radius) * 0.6);
   --radius-md: calc(var(--radius) * 0.8);
   --radius-lg: var(--radius);
@@ -46,135 +45,161 @@
   --radius-2xl: calc(var(--radius) * 1.8);
 }
 
-/* ════════════════════════════════
-   LIGHT MODE — Off-white civic look
-   ════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   LIGHT MODE — "Bold civic"
+   Apple-grey background, deep navy primary, electric blue accent
+   ════════════════════════════════════════════════════════ */
 :root {
   /* Brand */
-  --forest: #1b4332;
-  --sand: #e9d8a6;
-  --teal: #2ec4b6;
-  --teal-dark: #1da89c;
+  --navy: #0a2540;
+  --electric: #0070f3;
+  --electric-soft: #e6f0ff;
 
-  /* shadcn surface tokens */
-  --background: #fafaf5;          /* off-white */
-  --foreground: #111816;          /* near-black with green tint */
+  /* Surfaces */
+  --background: #f5f5f7;
+  --foreground: #0a2540;
   --card: #ffffff;
-  --card-foreground: #111816;
+  --card-foreground: #0a2540;
   --popover: #ffffff;
-  --popover-foreground: #111816;
-  --primary: #1b4332;             /* forest green */
-  --primary-foreground: #fafaf5;
-  --secondary: #e9d8a6;           /* warm sand */
-  --secondary-foreground: #1b4332;
-  --muted: #f0efe8;
-  --muted-foreground: #6b7280;
-  --accent: #2ec4b6;              /* teal */
+  --popover-foreground: #0a2540;
+
+  /* Action colours */
+  --primary: #0a2540;            /* navy */
+  --primary-foreground: #ffffff;
+  --secondary: #ffffff;
+  --secondary-foreground: #0a2540;
+  --muted: #ebebef;
+  --muted-foreground: #5b6470;
+  --accent: #0070f3;             /* electric blue */
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
-  --border: #e2e1d9;
-  --input: #e2e1d9;
-  --ring: #2ec4b6;
+
+  --border: #d8d8df;
+  --input: #d8d8df;
+  --ring: #0070f3;
   --radius: 0.625rem;
 }
 
-/* ════════════════════════════════
-   DARK MODE — Deep charcoal
-   ════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   DARK MODE — Deep graphite + electric blue
+   ════════════════════════════════════════════════════════ */
 .dark {
-  --background: #1a1a2e;          /* deep charcoal-blue */
-  --foreground: #e8e8e0;
-  --card: #1f2937;
-  --card-foreground: #e8e8e0;
-  --popover: #1f2937;
-  --popover-foreground: #e8e8e0;
-  --primary: #2ec4b6;             /* teal as primary in dark */
-  --primary-foreground: #1a1a2e;
-  --secondary: #1b4332;           /* forest as secondary bg */
-  --secondary-foreground: #e8e8e0;
-  --muted: #252535;
-  --muted-foreground: #9ca3af;
-  --accent: #2ec4b6;
-  --accent-foreground: #1a1a2e;
+  --background: #0b0d12;
+  --foreground: #f0f0f5;
+  --card: #14171f;
+  --card-foreground: #f0f0f5;
+  --popover: #14171f;
+  --popover-foreground: #f0f0f5;
+  --primary: #0070f3;
+  --primary-foreground: #ffffff;
+  --secondary: #1c2030;
+  --secondary-foreground: #f0f0f5;
+  --muted: #1c2030;
+  --muted-foreground: #8b94a3;
+  --accent: #0070f3;
+  --accent-foreground: #ffffff;
   --destructive: #ef4444;
   --border: rgba(255,255,255,0.08);
   --input: rgba(255,255,255,0.1);
-  --ring: #2ec4b6;
+  --ring: #0070f3;
+  --electric-soft: rgba(0,112,243,0.12);
 }
 
-/* ════════════════════════════════
-   BASE STYLES
-   ════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   BASE
+   ════════════════════════════════════════════════════════ */
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    @apply bg-background text-foreground antialiased;
+    font-family: "Inter", sans-serif;
+    font-feature-settings: "cv11", "ss01", "ss03";
   }
   h1, h2, h3, h4, h5, h6 {
-    font-family: "Plus Jakarta Sans", sans-serif;
+    font-family: "Space Grotesk", sans-serif;
+    letter-spacing: -0.01em;
   }
   html {
     @apply scroll-smooth;
   }
 }
 
-/* ════════════════════════════════
-   LEAFLET OVERRIDES
-   (Leaflet injects its own CSS — we override only what clashes)
-   ════════════════════════════════ */
-.leaflet-container {
-  font-family: "DM Sans", sans-serif;
-  background: #e8e4d9; /* neutral tile bg before tiles load */
-}
-
-.leaflet-control-attribution {
-  font-size: 10px;
-  opacity: 0.6;
-}
-
-/* Hide default leaflet zoom (we use custom controls) */
-.leaflet-control-zoom {
-  display: none;
-}
-
-/* Cluster styles */
-.marker-cluster-small,
-.marker-cluster-medium,
-.marker-cluster-large {
-  background-color: rgba(46, 196, 182, 0.2) !important;
-}
-.marker-cluster-small div,
-.marker-cluster-medium div,
-.marker-cluster-large div {
-  background-color: rgba(46, 196, 182, 0.85) !important;
-  color: #fff !important;
-  font-family: "Plus Jakarta Sans", sans-serif !important;
-  font-weight: 700 !important;
-  font-size: 13px !important;
-}
-
-/* ════════════════════════════════
-   UTILITY CLASSES
-   ════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   UTILITIES
+   ════════════════════════════════════════════════════════ */
 @layer utilities {
   .heading {
-    font-family: "Plus Jakarta Sans", sans-serif;
-    @apply font-bold;
+    font-family: "Space Grotesk", sans-serif;
+    @apply font-bold tracking-tight;
   }
   .fade-in {
-    animation: fadeIn 0.2s ease-out;
+    animation: fadeIn 0.22s ease-out;
   }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(4px); }
     to   { opacity: 1; transform: translateY(0); }
   }
+  .fade-out {
+    animation: fadeOut 0.22s ease-out forwards;
+  }
+  @keyframes fadeOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(4px); }
+  }
   .slide-up {
-    animation: slideUp 0.25s cubic-bezier(0.16,1,0.3,1);
+    animation: slideUp 0.28s cubic-bezier(0.16,1,0.3,1);
   }
   @keyframes slideUp {
     from { transform: translateY(100%); }
     to   { transform: translateY(0); }
   }
+  .slide-down {
+    animation: slideDown 0.22s cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+  @keyframes slideDown {
+    from { transform: translateY(0); }
+    to   { transform: translateY(100%); }
+  }
+  .backdrop-fade-in {
+    animation: backdropFadeIn 0.22s ease-out;
+  }
+  @keyframes backdropFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  .backdrop-fade-out {
+    animation: backdropFadeOut 0.22s ease-out forwards;
+  }
+  @keyframes backdropFadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+
+  /* Custom scrollbar — civic-clean */
+  .scroll-clean::-webkit-scrollbar {
+    width: 6px;
+  }
+  .scroll-clean::-webkit-scrollbar-thumb {
+    background: var(--border);
+    border-radius: 3px;
+  }
+}
+
+/* ════════════════════════════════════════════════════════
+   GOOGLE MAPS overrides — minimal, polite
+   ════════════════════════════════════════════════════════ */
+.gm-style .gm-style-iw-c {
+  border-radius: 12px !important;
+  padding: 0 !important;
+  box-shadow: 0 8px 24px rgba(10, 37, 64, 0.12) !important;
+}
+.gm-style .gm-style-iw-d {
+  overflow: visible !important;
+  padding: 8px 12px !important;
+}
+/* Hide the close X on info windows — we use our own panel */
+.gm-style .gm-ui-hover-effect {
+  display: none !important;
 }

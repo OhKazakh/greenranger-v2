@@ -34,21 +34,21 @@ export function LocationCard({ location, compact = false }: LocationCardProps) {
           <span
             className={cn(
               "text-xs font-semibold uppercase tracking-wide",
-              isHub ? "text-[#1B4332]" : "text-[#2EC4B6]"
+              isHub ? "text-primary" : "text-accent"
             )}
           >
             {isHub ? t("location.hub") : t("location.kiosk")}
           </span>
           {location.verified && (
             <CheckCircle2
-              className="w-4 h-4 text-[#2EC4B6]"
+              className="w-4 h-4 text-accent"
               aria-label={t("location.verified")}
             />
           )}
         </div>
 
         {/* Name */}
-        <h3 className="heading text-base font-bold text-foreground leading-tight mb-1 group-hover:text-[#2EC4B6] transition-colors">
+        <h3 className="heading text-base font-bold text-foreground leading-tight mb-1 group-hover:text-accent transition-colors">
           {location.name[lang]}
         </h3>
 
