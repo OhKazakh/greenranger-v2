@@ -78,18 +78,79 @@ export const MATERIALS: Record<MaterialType, MaterialMeta> = {
 export const ALL_MATERIALS = Object.keys(MATERIALS) as MaterialType[];
 
 // ── Marker colours by category ────────────────────────────────
+// Aligned with the new "bold civic" palette.
 export const MARKER_COLORS = {
-  hub: "#1B4332",    // forest green
-  kiosk: "#2EC4B6",  // teal
-  user: "#3B82F6",   // blue
+  hub: "#0A2540",       // deep navy — large recycling centres
+  kiosk: "#0070F3",     // electric blue — kiosks / RVMs
+  user: "#22C55E",      // green — user position (only place we use green)
+  cluster: "#0070F3",   // electric blue — cluster bubble
+  clusterRing: "#0A2540", // navy — ring around cluster
 } as const;
 
-// ── Tile layer URL (CartoDB Positron — clean & muted) ─────────
-export const TILE_URL =
-  "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
-export const TILE_ATTRIBUTION =
-  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
+// ── Google Maps style (light) ─────────────────────────────────
+// Strategy: hide ALL labels by default at the top, then explicitly
+// re-enable ONLY road labels. This way no future Google update can
+// surprise us with new label types (parks, neighbourhoods, etc.).
+export const MAP_STYLE_LIGHT: google.maps.MapTypeStyle[] = [
+  // Base geometry colour
+  { elementType: "geometry", stylers: [{ color: "#f5f5f7" }] },
 
-// ── Dark tile layer ───────────────────────────────────────────
-export const TILE_URL_DARK =
-  "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+  // Nuke ALL labels everywhere
+  { elementType: "labels", stylers: [{ visibility: "off" }] },
+  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+
+  // Hide every "place of interest" entirely (icons + geometry + labels)
+  { featureType: "poi", stylers: [{ visibility: "off" }] },
+  // Hide all administrative boundaries' labels (districts, neighbourhoods, country, etc.)
+  { featureType: "administrative", elementType: "labels", stylers: [{ visibility: "off" }] },
+  { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
+  { featureType: "administrative.neighborhood", stylers: [{ visibility: "off" }] },
+  // Hide transit (subway lines, bus stops)
+  { featureType: "transit", stylers: [{ visibility: "off" }] },
+  // Hide water labels (lake/river names)
+  { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
+  // Hide landscape labels (mountain names etc.)
+  { featureType: "landscape", elementType: "labels", stylers: [{ visibility: "off" }] },
+
+  // ── Now bring road labels BACK ──
+  { featureType: "road", elementType: "labels", stylers: [{ visibility: "on" }] },
+  { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#5b6470" }] },
+  { featureType: "road", elementType: "labels.text.stroke", stylers: [{ color: "#f5f5f7" }] },
+
+  // Geometry styling for roads (visual)
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+
+  // Water + park geometry colours (no labels though)
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#cfe2f3" }] },
+  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#e8efe6" }] },
+];
+
+// ── Google Maps style (dark) ──────────────────────────────────
+// Same strategy — hide all labels, re-enable only road labels.
+export const MAP_STYLE_DARK: google.maps.MapTypeStyle[] = [
+  { elementType: "geometry", stylers: [{ color: "#0b0d12" }] },
+
+  { elementType: "labels", stylers: [{ visibility: "off" }] },
+  { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+
+  { featureType: "poi", stylers: [{ visibility: "off" }] },
+  { featureType: "administrative", elementType: "labels", stylers: [{ visibility: "off" }] },
+  { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
+  { featureType: "administrative.neighborhood", stylers: [{ visibility: "off" }] },
+  { featureType: "transit", stylers: [{ visibility: "off" }] },
+  { featureType: "water", elementType: "labels", stylers: [{ visibility: "off" }] },
+  { featureType: "landscape", elementType: "labels", stylers: [{ visibility: "off" }] },
+
+  // Road labels back on
+  { featureType: "road", elementType: "labels", stylers: [{ visibility: "on" }] },
+  { featureType: "road", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#8b94a3" }] },
+  { featureType: "road", elementType: "labels.text.stroke", stylers: [{ color: "#0b0d12" }] },
+
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#1c2030" }] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#222a3d" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#0a1828" }] },
+  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#14201a" }] },
+];

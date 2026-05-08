@@ -16,14 +16,14 @@ export default function AboutPage() {
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-12">
       {/* Hero */}
       <div className="flex items-center gap-3 mb-2">
-        <div className="w-10 h-10 rounded-xl bg-[#1B4332] flex items-center justify-center shrink-0">
-          <Leaf className="w-5 h-5 text-[#2EC4B6]" />
+        <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center shrink-0">
+          <Leaf className="w-5 h-5 text-accent" />
         </div>
         <h1 className="heading text-2xl font-bold text-foreground">GreenRanger</h1>
       </div>
 
       {/* Hackathon badge */}
-      <div className="inline-flex items-center gap-2 bg-[#1B4332]/10 text-[#1B4332] dark:text-[#2EC4B6] dark:bg-[#2EC4B6]/10 rounded-full px-4 py-1.5 text-sm font-semibold mb-6">
+      <div className="inline-flex items-center gap-2 bg-primary/10 text-primary dark:text-accent dark:bg-accent/10 rounded-full px-4 py-1.5 text-sm font-semibold mb-6">
         <Trophy className="w-4 h-4" />
         1 место — Hack4Humanity · 486 участников
       </div>
@@ -39,7 +39,7 @@ export default function AboutPage() {
       {/* Mission */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-3">
-          <Globe className="w-4 h-4 text-[#2EC4B6]" />
+          <Globe className="w-4 h-4 text-accent" />
           <h2 className="heading text-base font-bold">Миссия</h2>
         </div>
         <p className="text-muted-foreground leading-relaxed">
@@ -68,7 +68,7 @@ export default function AboutPage() {
       {/* Tech stack */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-3">
-          <Code2 className="w-4 h-4 text-[#2EC4B6]" />
+          <Code2 className="w-4 h-4 text-accent" />
           <h2 className="heading text-base font-bold">Технологии</h2>
         </div>
         <div className="space-y-2">
@@ -86,7 +86,7 @@ export default function AboutPage() {
       {/* Author */}
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-3">
-          <Users className="w-4 h-4 text-[#2EC4B6]" />
+          <Users className="w-4 h-4 text-accent" />
           <h2 className="heading text-base font-bold">Автор</h2>
         </div>
         <p className="text-muted-foreground text-sm leading-relaxed">

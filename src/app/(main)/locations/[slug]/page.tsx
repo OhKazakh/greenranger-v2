@@ -89,7 +89,7 @@ export default function LocationDetailPage() {
           {location.category === "hub" ? t("location.hub") : t("location.kiosk")}
         </span>
         {location.verified && (
-          <span className="flex items-center gap-1 text-xs text-[#2EC4B6]">
+          <span className="flex items-center gap-1 text-xs text-accent">
             <CheckCircle2 className="w-3.5 h-3.5" />
             {t("location.verified")}
           </span>
@@ -153,7 +153,7 @@ export default function LocationDetailPage() {
             <Phone className="w-4 h-4 text-muted-foreground shrink-0" />
             <div>
               <p className="text-xs text-muted-foreground mb-0.5">{t("location.phone")}</p>
-              <a href={`tel:${location.phone}`} className="text-sm font-medium text-[#2EC4B6] hover:underline">
+              <a href={`tel:${location.phone}`} className="text-sm font-medium text-accent hover:underline">
                 {location.phone}
               </a>
             </div>
@@ -170,7 +170,7 @@ export default function LocationDetailPage() {
                 href={location.website}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-sm font-medium text-[#2EC4B6] hover:underline"
+                className="text-sm font-medium text-accent hover:underline"
               >
                 {location.website.replace(/^https?:\/\//, "")}
               </a>

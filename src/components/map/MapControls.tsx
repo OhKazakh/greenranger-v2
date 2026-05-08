@@ -1,10 +1,13 @@
 "use client";
 
 import { Plus, Minus, Locate } from "lucide-react";
-import { useMap } from "react-leaflet";
+import type { RefObject } from "react";
 import { useLang } from "@/context/LangContext";
-import { ASTANA_CENTER, ASTANA_DEFAULT_ZOOM } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+
+interface MapControlsProps {
+  map: RefObject<google.maps.Map | null>;
+}
 
 function ControlButton({
   onClick,
@@ -33,55 +36,47 @@ function ControlButton({
   );
 }
 
-export function MapControls() {
-  const map = useMap();
+export function MapControls({ map }: MapControlsProps) {
   const { t } = useLang();
 
+  const zoomIn = () => {
+    const m = map.current;
+    if (!m) return;
+    m.setZoom((m.getZoom() ?? 12) + 1);
+  };
+  const zoomOut = () => {
+    const m = map.current;
+    if (!m) return;
+    m.setZoom((m.getZoom() ?? 12) - 1);
+  };
   const handleLocate = () => {
+    if (!map.current) return;
     navigator.geolocation?.getCurrentPosition(
       ({ coords }) => {
-        map.flyTo([coords.latitude, coords.longitude], 15, { animate: true, duration: 1 });
+        map.current!.panTo({ lat: coords.latitude, lng: coords.longitude });
+        map.current!.setZoom(15);
       },
       () => {
-        // Permission denied or error — silently fail
+        // permission denied — silently ignore
       }
     );
   };
 
   return (
-    <div className="absolute bottom-6 right-4 z-[1000] flex flex-col gap-1">
-      <ControlButton
-        onClick={() => map.zoomIn()}
-        label={t("map.zoomIn")}
-      >
+    <div className="absolute bottom-6 right-4 z-10 flex flex-col gap-1">
+      <ControlButton onClick={zoomIn} label={t("map.zoomIn")}>
         <Plus className="w-4 h-4" />
       </ControlButton>
-      <ControlButton
-        onClick={() => map.zoomOut()}
-        label={t("map.zoomOut")}
-      >
+      <ControlButton onClick={zoomOut} label={t("map.zoomOut")}>
         <Minus className="w-4 h-4" />
       </ControlButton>
       <ControlButton
         onClick={handleLocate}
         label={t("map.myLocation")}
-        className="mt-1 text-[#2EC4B6]"
+        className="mt-1 text-accent"
       >
         <Locate className="w-4 h-4" />
       </ControlButton>
     </div>
-  );
-}
-
-// Separate component to reset view — used in "no results" state
-export function ResetViewControl() {
-  const map = useMap();
-  return (
-    <button
-      onClick={() => map.flyTo([ASTANA_CENTER.lat, ASTANA_CENTER.lng], ASTANA_DEFAULT_ZOOM)}
-      className="text-xs text-[#2EC4B6] hover:underline mt-1"
-    >
-      Сбросить вид
-    </button>
   );
 }

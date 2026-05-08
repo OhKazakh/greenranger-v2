@@ -18,7 +18,7 @@ export function FilterPanel({
   onMaterialsChange,
   onCategoryChange,
 }: FilterPanelProps) {
-  const { t } = useLang();
+  const { t, lang } = useLang();
 
   const toggleMaterial = (m: MaterialType) => {
     if (selectedMaterials.includes(m)) {
@@ -42,7 +42,7 @@ export function FilterPanel({
       {/* Category tabs */}
       <div>
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
-          Тип
+          {t("map.categoryLabel")}
         </p>
         <div className="flex flex-col gap-1">
           {CATEGORIES.map(({ value, labelKey }) => (
@@ -52,7 +52,7 @@ export function FilterPanel({
               className={cn(
                 "text-left text-sm px-3 py-1.5 rounded-lg transition-colors",
                 selectedCategory === value
-                  ? "bg-[#1B4332] text-white font-medium"
+                  ? "bg-primary text-white font-medium"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
@@ -72,7 +72,7 @@ export function FilterPanel({
             onClick={() =>
               allSelected ? onMaterialsChange([]) : onMaterialsChange([...ALL_MATERIALS])
             }
-            className="text-xs text-[#2EC4B6] hover:underline"
+            className="text-xs text-accent hover:underline"
           >
             {noneSelected || !allSelected ? t("map.filterSelectAll") : t("map.filterClearAll")}
           </button>
@@ -108,7 +108,7 @@ export function FilterPanel({
                   className={cn("w-2 h-2 rounded-full shrink-0", meta.color)}
                   aria-hidden="true"
                 />
-                <span className="truncate">{meta.label.ru}</span>
+                <span className="truncate">{meta.label[lang]}</span>
               </button>
             );
           })}

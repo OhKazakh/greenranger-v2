@@ -46,7 +46,7 @@ export function Navbar() {
         className={cn(
           "text-sm font-medium transition-colors duration-150",
           isActive
-            ? "text-[#2EC4B6]"
+            ? "text-accent"
             : "text-muted-foreground hover:text-foreground"
         )}
       >
@@ -60,8 +60,8 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/map" className="flex items-center gap-2 shrink-0">
-          <div className="w-7 h-7 rounded-lg bg-[#1B4332] flex items-center justify-center">
-            <Leaf className="w-4 h-4 text-[#2EC4B6]" />
+          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
+            <Leaf className="w-4 h-4 text-accent" />
           </div>
           <span className="heading text-sm font-bold text-foreground hidden sm:block">
             GreenRanger
