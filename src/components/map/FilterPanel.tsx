@@ -2,6 +2,7 @@
 
 import { useLang } from "@/context/LangContext";
 import { MATERIALS, ALL_MATERIALS } from "@/lib/constants";
+import { MaterialIcon } from "@/components/shared/MaterialIcon";
 import type { MaterialType, LocationCategory } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -10,6 +11,7 @@ interface FilterPanelProps {
   selectedCategory: LocationCategory | "all";
   onMaterialsChange: (materials: MaterialType[]) => void;
   onCategoryChange: (category: LocationCategory | "all") => void;
+  locationCounts?: Partial<Record<MaterialType, number>>;
 }
 
 export function FilterPanel({
@@ -17,6 +19,7 @@ export function FilterPanel({
   selectedCategory,
   onMaterialsChange,
   onCategoryChange,
+  locationCounts,
 }: FilterPanelProps) {
   const { t, lang } = useLang();
 
@@ -31,7 +34,10 @@ export function FilterPanel({
   const allSelected = selectedMaterials.length === ALL_MATERIALS.length;
   const noneSelected = selectedMaterials.length === 0;
 
-  const CATEGORIES: { value: LocationCategory | "all"; labelKey: "map.categoryAll" | "map.categoryHub" | "map.categoryKiosk" }[] = [
+  const CATEGORIES: {
+    value: LocationCategory | "all";
+    labelKey: "map.categoryAll" | "map.categoryHub" | "map.categoryKiosk";
+  }[] = [
     { value: "all", labelKey: "map.categoryAll" },
     { value: "hub", labelKey: "map.categoryHub" },
     { value: "kiosk", labelKey: "map.categoryKiosk" },
@@ -41,18 +47,18 @@ export function FilterPanel({
     <div className="flex flex-col gap-4">
       {/* Category tabs */}
       <div>
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
+        <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest mb-2">
           {t("map.categoryLabel")}
         </p>
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           {CATEGORIES.map(({ value, labelKey }) => (
             <button
               key={value}
               onClick={() => onCategoryChange(value)}
               className={cn(
-                "text-left text-sm px-3 py-1.5 rounded-lg transition-colors",
+                "text-left text-[12.5px] px-2.5 py-1.5 rounded-lg transition-colors duration-150 font-medium",
                 selectedCategory === value
-                  ? "bg-primary text-white font-medium"
+                  ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
@@ -65,28 +71,32 @@ export function FilterPanel({
       {/* Material filters */}
       <div>
         <div className="flex items-center justify-between mb-2">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+          <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
             {t("map.filterTitle")}
           </p>
           <button
             onClick={() =>
-              allSelected ? onMaterialsChange([]) : onMaterialsChange([...ALL_MATERIALS])
+              allSelected
+                ? onMaterialsChange([])
+                : onMaterialsChange([...ALL_MATERIALS])
             }
-            className="text-xs text-accent hover:underline"
+            className="text-[11px] text-accent hover:underline font-mono"
           >
-            {noneSelected || !allSelected ? t("map.filterSelectAll") : t("map.filterClearAll")}
+            {noneSelected || !allSelected
+              ? t("map.filterSelectAll")
+              : t("map.filterClearAll")}
           </button>
         </div>
 
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-0.5">
           {ALL_MATERIALS.map((m) => {
             const meta = MATERIALS[m];
-            const isSelected = selectedMaterials.includes(m) || noneSelected;
+            const isActive = selectedMaterials.includes(m) || noneSelected;
+            const count = locationCounts?.[m];
             return (
               <button
                 key={m}
                 onClick={() => {
-                  // If none are selected (show-all mode), start filtering by clicking one
                   if (noneSelected) {
                     onMaterialsChange([m]);
                   } else {
@@ -94,21 +104,22 @@ export function FilterPanel({
                   }
                 }}
                 className={cn(
-                  "flex items-center gap-2.5 text-sm px-3 py-1.5 rounded-lg transition-colors text-left",
-                  isSelected
-                    ? "bg-muted text-foreground font-medium"
-                    : "text-muted-foreground opacity-50 hover:opacity-100"
+                  "flex items-center gap-2 text-[12.5px] px-2.5 py-1.5 rounded-lg transition-colors duration-150 text-left",
+                  isActive
+                    ? "text-foreground hover:bg-muted"
+                    : "text-muted-foreground opacity-40 hover:opacity-70"
                 )}
               >
-                <span className="text-base" aria-hidden="true">
-                  {meta.icon}
+                {/* Stroke icon — neutral color in filter, material color context */}
+                <span className="w-4 h-4 shrink-0 flex items-center justify-center text-muted-foreground">
+                  <MaterialIcon material={m} size={15} />
                 </span>
-                {/* Colour dot */}
-                <span
-                  className={cn("w-2 h-2 rounded-full shrink-0", meta.color)}
-                  aria-hidden="true"
-                />
-                <span className="truncate">{meta.label[lang]}</span>
+                <span className="truncate flex-1">{meta.label[lang]}</span>
+                {count !== undefined && (
+                  <span className="font-mono text-[11px] text-muted-foreground ml-auto">
+                    {count}
+                  </span>
+                )}
               </button>
             );
           })}

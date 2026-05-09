@@ -1,9 +1,11 @@
 "use client";
 
 import { Plus, Minus, Locate } from "lucide-react";
+import { useState } from "react";
 import type { RefObject } from "react";
 import { useLang } from "@/context/LangContext";
 import { cn } from "@/lib/utils";
+import { MARKER_COLORS } from "@/lib/constants";
 
 interface MapControlsProps {
   map: RefObject<google.maps.Map | null>;
@@ -38,6 +40,8 @@ function ControlButton({
 
 export function MapControls({ map }: MapControlsProps) {
   const { t } = useLang();
+  const [locating, setLocating] = useState(false);
+  const [userMarker, setUserMarker] = useState<google.maps.Marker | null>(null);
 
   const zoomIn = () => {
     const m = map.current;
@@ -49,16 +53,45 @@ export function MapControls({ map }: MapControlsProps) {
     if (!m) return;
     m.setZoom((m.getZoom() ?? 12) - 1);
   };
+
   const handleLocate = () => {
-    if (!map.current) return;
-    navigator.geolocation?.getCurrentPosition(
+    if (!map.current || locating) return;
+
+    if (!navigator.geolocation) return;
+
+    setLocating(true);
+
+    navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        map.current!.panTo({ lat: coords.latitude, lng: coords.longitude });
+        const pos = { lat: coords.latitude, lng: coords.longitude };
+        map.current!.panTo(pos);
         map.current!.setZoom(15);
+
+        // Remove previous user marker
+        userMarker?.setMap(null);
+
+        const marker = new google.maps.Marker({
+          position: pos,
+          map: map.current!,
+          icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 8,
+            fillColor: MARKER_COLORS.user,
+            fillOpacity: 1,
+            strokeColor: "#ffffff",
+            strokeWeight: 2.5,
+          },
+          title: "My location",
+          zIndex: 999,
+        });
+
+        setUserMarker(marker);
+        setLocating(false);
       },
       () => {
-        // permission denied — silently ignore
-      }
+        setLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
     );
   };
 
@@ -73,7 +106,7 @@ export function MapControls({ map }: MapControlsProps) {
       <ControlButton
         onClick={handleLocate}
         label={t("map.myLocation")}
-        className="mt-1 text-accent"
+        className={cn("mt-1", locating ? "text-muted-foreground animate-pulse" : "text-accent")}
       >
         <Locate className="w-4 h-4" />
       </ControlButton>

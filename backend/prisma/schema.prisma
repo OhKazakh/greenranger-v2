@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  submissions Location[] @relation("SubmittedBy")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Location {
+  id       String           @id @default(cuid())
+  slug     String           @unique
+  category LocationCategory
+  verified Boolean          @default(false)
+
+  nameRu    String
+  nameEn    String
+  nameKk    String
+
+  descriptionRu String
+  descriptionEn String
+  descriptionKk String
+
+  addressRu String
+  addressEn String
+  addressKk String
+
+  lat Float
+  lng Float
+
+  materials String[]
+
+  scheduleWeekdays String?
+  scheduleSaturday String?
+  scheduleSunday   String?
+
+  phone   String?
+  website String?
+  photos  String[]
+
+  submittedBy   User?   @relation("SubmittedBy", fields: [submittedById], references: [id])
+  submittedById String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum LocationCategory {
+  hub
+  kiosk
+}

@@ -7,8 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { useLang } from "@/context/LangContext";
 import { MARKER_COLORS } from "@/lib/constants";
-import type { Location } from "@/types";
 import { cn } from "@/lib/utils";
+import type { Location } from "@/types";
 
 interface LocationDetailPanelProps {
   location: Location | null;
@@ -99,8 +99,10 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
               <span
-                className="text-xs font-semibold uppercase tracking-wide"
-                style={{ color: dotColor }}
+                className={cn(
+                  "text-xs font-semibold uppercase tracking-wide",
+                  isHub ? "text-primary" : "text-accent"
+                )}
               >
                 {isHub ? t("location.hub") : t("location.kiosk")}
               </span>

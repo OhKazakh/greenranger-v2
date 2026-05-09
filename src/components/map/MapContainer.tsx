@@ -20,6 +20,7 @@ import { useLang } from "@/context/LangContext";
 import {
   ASTANA_CENTER,
   ASTANA_DEFAULT_ZOOM,
+  ASTANA_BOUNDS,
   MARKER_COLORS,
   MAP_STYLE_LIGHT,
   MAP_STYLE_DARK,
@@ -89,6 +90,8 @@ export default function MapContainer() {
   const [filterOpen, setFilterOpen] = useState(false);
 
   const mapRef = useRef<google.maps.Map | null>(null);
+  // Stable reference — never changes, so GoogleMap never re-applies center on re-render
+  const initialCenter = useMemo(() => ({ lat: ASTANA_CENTER.lat, lng: ASTANA_CENTER.lng }), []);
 
   // Fetch once on mount
   useEffect(() => {
@@ -128,6 +131,11 @@ export default function MapContainer() {
       fullscreenControl: false,
       styles: resolvedTheme === "dark" ? MAP_STYLE_DARK : MAP_STYLE_LIGHT,
       gestureHandling: "greedy",
+      restriction: {
+        latLngBounds: ASTANA_BOUNDS,
+        strictBounds: false,
+      },
+      minZoom: 10,
     }),
     [resolvedTheme]
   );
@@ -177,7 +185,7 @@ export default function MapContainer() {
       <div className="relative flex-1 min-w-0">
         <GoogleMap
           mapContainerClassName="w-full h-full"
-          center={{ lat: ASTANA_CENTER.lat, lng: ASTANA_CENTER.lng }}
+          center={initialCenter}
           zoom={ASTANA_DEFAULT_ZOOM}
           options={mapOptions}
           onLoad={(map) => { mapRef.current = map; }}
@@ -187,6 +195,7 @@ export default function MapContainer() {
             options={{
               gridSize: 60,
               minimumClusterSize: 3,
+              zoomOnClick: false,
               styles: [
                 {
                   url: clusterIconUrl(),
@@ -203,6 +212,19 @@ export default function MapContainer() {
                 index: 1,
                 title: "",
               }),
+            }}
+            onClick={(cluster) => {
+              const map = mapRef.current;
+              if (!map) return;
+              const center = cluster.getCenter();
+              if (!center) return;
+              const currentZoom = map.getZoom() ?? ASTANA_DEFAULT_ZOOM;
+              const targetZoom = Math.min(currentZoom + 3, 17);
+              map.panTo(center);
+              // Step zoom with a short delay for a smooth animated feel
+              setTimeout(() => map.setZoom(currentZoom + 1), 0);
+              setTimeout(() => map.setZoom(currentZoom + 2), 180);
+              setTimeout(() => map.setZoom(targetZoom), 360);
             }}
           >
             {(clusterer) => (
