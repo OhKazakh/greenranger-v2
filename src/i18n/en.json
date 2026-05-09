@@ -130,7 +130,8 @@
     "resetError": "Link is invalid or expired. Request a new reset.",
     "resetRequestAgain": "Request again",
     "passwordMin": "At least 8 characters",
-    "passwordMismatch": "Passwords do not match"
+    "passwordMismatch": "Passwords do not match",
+    "welcome": "Welcome, {{name}}!"
   },
   "about": {
     "title": "About GreenRanger",
