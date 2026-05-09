@@ -184,6 +184,21 @@ export async function deleteReview(slug: string): Promise<void> {
 }
 
 // ════════════════════════════════════════════════════════════
+//  ADMIN
+// ════════════════════════════════════════════════════════════
+
+export async function adminSetVerified(id: string, verified: boolean): Promise<void> {
+  await apiFetch(`/locations/${id}/verify`, {
+    method: "PATCH",
+    body: JSON.stringify({ verified }),
+  });
+}
+
+export async function adminDeleteLocation(id: string): Promise<void> {
+  await apiFetch(`/locations/${id}`, { method: "DELETE" });
+}
+
+// ════════════════════════════════════════════════════════════
 //  AUTH
 // ════════════════════════════════════════════════════════════
 
