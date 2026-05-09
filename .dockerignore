@@ -1,0 +1,17 @@
+# Frontend (Next.js) — not needed for backend Docker build
+src/
+public/
+.next/
+node_modules/
+
+# Backend build artifacts (will be rebuilt)
+backend/node_modules/
+backend/dist/
+
+# Misc
+*.md
+.env
+.env.*
+!.env.example
+.git/
+.github/

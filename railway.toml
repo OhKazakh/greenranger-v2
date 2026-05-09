@@ -1,11 +1,7 @@
 [build]
-builder = "nixpacks"
-buildCommand = "cd backend && npm ci && npm run build"
-
-[build.nixpacksPlan.variables]
-NIXPACKS_NODE_VERSION = "22"
+builder = "dockerfile"
+dockerfilePath = "Dockerfile"
 
 [deploy]
-startCommand = "cd backend && node dist/src/main"
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 10
