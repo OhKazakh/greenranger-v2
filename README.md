@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GreenRanger — Astana
 
-## Getting Started
+Интерактивная карта пунктов раздельного сбора отходов в Астане.
 
-First, run the development server:
+Помогает жителям города быстро найти ближайшее место, куда можно сдать пластик, бумагу, стекло, металл, электронику и другие материалы.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Что умеет
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Карта всех пунктов переработки с фильтрацией по материалам и типу
+- Карточки пунктов с адресом, расписанием, телефоном и сайтом
+- Отзывы и оценки от пользователей
+- Предложить новый пункт — заявка отправляется на проверку администратору
+- Поддержка трёх языков: русский, английский, казахский
+- Тёмная и светлая тема
+- Личный кабинет, восстановление пароля по email
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Стек
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+**Фронтенд** — Next.js, TypeScript, Tailwind CSS, Google Maps  
+**Бэкенд** — NestJS, PostgreSQL, Prisma  
+**Деплой** — Vercel (фронт), Railway (бэкенд и БД)
 
-## Learn More
+## Сайт
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+[greenranger.kz](https://greenranger.kz)
