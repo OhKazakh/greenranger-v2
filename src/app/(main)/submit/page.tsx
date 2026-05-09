@@ -3,7 +3,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { toast } from "sonner";
 import { CheckCircle2, LogIn, MapPin } from "lucide-react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
@@ -28,11 +28,25 @@ const submitSchema = z.object({
   address: z.string().min(5, "Введите полный адрес"),
   description: z.string().min(10, "Минимум 10 символов"),
   materials: z.array(z.string()).min(1, "Выберите хотя бы один материал"),
-  phone: z.string().optional(),
+  phone: z.string().regex(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, "Введите номер в формате +7 (XXX) XXX-XX-XX").optional().or(z.literal("")),
   website: z.string().url("Введите корректный URL").optional().or(z.literal("")),
 });
 
 type SubmitFormValues = z.infer<typeof submitSchema>;
+
+// ── Ripple animation styles ───────────────────────────────────
+const rippleKeyframes = `
+@keyframes map-ripple {
+  0%   { transform: translate(-50%,-50%) scale(0.4); opacity: 0.8; }
+  100% { transform: translate(-50%,-50%) scale(2.8); opacity: 0; }
+}
+@keyframes map-drop {
+  0%   { transform: translate(-50%, -200%) scale(0.6); opacity: 0; }
+  60%  { transform: translate(-50%, 8%) scale(1.15); opacity: 1; }
+  80%  { transform: translate(-50%, -6%) scale(0.95); }
+  100% { transform: translate(-50%, 0%)  scale(1); opacity: 1; }
+}
+`;
 
 // ── Coordinate picker map ─────────────────────────────────────
 function CoordinatePicker({
@@ -47,10 +61,30 @@ function CoordinatePicker({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries: LIBRARIES,
   });
+  const mapRef = useRef<google.maps.Map | null>(null);
+  const [ripple, setRipple] = useState<{ x: number; y: number; key: number } | null>(null);
 
   const handleClick = useCallback(
     (e: google.maps.MapMouseEvent) => {
-      if (e.latLng) onChange({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+      if (!e.latLng) return;
+      onChange({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+
+      // Convert lat/lng to pixel position for ripple
+      if (mapRef.current) {
+        const proj = mapRef.current.getProjection();
+        const bounds = mapRef.current.getBounds();
+        const mapDiv = mapRef.current.getDiv();
+        if (proj && bounds && mapDiv) {
+          const ne = proj.fromLatLngToPoint(bounds.getNorthEast()!);
+          const sw = proj.fromLatLngToPoint(bounds.getSouthWest()!);
+          const scale = Math.pow(2, mapRef.current.getZoom()!);
+          const pt = proj.fromLatLngToPoint(e.latLng)!;
+          const x = (pt.x - sw.x) * scale;
+          const y = (pt.y - ne.y) * scale;
+          setRipple({ x, y, key: Date.now() });
+          setTimeout(() => setRipple(null), 700);
+        }
+      }
     },
     [onChange]
   );
@@ -65,6 +99,7 @@ function CoordinatePicker({
 
   return (
     <div className="h-48 rounded-xl overflow-hidden border border-border relative">
+      <style>{rippleKeyframes}</style>
       <GoogleMap
         mapContainerClassName="w-full h-full"
         center={value ?? { lat: ASTANA_CENTER.lat, lng: ASTANA_CENTER.lng }}
@@ -77,6 +112,7 @@ function CoordinatePicker({
           restriction: { latLngBounds: ASTANA_BOUNDS, strictBounds: false },
           minZoom: 10,
         }}
+        onLoad={(map) => { mapRef.current = map; }}
         onClick={handleClick}
       >
         {value && (
@@ -93,6 +129,32 @@ function CoordinatePicker({
           />
         )}
       </GoogleMap>
+
+      {/* Click ripple overlay */}
+      {ripple && (
+        <div
+          key={ripple.key}
+          className="pointer-events-none absolute"
+          style={{ left: ripple.x, top: ripple.y }}
+        >
+          {/* Drop animation on the dot */}
+          <div
+            className="absolute w-4 h-4 rounded-full bg-accent"
+            style={{
+              transform: "translate(-50%, -50%)",
+              animation: "map-drop 0.45s cubic-bezier(.22,.61,.36,1) forwards",
+            }}
+          />
+          {/* Ripple ring */}
+          <div
+            className="absolute w-8 h-8 rounded-full border-2 border-accent"
+            style={{
+              animation: "map-ripple 0.65s ease-out forwards",
+            }}
+          />
+        </div>
+      )}
+
       {!value && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="bg-background/90 border border-border rounded-lg px-3 py-2 flex items-center gap-2 shadow-md">
@@ -285,7 +347,37 @@ export default function SubmitPage() {
         {/* Phone */}
         <div className="space-y-1.5">
           <Label htmlFor="phone">{t("submit.phoneLabel")}</Label>
-          <Input id="phone" type="tel" placeholder="+7 (___) ___-__-__" {...register("phone")} />
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field }) => (
+              <Input
+                id="phone"
+                type="tel"
+                placeholder="+7 (___) ___-__-__"
+                value={field.value ?? ""}
+                onChange={(e) => {
+                  const digits = e.target.value.replace(/\D/g, "").slice(0, 11);
+                  let formatted = "";
+                  if (digits.length === 0) {
+                    formatted = "";
+                  } else {
+                    const d = digits.startsWith("8") ? "7" + digits.slice(1) : digits;
+                    const n = d.startsWith("7") ? d : "7" + d;
+                    const trimmed = n.slice(0, 11);
+                    formatted = "+7";
+                    if (trimmed.length > 1) formatted += " (" + trimmed.slice(1, 4);
+                    if (trimmed.length > 4) formatted += ") " + trimmed.slice(4, 7);
+                    if (trimmed.length > 7) formatted += "-" + trimmed.slice(7, 9);
+                    if (trimmed.length > 9) formatted += "-" + trimmed.slice(9, 11);
+                  }
+                  field.onChange(formatted);
+                }}
+                className={errors.phone ? "border-destructive" : ""}
+              />
+            )}
+          />
+          {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
         </div>
 
         {/* Website */}
