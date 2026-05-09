@@ -12,7 +12,7 @@ import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
-@Controller('api/locations/:slug/reviews')
+@Controller('locations/:slug/reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
