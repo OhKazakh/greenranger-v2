@@ -14,7 +14,7 @@ export function LanguageSwitcher() {
   const { lang, setLang } = useLang();
 
   return (
-    <div className="flex items-center gap-0.5 rounded-lg bg-muted p-0.5">
+    <div className="flex items-center gap-0.5 rounded-lg bg-muted p-0.5 w-fit">
       {LANGS.map(({ code, label }) => (
         <button
           key={code}
