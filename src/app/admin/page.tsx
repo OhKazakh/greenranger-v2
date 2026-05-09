@@ -4,10 +4,11 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, MapPin, CheckCircle2, AlertCircle,
-  Building2, Cpu, Trash2, ExternalLink, RefreshCw, ShieldCheck,
+  Building2, Cpu, Trash2, ExternalLink, RefreshCw, ShieldCheck, Users,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { adminGetAllLocations, adminSetVerified, adminDeleteLocation } from "@/lib/api";
+import { adminGetAllLocations, adminSetVerified, adminDeleteLocation, adminGetUsers } from "@/lib/api";
+import type { AdminUser } from "@/lib/api";
 import { MATERIALS } from "@/lib/constants";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -150,7 +151,9 @@ function LocationRow({
 export default function AdminPage() {
   const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
+  const [tab, setTab] = useState<"locations" | "users">("locations");
   const [locations, setLocations] = useState<Location[]>([]);
+  const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [filterCat, setFilterCat] = useState<"all" | "hub" | "kiosk">("all");
@@ -165,8 +168,8 @@ export default function AdminPage() {
 
   const load = useCallback(() => {
     setLoading(true);
-    adminGetAllLocations()
-      .then(setLocations)
+    Promise.all([adminGetAllLocations(), adminGetUsers()])
+      .then(([locs, usrs]) => { setLocations(locs); setUsers(usrs); })
       .finally(() => setLoading(false));
   }, []);
 
@@ -253,110 +256,180 @@ export default function AdminPage() {
         </button>
       </div>
 
-      {/* Stats */}
-      {loading ? (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-20 rounded-xl" />
-          ))}
-        </div>
-      ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard icon={MapPin} label="Всего пунктов" value={locations.length} color="text-accent" />
-          <StatCard icon={Building2} label="Хабы / Киоски" value={`${hubs} / ${kiosks}`} />
-          <StatCard icon={CheckCircle2} label="Верифицировано" value={verified} color="text-accent" />
-          <StatCard icon={AlertCircle} label="На проверке" value={unverified} color="text-destructive" sub={unverified > 0 ? "требуют проверки" : undefined} />
-        </div>
-      )}
+      {/* Tabs */}
+      <div className="flex gap-1 bg-muted rounded-lg p-1 w-fit">
+        <button
+          onClick={() => setTab("locations")}
+          className={cn("flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors",
+            tab === "locations" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
+        >
+          <MapPin className="w-3.5 h-3.5" /> Пункты
+        </button>
+        <button
+          onClick={() => setTab("users")}
+          className={cn("flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors",
+            tab === "users" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
+        >
+          <Users className="w-3.5 h-3.5" /> Пользователи {users.length > 0 && <span className="text-xs bg-muted-foreground/20 px-1.5 py-0.5 rounded-full">{users.length}</span>}
+        </button>
+      </div>
 
-      {/* Material breakdown */}
-      {!loading && topMaterials.length > 0 && (
-        <div className="bg-card border border-border rounded-xl p-5">
-          <h2 className="heading text-sm font-bold text-foreground mb-4 flex items-center gap-2">
-            <Cpu className="w-4 h-4 text-accent" />
-            Топ материалов
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {topMaterials.map(([m, count]) => (
-              <div key={m} className="flex items-center gap-2">
-                <MaterialBadge material={m} />
-                <span className="text-xs text-muted-foreground">{count} пунктов</span>
-              </div>
+      {tab === "locations" && <>
+        {/* Stats */}
+        {loading ? (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Skeleton key={i} className="h-20 rounded-xl" />
             ))}
           </div>
-        </div>
-      )}
-
-      {/* Locations table */}
-      <div className="bg-card border border-border rounded-xl overflow-hidden">
-        {/* Table toolbar */}
-        <div className="px-4 py-3 border-b border-border flex flex-col sm:flex-row gap-3 items-start sm:items-center">
-          <h2 className="heading text-sm font-bold text-foreground shrink-0">
-            Пункты ({filtered.length})
-          </h2>
-          <div className="flex flex-1 gap-2 flex-wrap">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Поиск…"
-              className="text-sm bg-background border border-border rounded-lg px-3 py-1.5 flex-1 min-w-[140px] focus:outline-none focus:ring-1 focus:ring-ring"
-            />
-            <select
-              value={filterCat}
-              onChange={(e) => setFilterCat(e.target.value as typeof filterCat)}
-              className="text-sm bg-background border border-border rounded-lg px-2.5 py-1.5 focus:outline-none"
-            >
-              <option value="all">Все типы</option>
-              <option value="hub">Хабы</option>
-              <option value="kiosk">Киоски</option>
-            </select>
-            <select
-              value={filterVerified}
-              onChange={(e) => setFilterVerified(e.target.value as typeof filterVerified)}
-              className="text-sm bg-background border border-border rounded-lg px-2.5 py-1.5 focus:outline-none"
-            >
-              <option value="all">Все статусы</option>
-              <option value="verified">Верифицированные</option>
-              <option value="unverified">Не верифицированные</option>
-            </select>
-          </div>
-        </div>
-
-        {loading ? (
-          <div className="p-4 space-y-2">
-            {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-10 rounded-lg" />)}
-          </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-left">
-              <thead>
-                <tr className="border-b border-border bg-muted/30">
-                  <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Название</th>
-                  <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">Тип</th>
-                  <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">Адрес</th>
-                  <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden xl:table-cell">Материалы</th>
-                  <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Статус</th>
-                  <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Действия</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.length === 0 ? (
-                  <tr>
-                    <td colSpan={6} className="px-4 py-10 text-center text-sm text-muted-foreground">
-                      Ничего не найдено
-                    </td>
-                  </tr>
-                ) : (
-                  filtered.map((loc) => (
-                    <LocationRow key={loc.id} loc={loc} onToggleVerify={handleToggleVerify} onDelete={handleDelete} />
-                  ))
-                )}
-              </tbody>
-            </table>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <StatCard icon={MapPin} label="Всего пунктов" value={locations.length} color="text-accent" />
+            <StatCard icon={Building2} label="Хабы / Киоски" value={`${hubs} / ${kiosks}`} />
+            <StatCard icon={CheckCircle2} label="Верифицировано" value={verified} color="text-accent" />
+            <StatCard icon={AlertCircle} label="На проверке" value={unverified} color="text-destructive" sub={unverified > 0 ? "требуют проверки" : undefined} />
           </div>
         )}
-      </div>
+
+        {/* Material breakdown */}
+        {!loading && topMaterials.length > 0 && (
+          <div className="bg-card border border-border rounded-xl p-5">
+            <h2 className="heading text-sm font-bold text-foreground mb-4 flex items-center gap-2">
+              <Cpu className="w-4 h-4 text-accent" />
+              Топ материалов
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {topMaterials.map(([m, count]) => (
+                <div key={m} className="flex items-center gap-2">
+                  <MaterialBadge material={m} />
+                  <span className="text-xs text-muted-foreground">{count} пунктов</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* Locations table */}
+        <div className="bg-card border border-border rounded-xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-border flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+            <h2 className="heading text-sm font-bold text-foreground shrink-0">
+              Пункты ({filtered.length})
+            </h2>
+            <div className="flex flex-1 gap-2 flex-wrap">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Поиск…"
+                className="text-sm bg-background border border-border rounded-lg px-3 py-1.5 flex-1 min-w-[140px] focus:outline-none focus:ring-1 focus:ring-ring"
+              />
+              <select
+                value={filterCat}
+                onChange={(e) => setFilterCat(e.target.value as typeof filterCat)}
+                className="text-sm bg-background border border-border rounded-lg px-2.5 py-1.5 focus:outline-none"
+              >
+                <option value="all">Все типы</option>
+                <option value="hub">Хабы</option>
+                <option value="kiosk">Киоски</option>
+              </select>
+              <select
+                value={filterVerified}
+                onChange={(e) => setFilterVerified(e.target.value as typeof filterVerified)}
+                className="text-sm bg-background border border-border rounded-lg px-2.5 py-1.5 focus:outline-none"
+              >
+                <option value="all">Все статусы</option>
+                <option value="verified">Верифицированные</option>
+                <option value="unverified">Не верифицированные</option>
+              </select>
+            </div>
+          </div>
+
+          {loading ? (
+            <div className="p-4 space-y-2">
+              {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-10 rounded-lg" />)}
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-border bg-muted/30">
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Название</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">Тип</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">Адрес</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden xl:table-cell">Материалы</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Статус</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Действия</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} className="px-4 py-10 text-center text-sm text-muted-foreground">
+                        Ничего не найдено
+                      </td>
+                    </tr>
+                  ) : (
+                    filtered.map((loc) => (
+                      <LocationRow key={loc.id} loc={loc} onToggleVerify={handleToggleVerify} onDelete={handleDelete} />
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      </>}
+
+      {tab === "users" && (
+        <div className="bg-card border border-border rounded-xl overflow-hidden">
+          <div className="px-4 py-3 border-b border-border">
+            <h2 className="heading text-sm font-bold text-foreground">Пользователи ({users.length})</h2>
+          </div>
+          {loading ? (
+            <div className="p-4 space-y-2">
+              {Array.from({ length: 5 }).map((_, i) => <Skeleton key={i} className="h-10 rounded-lg" />)}
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-border bg-muted/30">
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Имя</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Email</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden sm:table-cell">Роль</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">Отзывы</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">Заявки</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">Дата рег.</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((u) => (
+                    <tr key={u.id} className="border-b border-border hover:bg-muted/30 transition-colors">
+                      <td className="px-4 py-3 text-sm font-medium text-foreground">{u.name}</td>
+                      <td className="px-4 py-3 text-sm text-muted-foreground">{u.email}</td>
+                      <td className="px-4 py-3 hidden sm:table-cell">
+                        <span className={cn(
+                          "text-xs px-2 py-0.5 rounded-full font-medium",
+                          u.role === "ADMIN"
+                            ? "bg-primary/10 text-primary"
+                            : "bg-muted text-muted-foreground"
+                        )}>
+                          {u.role === "ADMIN" ? "Админ" : "Пользователь"}
+                        </span>
+                      </td>
+                      <td className="px-4 py-3 text-sm text-muted-foreground hidden md:table-cell">{u._count.reviews}</td>
+                      <td className="px-4 py-3 text-sm text-muted-foreground hidden md:table-cell">{u._count.submissions}</td>
+                      <td className="px-4 py-3 text-xs text-muted-foreground hidden lg:table-cell">
+                        {new Date(u.createdAt).toLocaleDateString("ru-RU")}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      )}
 
     </div>
   );

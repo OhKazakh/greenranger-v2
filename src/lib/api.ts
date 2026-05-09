@@ -187,6 +187,19 @@ export async function deleteReview(slug: string): Promise<void> {
 //  ADMIN
 // ════════════════════════════════════════════════════════════
 
+export interface AdminUser {
+  id: string;
+  name: string;
+  email: string;
+  role: string;
+  createdAt: string;
+  _count: { reviews: number; submissions: number };
+}
+
+export async function adminGetUsers(): Promise<AdminUser[]> {
+  return apiFetch<AdminUser[]>("/users");
+}
+
 export async function adminGetAllLocations(): Promise<Location[]> {
   const raws = await apiFetch<unknown[]>("/locations/admin/all");
   return raws.map(toLocation);
