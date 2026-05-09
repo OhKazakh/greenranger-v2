@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { Search } from "lucide-react";
+import { Search, SlidersHorizontal, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LocationCard } from "@/components/shared/LocationCard";
 import { FilterPanel } from "@/components/map/FilterPanel";
 import { useLang } from "@/context/LangContext";
 import { getLocations } from "@/lib/api";
+import { cn } from "@/lib/utils";
 import type { Location, MaterialType, LocationCategory } from "@/types";
 
 function LocationCardSkeleton() {
@@ -35,6 +36,7 @@ export default function LocationsPage() {
   const [search, setSearch] = useState("");
   const [selectedMaterials, setSelectedMaterials] = useState<MaterialType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<LocationCategory | "all">("all");
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   useEffect(() => {
     getLocations()
@@ -57,6 +59,8 @@ export default function LocationsPage() {
       return materialMatch && categoryMatch && searchMatch;
     });
   }, [locations, selectedMaterials, selectedCategory, search]);
+
+  const activeFilterCount = selectedMaterials.length + (selectedCategory !== "all" ? 1 : 0);
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
@@ -83,15 +87,34 @@ export default function LocationsPage() {
 
         {/* Main content */}
         <div className="flex-1 min-w-0">
-          {/* Search */}
-          <div className="relative mb-6">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-            <Input
-              placeholder={t("locations.search")}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="pl-9"
-            />
+          {/* Search + mobile filter button */}
+          <div className="flex gap-2 mb-6">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder={t("locations.search")}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="pl-9"
+              />
+            </div>
+            {/* Mobile filter button */}
+            <button
+              onClick={() => setMobileFilterOpen(true)}
+              className={cn(
+                "md:hidden flex items-center gap-2 px-3 py-2 rounded-lg border border-border text-sm font-medium shrink-0 transition-colors",
+                activeFilterCount > 0
+                  ? "bg-accent/10 border-accent/30 text-accent"
+                  : "bg-background text-muted-foreground hover:text-foreground"
+              )}
+            >
+              <SlidersHorizontal className="w-4 h-4" />
+              {activeFilterCount > 0 && (
+                <span className="bg-accent text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+                  {activeFilterCount}
+                </span>
+              )}
+            </button>
           </div>
 
           {/* Grid */}
@@ -114,6 +137,32 @@ export default function LocationsPage() {
           )}
         </div>
       </div>
+
+      {/* Mobile filter drawer */}
+      {mobileFilterOpen && (
+        <>
+          <div
+            className="md:hidden fixed inset-0 z-40 bg-black/40"
+            onClick={() => setMobileFilterOpen(false)}
+          />
+          <div className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-background rounded-t-2xl border-t border-border max-h-[80vh] overflow-y-auto slide-up">
+            <div className="flex items-center justify-between px-4 pt-4 pb-2">
+              <h3 className="heading text-sm font-bold">{t("map.filtersTitle")}</h3>
+              <button onClick={() => setMobileFilterOpen(false)}>
+                <X className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </div>
+            <div className="px-4 pb-10">
+              <FilterPanel
+                selectedMaterials={selectedMaterials}
+                selectedCategory={selectedCategory}
+                onMaterialsChange={setSelectedMaterials}
+                onCategoryChange={setSelectedCategory}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

@@ -60,7 +60,7 @@ function LocationRow({
               loc.category === "hub" ? "bg-primary" : "bg-accent"
             )}
           />
-          <span className="text-sm font-medium text-foreground max-w-[200px] truncate">
+          <span className="text-sm font-medium text-foreground max-w-[120px] sm:max-w-[200px] truncate">
             {loc.name.ru}
           </span>
         </div>
@@ -107,7 +107,9 @@ function LocationRow({
           ) : (
             <AlertCircle className="w-3 h-3" />
           )}
-          {loc.verified ? "Верифицирован" : "Не верифицирован"}
+          <span className="hidden sm:inline">
+            {loc.verified ? "Верифицирован" : "Не верифицирован"}
+          </span>
         </button>
       </td>
       <td className="px-4 py-3">
