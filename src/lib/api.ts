@@ -30,7 +30,7 @@ const mockDelay = (ms = 300) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
 // ── Base fetcher (used in real mode only) ────────────────────
-async function apiFetch<T>(
+export async function apiFetch<T>(
   path: string,
   options?: RequestInit
 ): Promise<T> {

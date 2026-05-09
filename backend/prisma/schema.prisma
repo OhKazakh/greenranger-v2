@@ -15,9 +15,11 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  submissions Location[] @relation("SubmittedBy")
-  reviews     Review[]
+  submissions         Location[] @relation("SubmittedBy")
+  reviews             Review[]
+  passwordResetTokens PasswordResetToken[]
 }
+
 
 enum Role {
   USER
@@ -77,6 +79,17 @@ model Review {
   locationId String
 
   @@unique([userId, locationId])
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id])
+  userId String
 }
 
 enum LocationCategory {
