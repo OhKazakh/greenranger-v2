@@ -235,7 +235,7 @@ export default function LocationDetailPage() {
       {/* Mini map */}
       <div className="mb-6">
         <h2 className="heading text-sm font-bold text-foreground mb-3">
-          На карте
+          {t("map.onMap")}
         </h2>
         <div className="h-48 rounded-xl overflow-hidden border border-border">
           <MiniMap position={location.position} name={location.name[lang]} />

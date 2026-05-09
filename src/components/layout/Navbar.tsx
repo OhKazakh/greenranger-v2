@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Leaf, Menu, X, LogOut, User as UserIcon } from "lucide-react";
+import { Leaf, Menu, X, LogOut, User as UserIcon, LayoutDashboard } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ButtonLink } from "@/components/ui/button-link";
@@ -60,8 +60,11 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
         {/* Logo */}
         <Link href="/map" className="flex items-center gap-2 shrink-0">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-            <Leaf className="w-4 h-4 text-accent" />
+          <div
+            className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
+            style={{ background: "var(--forest)" }}
+          >
+            <Leaf className="w-4 h-4" style={{ color: "var(--teal)" }} />
           </div>
           <span className="heading text-sm font-bold text-foreground hidden sm:block">
             GreenRanger
@@ -82,6 +85,20 @@ export function Navbar() {
           <Separator orientation="vertical" className="h-5" />
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
+              {user?.role === "admin" && (
+                <Link
+                  href="/admin"
+                  className={cn(
+                    "flex items-center gap-1 text-xs font-medium px-2 py-1 rounded-lg transition-colors",
+                    pathname === "/admin"
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                  )}
+                >
+                  <LayoutDashboard className="w-3.5 h-3.5" />
+                  {t("nav.admin")}
+                </Link>
+              )}
               <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <UserIcon className="w-3.5 h-3.5" />
                 {user?.name}
@@ -135,6 +152,16 @@ export function Navbar() {
                     <p className="text-xs text-muted-foreground">
                       {user?.name} · {user?.email}
                     </p>
+                    {user?.role === "admin" && (
+                      <Link
+                        href="/admin"
+                        onClick={() => setMobileOpen(false)}
+                        className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                      >
+                        <LayoutDashboard className="w-4 h-4" />
+                        {t("nav.admin")}
+                      </Link>
+                    )}
                     <Button
                       variant="outline"
                       size="sm"

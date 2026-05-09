@@ -21,7 +21,7 @@ import { mockLocations } from "@/lib/mock-data";
 
 // ── Config ────────────────────────────────────────────────────
 const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK !== "false"; // default = mock ON
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
+const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001") + "/api";
 
 // ── Small delay to simulate real network latency in mock mode ─
 const mockDelay = (ms = 300) =>
@@ -47,6 +47,34 @@ async function apiFetch<T>(
   }
 
   return res.json() as Promise<T>;
+}
+
+// ════════════════════════════════════════════════════════════
+//  SHAPE TRANSFORM — backend flat → frontend nested
+// ════════════════════════════════════════════════════════════
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function toLocation(r: any): Location {
+  return {
+    id: r.id,
+    slug: r.slug,
+    category: r.category,
+    verified: r.verified,
+    name: { ru: r.nameRu, en: r.nameEn, kk: r.nameKk },
+    description: { ru: r.descriptionRu, en: r.descriptionEn, kk: r.descriptionKk },
+    address: { ru: r.addressRu, en: r.addressEn, kk: r.addressKk },
+    position: { lat: r.lat, lng: r.lng },
+    materials: r.materials,
+    schedule: {
+      weekdays: r.scheduleWeekdays ?? null,
+      saturday: r.scheduleSaturday ?? null,
+      sunday: r.scheduleSunday ?? null,
+    },
+    phone: r.phone ?? null,
+    website: r.website ?? null,
+    photos: r.photos ?? [],
+    createdAt: r.createdAt,
+  };
 }
 
 // ════════════════════════════════════════════════════════════
@@ -87,7 +115,8 @@ export async function getLocations(filter?: Partial<FilterState>): Promise<Locat
   if (filter?.category && filter.category !== "all") params.set("category", filter.category);
   if (filter?.search) params.set("search", filter.search);
 
-  return apiFetch<Location[]>(`/locations?${params.toString()}`);
+  const raw = await apiFetch<unknown[]>(`/locations?${params.toString()}`);
+  return raw.map(toLocation);
 }
 
 /** Fetch a single location by slug */
@@ -96,7 +125,8 @@ export async function getLocationBySlug(slug: string): Promise<Location | null> 
     await mockDelay(150);
     return mockLocations.find((l) => l.slug === slug) ?? null;
   }
-  return apiFetch<Location>(`/locations/${slug}`);
+  const raw = await apiFetch<unknown>(`/locations/${slug}`);
+  return toLocation(raw);
 }
 
 /** Fetch a single location by id */
@@ -105,7 +135,8 @@ export async function getLocationById(id: string): Promise<Location | null> {
     await mockDelay(150);
     return mockLocations.find((l) => l.id === id) ?? null;
   }
-  return apiFetch<Location>(`/locations/id/${id}`);
+  const raw = await apiFetch<unknown>(`/locations/id/${id}`);
+  return toLocation(raw);
 }
 
 /** Submit a new location suggestion (requires auth) */
@@ -157,10 +188,11 @@ export async function login(payload: LoginPayload): Promise<User> {
     }
     throw new Error("Неверный email или пароль");
   }
-  return apiFetch<User>("/auth/login", {
+  const res = await apiFetch<{ user: User }>("/auth/login", {
     method: "POST",
     body: JSON.stringify(payload),
   });
+  return res.user;
 }
 
 export async function register(payload: RegisterPayload): Promise<User> {
@@ -175,10 +207,11 @@ export async function register(payload: RegisterPayload): Promise<User> {
     sessionStorage.setItem("mock_user", JSON.stringify(mockUser));
     return mockUser;
   }
-  return apiFetch<User>("/auth/register", {
+  const res = await apiFetch<{ user: User }>("/auth/register", {
     method: "POST",
     body: JSON.stringify(payload),
   });
+  return res.user;
 }
 
 export async function logout(): Promise<void> {

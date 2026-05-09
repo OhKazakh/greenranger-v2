@@ -7,7 +7,8 @@
     "login": "Log in",
     "register": "Register",
     "logout": "Log out",
-    "myProfile": "My profile"
+    "myProfile": "My profile",
+    "admin": "Admin"
   },
   "map": {
     "title": "Recycling Points Map",
@@ -117,7 +118,14 @@
     "missionText": "We make recycling accessible for every Astana resident. GreenRanger shows the nearest recycling points with detailed information on what they accept.",
     "techTitle": "Technology",
     "contactTitle": "Contact",
-    "version": "Version 2.0"
+    "version": "Version 2.0",
+    "serviceDesc": "A public service for finding separate waste collection points in Astana. Up-to-date data, interactive map, three languages.",
+    "role": "Software & AI Engineer",
+    "contactLabel": "Contact",
+    "openMap": "Open map",
+    "addPoint": "Add a point",
+    "footerNote": "GreenRanger v2 · Hack4Humanity 2024 laureate",
+    "city": "Astana · Kazakhstan"
   },
   "common": {
     "loading": "Loading...",
