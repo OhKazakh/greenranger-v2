@@ -10,22 +10,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/api";
+import { useLang } from "@/context/LangContext";
 import Link from "next/link";
 
-const schema = z.object({
-  password: z.string().min(8, "Минимум 8 символов"),
-  confirm: z.string(),
-}).refine((d) => d.password === d.confirm, {
-  message: "Пароли не совпадают",
-  path: ["confirm"],
-});
-
 function ResetForm() {
+  const { t } = useLang();
   const searchParams = useSearchParams();
   const router = useRouter();
   const token = searchParams.get("token");
   const [done, setDone] = useState(false);
   const [error, setError] = useState("");
+
+  const schema = z.object({
+    password: z.string().min(8, t("auth.passwordMin")),
+    confirm: z.string(),
+  }).refine((d) => d.password === d.confirm, {
+    message: t("auth.passwordMismatch"),
+    path: ["confirm"],
+  });
 
   const {
     register,
@@ -37,9 +39,9 @@ function ResetForm() {
     return (
       <div className="text-center">
         <XCircle className="w-10 h-10 text-destructive mx-auto mb-3" />
-        <p className="text-sm text-muted-foreground">Недействительная ссылка. Запросите сброс заново.</p>
+        <p className="text-sm text-muted-foreground">{t("auth.resetInvalidLink")}</p>
         <Link href="/forgot-password" className="text-sm text-accent hover:underline mt-4 inline-block">
-          Запросить снова
+          {t("auth.resetRequestAgain")}
         </Link>
       </div>
     );
@@ -51,9 +53,9 @@ function ResetForm() {
         <div className="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-7 h-7 text-accent" />
         </div>
-        <h2 className="heading text-xl font-bold mb-2">Пароль изменён</h2>
-        <p className="text-sm text-muted-foreground mb-6">Теперь вы можете войти с новым паролем.</p>
-        <Button onClick={() => router.push("/login")} className="w-full">Войти</Button>
+        <h2 className="heading text-xl font-bold mb-2">{t("auth.resetDoneTitle")}</h2>
+        <p className="text-sm text-muted-foreground mb-6">{t("auth.resetDoneMessage")}</p>
+        <Button onClick={() => router.push("/login")} className="w-full">{t("auth.loginButton")}</Button>
       </div>
     );
   }
@@ -67,7 +69,7 @@ function ResetForm() {
       });
       setDone(true);
     } catch {
-      setError("Ссылка недействительна или срок истёк. Запросите сброс заново.");
+      setError(t("auth.resetError"));
     }
   };
 
@@ -78,44 +80,42 @@ function ResetForm() {
           <KeyRound className="w-4.5 h-4.5 text-accent" />
         </div>
         <div>
-          <h1 className="heading text-xl font-bold">Новый пароль</h1>
-          <p className="text-xs text-muted-foreground">Придумайте надёжный пароль</p>
+          <h1 className="heading text-xl font-bold">{t("auth.resetTitle")}</h1>
+          <p className="text-xs text-muted-foreground">{t("auth.resetSubtitle")}</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
-          <Label htmlFor="password">Новый пароль</Label>
+          <Label htmlFor="password">{t("auth.resetNewPassword")}</Label>
           <Input
             id="password"
             type="password"
-            placeholder="Минимум 8 символов"
             {...register("password")}
             className={errors.password ? "border-destructive" : ""}
           />
           {errors.password && (
-            <p className="text-xs text-destructive">{errors.password.message}</p>
+            <p className="text-xs text-destructive">{errors.password.message as string}</p>
           )}
         </div>
 
         <div className="space-y-1.5">
-          <Label htmlFor="confirm">Повторите пароль</Label>
+          <Label htmlFor="confirm">{t("auth.resetConfirm")}</Label>
           <Input
             id="confirm"
             type="password"
-            placeholder="Повторите пароль"
             {...register("confirm")}
             className={errors.confirm ? "border-destructive" : ""}
           />
           {errors.confirm && (
-            <p className="text-xs text-destructive">{errors.confirm.message}</p>
+            <p className="text-xs text-destructive">{errors.confirm.message as string}</p>
           )}
         </div>
 
         {error && <p className="text-xs text-destructive">{error}</p>}
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Сохранение…" : "Сохранить пароль"}
+          {isSubmitting ? t("auth.resetSubmitting") : t("auth.resetSubmit")}
         </Button>
       </form>
     </div>
