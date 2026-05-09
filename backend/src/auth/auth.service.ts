@@ -69,8 +69,10 @@ export class AuthService {
     const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
 
     const resend = new Resend(process.env.RESEND_API_KEY);
-    await resend.emails.send({
-      from: 'GreenRanger <noreply@greenranger.kz>',
+    // Use verified sender — fall back to Resend's onboarding address until domain is verified
+    const from = process.env.RESEND_FROM ?? 'GreenRanger <onboarding@resend.dev>';
+    const { error } = await resend.emails.send({
+      from,
       to: email,
       subject: 'Сброс пароля — GreenRanger',
       html: `
@@ -85,6 +87,10 @@ export class AuthService {
         </div>
       `,
     });
+    if (error) {
+      // Log but don't expose error details to the client
+      console.error('[Resend] Failed to send reset email:', error);
+    }
 
     return { message: 'If this email exists, a reset link has been sent.' };
   }
