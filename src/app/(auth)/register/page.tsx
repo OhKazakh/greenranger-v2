@@ -38,7 +38,7 @@ export default function RegisterPage() {
     try {
       const user = await apiRegister(values);
       setUser(user);
-      toast.success(`Добро пожаловать, ${user.name}!`);
+      toast.success(t("auth.welcome").replace("{{name}}", user.name));
       router.push("/map");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Ошибка регистрации");

@@ -130,7 +130,8 @@
     "resetError": "Сілтеме жарамсыз немесе мерзімі өтті. Қайтадан сұраңыз.",
     "resetRequestAgain": "Қайтадан сұрау",
     "passwordMin": "Кемінде 8 таңба",
-    "passwordMismatch": "Құпия сөздер сәйкес келмейді"
+    "passwordMismatch": "Құпия сөздер сәйкес келмейді",
+    "welcome": "Қош келдіңіз, {{name}}!"
   },
   "about": {
     "title": "GreenRanger жобасы туралы",

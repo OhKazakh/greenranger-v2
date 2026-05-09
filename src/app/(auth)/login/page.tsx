@@ -37,7 +37,7 @@ export default function LoginPage() {
     try {
       const user = await login(values);
       setUser(user);
-      toast.success(`Добро пожаловать, ${user.name}!`);
+      toast.success(t("auth.welcome").replace("{{name}}", user.name));
       router.push("/map");
     } catch (err) {
       toast.error(err instanceof Error ? err.message : t("auth.errors.invalidCredentials"));

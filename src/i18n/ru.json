@@ -130,7 +130,8 @@
     "resetError": "Ссылка недействительна или срок истёк. Запросите сброс заново.",
     "resetRequestAgain": "Запросить снова",
     "passwordMin": "Минимум 8 символов",
-    "passwordMismatch": "Пароли не совпадают"
+    "passwordMismatch": "Пароли не совпадают",
+    "welcome": "Добро пожаловать, {{name}}!"
   },
   "about": {
     "title": "О проекте GreenRanger",
