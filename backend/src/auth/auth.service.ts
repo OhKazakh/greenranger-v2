@@ -70,20 +70,30 @@ export class AuthService {
 
     const resend = new Resend(process.env.RESEND_API_KEY);
     // Use verified sender — fall back to Resend's onboarding address until domain is verified
-    const from = process.env.RESEND_FROM ?? 'GreenRanger <onboarding@resend.dev>';
+    const from = process.env.RESEND_FROM ?? 'GreenRanger — Astana <onboarding@resend.dev>';
     const { error } = await resend.emails.send({
       from,
       to: email,
-      subject: 'Сброс пароля — GreenRanger',
+      subject: 'GreenRanger — Astana: сброс пароля',
       html: `
-        <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px">
-          <h2 style="color:#1a2e1a;margin-bottom:8px">Сброс пароля</h2>
-          <p style="color:#555;margin-bottom:24px">Вы запросили сброс пароля для вашего аккаунта GreenRanger.</p>
+        <div style="font-family:sans-serif;max-width:480px;margin:0 auto;padding:32px;background:#ffffff">
+          <!-- Logo -->
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:28px">
+            <div style="width:32px;height:32px;border-radius:8px;background:#1a2e1a;display:inline-flex;align-items:center;justify-content:center">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2ec4b6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/>
+                <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+              </svg>
+            </div>
+            <span style="font-weight:700;font-size:17px;color:#1a2e1a;letter-spacing:-0.3px">GreenRanger — Astana</span>
+          </div>
+          <h2 style="color:#1a2e1a;margin:0 0 8px;font-size:20px">Сброс пароля</h2>
+          <p style="color:#555;margin-bottom:24px;line-height:1.6">Вы запросили сброс пароля для вашего аккаунта GreenRanger.</p>
           <a href="${resetUrl}"
-             style="display:inline-block;background:#2ec4b6;color:#fff;text-decoration:none;padding:12px 24px;border-radius:8px;font-weight:600">
+             style="display:inline-block;background:#2ec4b6;color:#fff;text-decoration:none;padding:12px 28px;border-radius:8px;font-weight:600;font-size:15px">
             Сбросить пароль
           </a>
-          <p style="color:#999;font-size:13px;margin-top:24px">Ссылка действительна 1 час. Если вы не запрашивали сброс — проигнорируйте это письмо.</p>
+          <p style="color:#aaa;font-size:12px;margin-top:28px;line-height:1.6">Ссылка действительна 1 час.<br>Если вы не запрашивали сброс — просто проигнорируйте это письмо.</p>
         </div>
       `,
     });

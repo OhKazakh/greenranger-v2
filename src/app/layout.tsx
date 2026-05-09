@@ -3,13 +3,13 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GreenRanger — Карта переработки Астаны",
+  title: "GreenRanger — Astana",
   description:
-    "Найдите ближайший пункт раздельного сбора отходов в Астане. Пластик, бумага, стекло, металл и другие материалы.",
-  keywords: ["переработка", "Астана", "вторсырьё", "раздельный сбор", "экология"],
+    "Find the nearest recycling point in Astana. Plastic, paper, glass, metal and more.",
+  keywords: ["recycling", "Astana", "ecology", "переработка", "Астана", "экология"],
   openGraph: {
-    title: "GreenRanger",
-    description: "Карта пунктов переработки Астаны",
+    title: "GreenRanger — Astana",
+    description: "Recycling map of Astana",
     locale: "ru_KZ",
     type: "website",
   },
