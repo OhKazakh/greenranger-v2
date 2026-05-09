@@ -128,7 +128,7 @@ export function Navbar() {
             <SheetTrigger className="inline-flex items-center justify-center h-8 w-8 rounded-lg hover:bg-muted transition-colors text-foreground">
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </SheetTrigger>
-            <SheetContent side="right" className="w-64 pt-10">
+            <SheetContent side="right" className="w-72 max-w-[82vw] rounded-l-2xl overflow-hidden pt-12 px-6">
               <div className="flex flex-col gap-6">
                 {/* Mobile links */}
                 <nav className="flex flex-col gap-4">
