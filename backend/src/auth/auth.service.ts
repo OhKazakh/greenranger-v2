@@ -28,7 +28,7 @@ export class AuthService {
       select: { id: true, email: true, name: true, role: true },
     });
 
-    return { user, token: this.signToken(user.id, user.email) };
+    return { user: { ...user, role: user.role.toLowerCase() }, token: this.signToken(user.id, user.email) };
   }
 
   async login(dto: LoginDto) {
@@ -41,7 +41,7 @@ export class AuthService {
     if (!valid) throw new UnauthorizedException('Invalid credentials');
 
     const { password: _, ...safe } = user;
-    return { user: safe, token: this.signToken(user.id, user.email) };
+    return { user: { ...safe, role: safe.role.toLowerCase() }, token: this.signToken(user.id, user.email) };
   }
 
   private signToken(userId: string, email: string) {
