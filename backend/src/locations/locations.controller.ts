@@ -11,6 +11,7 @@ import {
 import type { Request } from 'express';
 import { LocationsService } from './locations.service';
 import { CreateLocationDto } from './dto/create-location.dto';
+import { SuggestLocationDto } from './dto/suggest-location.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('locations')
@@ -36,5 +37,12 @@ export class LocationsController {
   create(@Body() dto: CreateLocationDto, @Req() req: Request) {
     const user = (req as any).user as { id: string } | undefined;
     return this.locations.create(dto, user?.id);
+  }
+
+  @Post('suggest')
+  @UseGuards(JwtAuthGuard)
+  suggest(@Body() dto: SuggestLocationDto, @Req() req: Request) {
+    const user = (req as any).user as { id: string } | undefined;
+    return this.locations.suggest(dto, user?.id);
   }
 }

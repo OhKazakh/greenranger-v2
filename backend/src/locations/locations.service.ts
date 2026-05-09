@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateLocationDto } from './dto/create-location.dto';
+import { SuggestLocationDto } from './dto/suggest-location.dto';
 
 @Injectable()
 export class LocationsService {
@@ -29,6 +30,42 @@ export class LocationsService {
       data: {
         ...dto,
         photos: dto.photos ?? [],
+        ...(submittedById && { submittedById }),
+      },
+    });
+  }
+
+  async suggest(dto: SuggestLocationDto, submittedById?: string) {
+    // Generate a unique slug from the name
+    const base = dto.name
+      .toLowerCase()
+      .replace(/[^a-zа-яё0-9\s]/gi, '')
+      .trim()
+      .replace(/\s+/g, '-')
+      .slice(0, 40);
+    const slug = `${base}-${Date.now()}`;
+
+    return this.prisma.location.create({
+      data: {
+        slug,
+        category: 'kiosk', // default; admin can change later
+        verified: false,
+        // Same value in all 3 languages — admin reviews and translates later
+        nameRu: dto.name,
+        nameEn: dto.name,
+        nameKk: dto.name,
+        descriptionRu: dto.description,
+        descriptionEn: dto.description,
+        descriptionKk: dto.description,
+        addressRu: dto.address,
+        addressEn: dto.address,
+        addressKk: dto.address,
+        lat: dto.lat,
+        lng: dto.lng,
+        materials: dto.materials,
+        phone: dto.phone ?? null,
+        website: dto.website ?? null,
+        photos: [],
         ...(submittedById && { submittedById }),
       },
     });
