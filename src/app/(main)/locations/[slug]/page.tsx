@@ -16,6 +16,7 @@ import { getLocationBySlug } from "@/lib/api";
 import { MARKER_COLORS } from "@/lib/constants";
 import type { Location } from "@/types";
 import dynamic from "next/dynamic";
+import { ReviewSection } from "@/components/shared/ReviewSection";
 
 // Mini-map: we keep this as a plain import because the detail page
 // is already "use client", so Leaflet won't run on the server here.
@@ -240,6 +241,12 @@ export default function LocationDetailPage() {
         <div className="h-48 rounded-xl overflow-hidden border border-border">
           <MiniMap position={location.position} name={location.name[lang]} />
         </div>
+      </div>
+
+      {/* Reviews */}
+      <Separator className="mb-6" />
+      <div className="mb-6">
+        <ReviewSection slug={location.slug} />
       </div>
 
       {/* CTA */}

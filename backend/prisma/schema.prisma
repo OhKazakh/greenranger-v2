@@ -16,6 +16,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   submissions Location[] @relation("SubmittedBy")
+  reviews     Review[]
 }
 
 enum Role {
@@ -57,8 +58,25 @@ model Location {
   submittedBy   User?   @relation("SubmittedBy", fields: [submittedById], references: [id])
   submittedById String?
 
+  reviews Review[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id         String   @id @default(cuid())
+  rating     Int
+  comment    String?
+  createdAt  DateTime @default(now())
+
+  user       User     @relation(fields: [userId], references: [id])
+  userId     String
+
+  location   Location @relation(fields: [locationId], references: [id])
+  locationId String
+
+  @@unique([userId, locationId])
 }
 
 enum LocationCategory {

@@ -16,6 +16,8 @@ import type {
   SubmitLocationPayload,
   User,
   FilterState,
+  Review,
+  ReviewsResponse,
 } from "@/types";
 import { mockLocations } from "@/lib/mock-data";
 
@@ -150,6 +152,35 @@ export async function submitLocation(payload: SubmitLocationPayload): Promise<vo
     method: "POST",
     body: JSON.stringify(payload),
   });
+}
+
+// ════════════════════════════════════════════════════════════
+//  REVIEWS
+// ════════════════════════════════════════════════════════════
+
+export async function getReviews(slug: string): Promise<ReviewsResponse> {
+  if (USE_MOCK) {
+    return { reviews: [], avgRating: null, count: 0 };
+  }
+  return apiFetch<ReviewsResponse>(`/locations/${slug}/reviews`);
+}
+
+export async function submitReview(
+  slug: string,
+  payload: { rating: number; comment?: string }
+): Promise<Review> {
+  if (USE_MOCK) {
+    throw new Error("Not available in mock mode");
+  }
+  return apiFetch<Review>(`/locations/${slug}/reviews`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteReview(slug: string): Promise<void> {
+  if (USE_MOCK) return;
+  await apiFetch(`/locations/${slug}/reviews`, { method: "DELETE" });
 }
 
 // ════════════════════════════════════════════════════════════

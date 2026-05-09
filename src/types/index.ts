@@ -103,6 +103,21 @@ export interface FilterState {
   search: string;
 }
 
+// ── Review ────────────────────────────────────────────────────
+export interface Review {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  user: { id: string; name: string };
+}
+
+export interface ReviewsResponse {
+  reviews: Review[];
+  avgRating: number | null;
+  count: number;
+}
+
 // ── Material metadata (display name + colour + icon) ─────────
 export interface MaterialMeta {
   id: MaterialType;
