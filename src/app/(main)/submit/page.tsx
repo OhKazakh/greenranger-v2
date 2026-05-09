@@ -79,6 +79,7 @@ function CoordinatePicker({
           const sw = proj.fromLatLngToPoint(bounds.getSouthWest()!);
           const scale = Math.pow(2, mapRef.current.getZoom()!);
           const pt = proj.fromLatLngToPoint(e.latLng)!;
+          if (!ne || !sw || !pt) return;
           const x = (pt.x - sw.x) * scale;
           const y = (pt.y - ne.y) * scale;
           setRipple({ x, y, key: Date.now() });
