@@ -36,6 +36,12 @@ export class LocationsService {
     });
   }
 
+  async findAllAdmin() {
+    return this.prisma.location.findMany({
+      orderBy: [{ verified: 'asc' }, { createdAt: 'desc' }],
+    });
+  }
+
   async setVerified(id: string, verified: boolean) {
     const loc = await this.prisma.location.findUnique({ where: { id } });
     if (!loc) throw new NotFoundException('Location not found');

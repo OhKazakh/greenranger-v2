@@ -49,6 +49,12 @@ export class LocationsController {
     return this.locations.suggest(dto, user?.id);
   }
 
+  @Get('admin/all')
+  @UseGuards(AdminGuard)
+  findAllAdmin() {
+    return this.locations.findAllAdmin();
+  }
+
   @Patch(':id/verify')
   @UseGuards(AdminGuard)
   verify(@Param('id') id: string, @Body('verified') verified: boolean) {
