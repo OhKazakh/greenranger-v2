@@ -51,6 +51,8 @@ export class LocationsService {
   async remove(id: string) {
     const loc = await this.prisma.location.findUnique({ where: { id } });
     if (!loc) throw new NotFoundException('Location not found');
+    // Delete related reviews first to avoid FK constraint error
+    await this.prisma.review.deleteMany({ where: { locationId: id } });
     return this.prisma.location.delete({ where: { id } });
   }
 
