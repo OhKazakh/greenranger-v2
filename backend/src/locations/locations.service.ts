@@ -10,6 +10,7 @@ export class LocationsService {
   async findAll(filters?: { category?: string; materials?: string[] }) {
     return this.prisma.location.findMany({
       where: {
+        verified: true,
         ...(filters?.category && { category: filters.category as any }),
         ...(filters?.materials?.length && {
           materials: { hasSome: filters.materials },
@@ -21,7 +22,7 @@ export class LocationsService {
 
   async findBySlug(slug: string) {
     const loc = await this.prisma.location.findUnique({ where: { slug } });
-    if (!loc) throw new NotFoundException('Location not found');
+    if (!loc || !loc.verified) throw new NotFoundException('Location not found');
     return loc;
   }
 
