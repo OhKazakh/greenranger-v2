@@ -59,4 +59,19 @@ export class AuthController {
   me(@Req() req: Request) {
     return (req as any).user;
   }
+
+  @Post('forgot-password')
+  @HttpCode(200)
+  forgotPassword(@Body('email') email: string) {
+    return this.auth.forgotPassword(email);
+  }
+
+  @Post('reset-password')
+  @HttpCode(200)
+  resetPassword(
+    @Body('token') token: string,
+    @Body('password') password: string,
+  ) {
+    return this.auth.resetPassword(token, password);
+  }
 }
