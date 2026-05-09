@@ -7,7 +7,7 @@ import {
   Building2, Cpu, Trash2, ExternalLink, RefreshCw, ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { getLocations } from "@/lib/api";
+import { getLocations, adminSetVerified, adminDeleteLocation } from "@/lib/api";
 import { MATERIALS } from "@/lib/constants";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -46,9 +46,11 @@ function StatCard({
 function LocationRow({
   loc,
   onToggleVerify,
+  onDelete,
 }: {
   loc: Location;
   onToggleVerify: (id: string, current: boolean) => void;
+  onDelete: (id: string) => void;
 }) {
   return (
     <tr className="border-b border-border hover:bg-muted/30 transition-colors">
@@ -132,8 +134,8 @@ function LocationRow({
           </button>
           <button
             className="p-1.5 rounded-lg hover:bg-destructive/10 transition-colors text-muted-foreground hover:text-destructive"
-            title="Удалить (заглушка)"
-            onClick={() => alert("Удаление: подключите к реальному API")}
+            title="Удалить"
+            onClick={() => onDelete(loc.id)}
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
@@ -170,12 +172,31 @@ export default function AdminPage() {
 
   useEffect(() => { load(); }, [load]);
 
-  const handleToggleVerify = useCallback((id: string, current: boolean) => {
-    // Optimistic update (mock — wire to real API when ready)
+  const handleToggleVerify = useCallback(async (id: string, current: boolean) => {
+    // Optimistic update
     setLocations((prev) =>
       prev.map((l) => (l.id === id ? { ...l, verified: !current } : l))
     );
+    try {
+      await adminSetVerified(id, !current);
+    } catch {
+      // Revert on failure
+      setLocations((prev) =>
+        prev.map((l) => (l.id === id ? { ...l, verified: current } : l))
+      );
+    }
   }, []);
+
+  const handleDelete = useCallback(async (id: string) => {
+    if (!window.confirm("Удалить этот пункт? Это действие нельзя отменить.")) return;
+    setLocations((prev) => prev.filter((l) => l.id !== id));
+    try {
+      await adminDeleteLocation(id);
+    } catch {
+      // Reload on failure
+      load();
+    }
+  }, [load]);
 
   // Derived stats
   const hubs = locations.filter((l) => l.category === "hub").length;
@@ -328,7 +349,7 @@ export default function AdminPage() {
                   </tr>
                 ) : (
                   filtered.map((loc) => (
-                    <LocationRow key={loc.id} loc={loc} onToggleVerify={handleToggleVerify} />
+                    <LocationRow key={loc.id} loc={loc} onToggleVerify={handleToggleVerify} onDelete={handleDelete} />
                   ))
                 )}
               </tbody>
@@ -337,9 +358,6 @@ export default function AdminPage() {
         )}
       </div>
 
-      <p className="text-xs text-muted-foreground text-center">
-        Верификация и удаление сохраняются только до перезагрузки страницы — подключите к реальному API для персистентности.
-      </p>
     </div>
   );
 }

@@ -35,6 +35,18 @@ export class LocationsService {
     });
   }
 
+  async setVerified(id: string, verified: boolean) {
+    const loc = await this.prisma.location.findUnique({ where: { id } });
+    if (!loc) throw new NotFoundException('Location not found');
+    return this.prisma.location.update({ where: { id }, data: { verified } });
+  }
+
+  async remove(id: string) {
+    const loc = await this.prisma.location.findUnique({ where: { id } });
+    if (!loc) throw new NotFoundException('Location not found');
+    return this.prisma.location.delete({ where: { id } });
+  }
+
   async suggest(dto: SuggestLocationDto, submittedById?: string) {
     // Generate a unique slug from the name
     const base = dto.name
