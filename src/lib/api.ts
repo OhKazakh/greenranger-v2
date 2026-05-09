@@ -187,6 +187,11 @@ export async function deleteReview(slug: string): Promise<void> {
 //  ADMIN
 // ════════════════════════════════════════════════════════════
 
+export async function adminGetAllLocations(): Promise<Location[]> {
+  const raws = await apiFetch<unknown[]>("/locations/admin/all");
+  return raws.map(toLocation);
+}
+
 export async function adminSetVerified(id: string, verified: boolean): Promise<void> {
   await apiFetch(`/locations/${id}/verify`, {
     method: "PATCH",

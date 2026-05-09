@@ -7,7 +7,7 @@ import {
   Building2, Cpu, Trash2, ExternalLink, RefreshCw, ShieldCheck,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
-import { getLocations, adminSetVerified, adminDeleteLocation } from "@/lib/api";
+import { adminGetAllLocations, adminSetVerified, adminDeleteLocation } from "@/lib/api";
 import { MATERIALS } from "@/lib/constants";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -165,7 +165,7 @@ export default function AdminPage() {
 
   const load = useCallback(() => {
     setLoading(true);
-    getLocations()
+    adminGetAllLocations()
       .then(setLocations)
       .finally(() => setLoading(false));
   }, []);
