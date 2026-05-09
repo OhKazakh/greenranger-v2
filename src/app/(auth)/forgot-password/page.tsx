@@ -10,13 +10,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { apiFetch } from "@/lib/api";
-
-const schema = z.object({
-  email: z.string().email("Введите корректный email"),
-});
+import { useLang } from "@/context/LangContext";
 
 export default function ForgotPasswordPage() {
+  const { t } = useLang();
   const [sent, setSent] = useState(false);
+
+  const schema = z.object({
+    email: z.string().email(t("auth.errors.invalidEmail")),
+  });
 
   const {
     register,
@@ -38,12 +40,10 @@ export default function ForgotPasswordPage() {
         <div className="w-14 h-14 rounded-full bg-accent/10 flex items-center justify-center mx-auto mb-4">
           <CheckCircle2 className="w-7 h-7 text-accent" />
         </div>
-        <h2 className="heading text-xl font-bold mb-2">Письмо отправлено</h2>
-        <p className="text-sm text-muted-foreground mb-6">
-          Если этот email зарегистрирован, вы получите ссылку для сброса пароля. Проверьте папку «Спам».
-        </p>
+        <h2 className="heading text-xl font-bold mb-2">{t("auth.forgotSentTitle")}</h2>
+        <p className="text-sm text-muted-foreground mb-6">{t("auth.forgotSentMessage")}</p>
         <Link href="/login" className="text-sm text-accent hover:underline">
-          Вернуться ко входу
+          {t("auth.loginLink")}
         </Link>
       </div>
     );
@@ -56,7 +56,7 @@ export default function ForgotPasswordPage() {
         className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors"
       >
         <ArrowLeft className="w-3.5 h-3.5" />
-        Назад
+        {t("auth.forgotBack")}
       </Link>
 
       <div className="flex items-center gap-3 mb-6">
@@ -64,14 +64,14 @@ export default function ForgotPasswordPage() {
           <Mail className="w-4.5 h-4.5 text-accent" />
         </div>
         <div>
-          <h1 className="heading text-xl font-bold">Забыли пароль?</h1>
-          <p className="text-xs text-muted-foreground">Отправим ссылку на сброс</p>
+          <h1 className="heading text-xl font-bold">{t("auth.forgotTitle")}</h1>
+          <p className="text-xs text-muted-foreground">{t("auth.forgotSubtitle")}</p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="space-y-1.5">
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t("auth.forgotEmailLabel")}</Label>
           <Input
             id="email"
             type="email"
@@ -80,12 +80,12 @@ export default function ForgotPasswordPage() {
             className={errors.email ? "border-destructive" : ""}
           />
           {errors.email && (
-            <p className="text-xs text-destructive">{errors.email.message}</p>
+            <p className="text-xs text-destructive">{errors.email.message as string}</p>
           )}
         </div>
 
         <Button type="submit" className="w-full" disabled={isSubmitting}>
-          {isSubmitting ? "Отправка…" : "Отправить ссылку"}
+          {isSubmitting ? t("auth.forgotSubmitting") : t("auth.forgotSubmit")}
         </Button>
       </form>
     </div>
