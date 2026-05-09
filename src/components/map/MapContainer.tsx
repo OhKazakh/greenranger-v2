@@ -9,6 +9,7 @@
 // ────────────────────────────────────────────────────────────
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import { GoogleMap, useJsApiLoader, Marker, MarkerClusterer, OverlayView } from "@react-google-maps/api";
 import { useTheme } from "next-themes";
 import { SlidersHorizontal, X } from "lucide-react";
@@ -69,6 +70,7 @@ const LIBRARIES: ("places")[] = [];
 export default function MapContainer() {
   const { t, lang } = useLang();
   const { resolvedTheme } = useTheme();
+  const searchParams = useSearchParams();
 
   // Load Google Maps JS SDK
   const { isLoaded, loadError } = useJsApiLoader({
@@ -100,6 +102,22 @@ export default function MapContainer() {
       .then(setLocations)
       .finally(() => setIsLoadingData(false));
   }, []);
+
+  // If ?focus=<slug> is in the URL, pan to that location and open its panel
+  // once both the map SDK and data are ready.
+  useEffect(() => {
+    const slug = searchParams.get("focus");
+    if (!slug || !isLoaded || isLoadingData || locations.length === 0) return;
+
+    const target = locations.find((l) => l.slug === slug);
+    if (!target) return;
+
+    setSelectedLocation(target);
+    if (mapRef.current) {
+      mapRef.current.panTo({ lat: target.position.lat, lng: target.position.lng });
+      mapRef.current.setZoom(16);
+    }
+  }, [searchParams, isLoaded, isLoadingData, locations]);
 
   // Apply filters locally (cheap + reactive)
   const filtered = useMemo(() => {
