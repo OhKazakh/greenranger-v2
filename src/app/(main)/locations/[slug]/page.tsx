@@ -243,7 +243,7 @@ export default function LocationDetailPage() {
       </div>
 
       {/* CTA */}
-      <ButtonLink href="/map" className="w-full">{t("location.viewOnMap")}</ButtonLink>
+      <ButtonLink href={`/map?focus=${location.slug}`} className="w-full">{t("location.viewOnMap")}</ButtonLink>
     </div>
   );
 }

@@ -11,6 +11,7 @@
 // ────────────────────────────────────────────────────────────
 
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const MapContainer = dynamic(
@@ -28,6 +29,11 @@ const MapContainer = dynamic(
   }
 );
 
+// Suspense is required because MapContainer uses useSearchParams()
 export function DynamicMap() {
-  return <MapContainer />;
+  return (
+    <Suspense>
+      <MapContainer />
+    </Suspense>
+  );
 }
