@@ -162,5 +162,20 @@
     "copyAddress": "Copy address",
     "copied": "Copied!",
     "learnMore": "Learn more"
+  },
+  "reviews": {
+    "title": "Reviews",
+    "leaveReview": "Leave a review",
+    "yourReview": "Your review",
+    "delete": "Delete",
+    "submit": "Submit",
+    "submitting": "Submitting…",
+    "placeholder": "Optional comment…",
+    "loginPrompt": "Log in",
+    "loginSuffix": " to leave a review.",
+    "loading": "Loading reviews…",
+    "noReviews": "No reviews yet.",
+    "ratingRequired": "Please select a rating",
+    "errorSubmit": "Failed to submit review"
   }
 }
