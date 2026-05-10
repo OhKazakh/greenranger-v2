@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { Star } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useLang } from "@/context/LangContext";
 import { getReviews, submitReview, deleteReview } from "@/lib/api";
 import type { Review, ReviewsResponse } from "@/types";
-import { Separator } from "@/components/ui/separator";
 
 function StarRating({
   value,
@@ -39,13 +39,16 @@ function StarRating({
 }
 
 function ReviewCard({ review }: { review: Review }) {
+  const { lang } = useLang();
   return (
     <div className="py-3">
       <div className="flex items-center gap-2 mb-1">
         <span className="text-sm font-semibold text-foreground">{review.user.name}</span>
         <StarRating value={review.rating} readonly size={14} />
         <span className="text-xs text-muted-foreground ml-auto">
-          {new Date(review.createdAt).toLocaleDateString()}
+          {new Date(review.createdAt).toLocaleDateString(
+            lang === "ru" ? "ru-RU" : lang === "kk" ? "kk-KZ" : "en-US"
+          )}
         </span>
       </div>
       {review.comment && (
@@ -57,6 +60,7 @@ function ReviewCard({ review }: { review: Review }) {
 
 export function ReviewSection({ slug }: { slug: string }) {
   const { user, isAuthenticated } = useAuth();
+  const { t } = useLang();
   const [data, setData] = useState<ReviewsResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [rating, setRating] = useState(0);
@@ -74,7 +78,7 @@ export function ReviewSection({ slug }: { slug: string }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (rating === 0) { setError("Please select a rating"); return; }
+    if (rating === 0) { setError(t("reviews.ratingRequired")); return; }
     setSubmitting(true);
     setError(null);
     try {
@@ -84,7 +88,7 @@ export function ReviewSection({ slug }: { slug: string }) {
       setRating(0);
       setComment("");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Failed to submit review");
+      setError(err instanceof Error ? err.message : t("reviews.errorSubmit"));
     } finally {
       setSubmitting(false);
     }
@@ -104,13 +108,11 @@ export function ReviewSection({ slug }: { slug: string }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-3">
-        <h2 className="heading text-sm font-bold text-foreground">Reviews</h2>
+        <h2 className="heading text-sm font-bold text-foreground">{t("reviews.title")}</h2>
         {data && data.count > 0 && (
           <div className="flex items-center gap-1.5">
             <StarRating value={Math.round(data.avgRating ?? 0)} readonly size={14} />
-            <span className="text-sm font-semibold">
-              {data.avgRating?.toFixed(1)}
-            </span>
+            <span className="text-sm font-semibold">{data.avgRating?.toFixed(1)}</span>
             <span className="text-xs text-muted-foreground">({data.count})</span>
           </div>
         )}
@@ -119,12 +121,14 @@ export function ReviewSection({ slug }: { slug: string }) {
       {/* Submit form */}
       {isAuthenticated && !myReview && (
         <form onSubmit={handleSubmit} className="mb-4 p-4 bg-muted/40 rounded-xl border border-border space-y-3">
-          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Leave a review</p>
+          <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+            {t("reviews.leaveReview")}
+          </p>
           <StarRating value={rating} onChange={setRating} />
           <textarea
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            placeholder="Optional comment..."
+            placeholder={t("reviews.placeholder")}
             rows={2}
             className="w-full text-sm bg-background border border-border rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-1 focus:ring-accent"
           />
@@ -134,7 +138,7 @@ export function ReviewSection({ slug }: { slug: string }) {
             disabled={submitting || rating === 0}
             className="text-sm font-semibold px-4 py-1.5 rounded-lg bg-accent text-accent-foreground disabled:opacity-50"
           >
-            {submitting ? "Submitting…" : "Submit"}
+            {submitting ? t("reviews.submitting") : t("reviews.submit")}
           </button>
         </form>
       )}
@@ -143,13 +147,15 @@ export function ReviewSection({ slug }: { slug: string }) {
       {myReview && (
         <div className="mb-4 p-4 bg-muted/40 rounded-xl border border-border">
           <div className="flex items-center justify-between mb-1">
-            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your review</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+              {t("reviews.yourReview")}
+            </p>
             <button
               onClick={handleDelete}
               disabled={submitting}
               className="text-xs text-destructive hover:underline disabled:opacity-50"
             >
-              Delete
+              {t("reviews.delete")}
             </button>
           </div>
           <ReviewCard review={myReview} />
@@ -158,24 +164,22 @@ export function ReviewSection({ slug }: { slug: string }) {
 
       {!isAuthenticated && (
         <p className="text-sm text-muted-foreground mb-4">
-          <a href="/login" className="text-accent hover:underline">Log in</a> to leave a review.
+          <a href="/login" className="text-accent hover:underline">{t("reviews.loginPrompt")}</a>
+          {t("reviews.loginSuffix")}
         </p>
       )}
 
-      {/* All reviews */}
       {loading ? (
-        <p className="text-sm text-muted-foreground">Loading reviews…</p>
-      ) : data && data.reviews.length > 0 ? (
+        <p className="text-sm text-muted-foreground">{t("reviews.loading")}</p>
+      ) : data && data.reviews.filter((r) => r.user.id !== user?.id).length > 0 ? (
         <div className="divide-y divide-border">
           {data.reviews
             .filter((r) => r.user.id !== user?.id)
-            .map((r) => (
-              <ReviewCard key={r.id} review={r} />
-            ))}
+            .map((r) => <ReviewCard key={r.id} review={r} />)}
         </div>
-      ) : (
-        <p className="text-sm text-muted-foreground">No reviews yet.</p>
-      )}
+      ) : !myReview ? (
+        <p className="text-sm text-muted-foreground">{t("reviews.noReviews")}</p>
+      ) : null}
     </div>
   );
 }

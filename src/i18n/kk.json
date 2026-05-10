@@ -42,7 +42,7 @@
     "verified": "Расталған",
     "unverified": "Расталмаған",
     "hub": "Ірі орталық",
-    "kiosk": "Киоск / Автомат",
+    "kiosk": "Киоск / Дүкен",
     "viewDetail": "Толығырақ",
     "viewOnMap": "Картада көрсету",
     "weekdays": "Дс–Жм",
@@ -162,5 +162,20 @@
     "copyAddress": "Мекенжайды көшіру",
     "copied": "Көшірілді!",
     "learnMore": "Толығырақ"
+  },
+  "reviews": {
+    "title": "Пікірлер",
+    "leaveReview": "Пікір қалдыру",
+    "yourReview": "Сіздің пікіріңіз",
+    "delete": "Жою",
+    "submit": "Жіберу",
+    "submitting": "Жіберілуде…",
+    "placeholder": "Міндетті емес пікір…",
+    "loginPrompt": "Кіріңіз",
+    "loginSuffix": ", пікір қалдыру үшін.",
+    "loading": "Пікірлер жүктелуде…",
+    "noReviews": "Пікірлер жоқ.",
+    "ratingRequired": "Бағалауды таңдаңыз",
+    "errorSubmit": "Пікірді жіберу мүмкін болмады"
   }
 }

@@ -162,5 +162,20 @@
     "copyAddress": "Скопировать адрес",
     "copied": "Скопировано!",
     "learnMore": "Подробнее"
+  },
+  "reviews": {
+    "title": "Отзывы",
+    "leaveReview": "Оставить отзыв",
+    "yourReview": "Ваш отзыв",
+    "delete": "Удалить",
+    "submit": "Отправить",
+    "submitting": "Отправка…",
+    "placeholder": "Необязательный комментарий…",
+    "loginPrompt": "войдите",
+    "loginSuffix": ", чтобы оставить отзыв.",
+    "loading": "Загрузка отзывов…",
+    "noReviews": "Пока нет отзывов.",
+    "ratingRequired": "Выберите оценку",
+    "errorSubmit": "Не удалось отправить отзыв"
   }
 }
