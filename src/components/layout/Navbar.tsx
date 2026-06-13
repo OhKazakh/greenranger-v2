@@ -99,10 +99,18 @@ export function Navbar() {
                   {t("nav.admin")}
                 </Link>
               )}
-              <span className="text-xs text-muted-foreground flex items-center gap-1">
+              <Link
+                href="/profile"
+                className={cn(
+                  "text-xs flex items-center gap-1 px-2 py-1 rounded-lg transition-colors",
+                  pathname === "/profile"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}
+              >
                 <UserIcon className="w-3.5 h-3.5" />
                 {user?.name}
-              </span>
+              </Link>
               <Button
                 variant="ghost"
                 size="sm"
@@ -149,6 +157,14 @@ export function Navbar() {
                 {/* Mobile auth */}
                 {isAuthenticated ? (
                   <div className="flex flex-col gap-2">
+                    <Link
+                      href="/profile"
+                      onClick={() => setMobileOpen(false)}
+                      className="flex items-center gap-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      <UserIcon className="w-4 h-4" />
+                      {t("nav.profile")}
+                    </Link>
                     <p className="text-xs text-muted-foreground">
                       {user?.name} · {user?.email}
                     </p>

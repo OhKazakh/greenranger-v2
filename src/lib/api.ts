@@ -184,6 +184,45 @@ export async function deleteReview(slug: string): Promise<void> {
 }
 
 // ════════════════════════════════════════════════════════════
+//  PROFILE — current user's own activity
+// ════════════════════════════════════════════════════════════
+
+interface RawLocalized {
+  slug: string;
+  nameRu: string;
+  nameEn: string;
+  nameKk: string;
+}
+
+export interface MyReview {
+  id: string;
+  rating: number;
+  comment: string | null;
+  createdAt: string;
+  location: RawLocalized & { verified: boolean };
+}
+
+export interface MySubmission {
+  id: string;
+  slug: string;
+  nameRu: string;
+  nameEn: string;
+  nameKk: string;
+  category: string;
+  verified: boolean;
+  createdAt: string;
+}
+
+export interface MyActivity {
+  reviews: MyReview[];
+  submissions: MySubmission[];
+}
+
+export async function getMyActivity(): Promise<MyActivity> {
+  return apiFetch<MyActivity>("/users/me/activity");
+}
+
+// ════════════════════════════════════════════════════════════
 //  ADMIN
 // ════════════════════════════════════════════════════════════
 

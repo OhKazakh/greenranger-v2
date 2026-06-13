@@ -8,7 +8,8 @@
     "register": "Register",
     "logout": "Log out",
     "myProfile": "My profile",
-    "admin": "Admin"
+    "admin": "Admin",
+    "profile": "Profile"
   },
   "map": {
     "title": "Recycling Points Map",
@@ -195,5 +196,19 @@
     "message": "An unexpected error occurred. Please try refreshing the page.",
     "retry": "Try again",
     "home": "Go home"
+  },
+  "profile": {
+    "title": "My account",
+    "myReviews": "My reviews",
+    "mySubmissions": "My submissions",
+    "noReviews": "You haven't left any reviews yet.",
+    "noSubmissions": "You haven't suggested any points yet.",
+    "pending": "Pending review",
+    "published": "Published",
+    "reviewsTab": "Reviews",
+    "submissionsTab": "Submissions",
+    "loading": "Loading...",
+    "requiresAuth": "Log in to view your account.",
+    "login": "Log in"
   }
 }
