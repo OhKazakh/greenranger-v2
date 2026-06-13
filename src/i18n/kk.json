@@ -59,7 +59,8 @@
     "photoAlt": "фото"
   },
   "actions": {
-    "addAnother": "Тағы қосу"
+    "addAnother": "Тағы қосу",
+    "clear": "Тазалау"
   },
   "locations": {
     "title": "Барлық қайта өңдеу нүктелері",

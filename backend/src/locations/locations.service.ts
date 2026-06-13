@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateLocationDto } from './dto/create-location.dto';
+import { UpdateLocationDto } from './dto/update-location.dto';
 import { SuggestLocationDto } from './dto/suggest-location.dto';
 
 @Injectable()
@@ -46,6 +47,15 @@ export class LocationsService {
     const loc = await this.prisma.location.findUnique({ where: { id } });
     if (!loc) throw new NotFoundException('Location not found');
     return this.prisma.location.update({ where: { id }, data: { verified } });
+  }
+
+  async update(id: string, dto: UpdateLocationDto) {
+    const loc = await this.prisma.location.findUnique({ where: { id } });
+    if (!loc) throw new NotFoundException('Location not found');
+    return this.prisma.location.update({
+      where: { id },
+      data: { ...(dto as any) },
+    });
   }
 
   async remove(id: string) {

@@ -255,6 +255,35 @@ export async function adminDeleteLocation(id: string): Promise<void> {
   await apiFetch(`/locations/${id}`, { method: "DELETE" });
 }
 
+export interface AdminLocationUpdate {
+  category?: "hub" | "kiosk";
+  nameRu?: string;
+  nameEn?: string;
+  nameKk?: string;
+  descriptionRu?: string;
+  descriptionEn?: string;
+  descriptionKk?: string;
+  addressRu?: string;
+  addressEn?: string;
+  addressKk?: string;
+  lat?: number;
+  lng?: number;
+  materials?: string[];
+  phone?: string;
+  website?: string;
+}
+
+export async function adminUpdateLocation(
+  id: string,
+  patch: AdminLocationUpdate
+): Promise<Location> {
+  const raw = await apiFetch<unknown>(`/locations/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(patch),
+  });
+  return toLocation(raw);
+}
+
 // ════════════════════════════════════════════════════════════
 //  AUTH
 // ════════════════════════════════════════════════════════════

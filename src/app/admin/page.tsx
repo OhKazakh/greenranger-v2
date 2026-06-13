@@ -4,12 +4,13 @@ import { useEffect, useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import {
   LayoutDashboard, MapPin, CheckCircle2, AlertCircle,
-  Building2, Cpu, Trash2, ExternalLink, RefreshCw, ShieldCheck, Users,
+  Building2, Cpu, Trash2, ExternalLink, RefreshCw, ShieldCheck, Users, Pencil, X,
 } from "lucide-react";
+import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
-import { adminGetAllLocations, adminSetVerified, adminDeleteLocation, adminGetUsers } from "@/lib/api";
-import type { AdminUser } from "@/lib/api";
-import { MATERIALS } from "@/lib/constants";
+import { adminGetAllLocations, adminSetVerified, adminDeleteLocation, adminGetUsers, adminUpdateLocation } from "@/lib/api";
+import type { AdminUser, AdminLocationUpdate } from "@/lib/api";
+import { MATERIALS, ALL_MATERIALS } from "@/lib/constants";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
@@ -48,10 +49,12 @@ function LocationRow({
   loc,
   onToggleVerify,
   onDelete,
+  onEdit,
 }: {
   loc: Location;
   onToggleVerify: (id: string, current: boolean) => void;
   onDelete: (id: string) => void;
+  onEdit: (loc: Location) => void;
 }) {
   return (
     <tr className="border-b border-border hover:bg-muted/30 transition-colors">
@@ -127,6 +130,13 @@ function LocationRow({
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
           <button
+            onClick={() => onEdit(loc)}
+            className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
+            title="Редактировать"
+          >
+            <Pencil className="w-3.5 h-3.5" />
+          </button>
+          <button
             onClick={() => onToggleVerify(loc.id, loc.verified)}
             className="p-1.5 rounded-lg hover:bg-primary/10 transition-colors text-muted-foreground hover:text-primary"
             title={loc.verified ? "Снять верификацию" : "Верифицировать"}
@@ -146,6 +156,176 @@ function LocationRow({
   );
 }
 
+// ── Edit modal ───────────────────────────────────────────────
+function EditLocationModal({
+  loc,
+  onClose,
+  onSaved,
+}: {
+  loc: Location;
+  onClose: () => void;
+  onSaved: (updated: Location) => void;
+}) {
+  const [form, setForm] = useState({
+    category: loc.category,
+    nameRu: loc.name.ru, nameEn: loc.name.en, nameKk: loc.name.kk,
+    descriptionRu: loc.description.ru, descriptionEn: loc.description.en, descriptionKk: loc.description.kk,
+    addressRu: loc.address.ru, addressEn: loc.address.en, addressKk: loc.address.kk,
+    lat: String(loc.position.lat), lng: String(loc.position.lng),
+    phone: loc.phone ?? "", website: loc.website ?? "",
+  });
+  const [materials, setMaterials] = useState<MaterialType[]>(loc.materials);
+  const [saving, setSaving] = useState(false);
+
+  const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
+
+  const toggleMaterial = (m: MaterialType) =>
+    setMaterials((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
+
+  const handleSave = async () => {
+    const lat = parseFloat(form.lat);
+    const lng = parseFloat(form.lng);
+    if (Number.isNaN(lat) || Number.isNaN(lng)) {
+      toast.error("Некорректные координаты");
+      return;
+    }
+    setSaving(true);
+    const patch: AdminLocationUpdate = {
+      category: form.category,
+      nameRu: form.nameRu, nameEn: form.nameEn, nameKk: form.nameKk,
+      descriptionRu: form.descriptionRu, descriptionEn: form.descriptionEn, descriptionKk: form.descriptionKk,
+      addressRu: form.addressRu, addressEn: form.addressEn, addressKk: form.addressKk,
+      lat, lng, materials,
+      phone: form.phone, website: form.website,
+    };
+    try {
+      const updated = await adminUpdateLocation(loc.id, patch);
+      toast.success("Изменения сохранены");
+      onSaved(updated);
+      onClose();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Не удалось сохранить");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const field = (label: string, k: keyof typeof form, type = "text") => (
+    <div className="space-y-1">
+      <label className="text-xs font-medium text-muted-foreground">{label}</label>
+      <input
+        type={type}
+        value={form[k]}
+        onChange={(e) => set(k, e.target.value)}
+        className="w-full text-sm bg-background border border-border rounded-lg px-3 py-1.5 focus:outline-none focus:ring-1 focus:ring-ring"
+      />
+    </div>
+  );
+
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-black/50" onClick={onClose} />
+      <div className="relative bg-card border border-border rounded-2xl w-full max-w-2xl max-h-[88vh] overflow-y-auto shadow-2xl">
+        <div className="sticky top-0 bg-card border-b border-border px-5 py-3.5 flex items-center justify-between z-10">
+          <h2 className="heading text-sm font-bold text-foreground">Редактировать пункт</h2>
+          <button onClick={onClose} className="p-1 rounded-lg hover:bg-muted text-muted-foreground">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="p-5 space-y-5">
+          {/* Category */}
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">Тип</label>
+            <select
+              value={form.category}
+              onChange={(e) => set("category", e.target.value)}
+              className="w-full text-sm bg-background border border-border rounded-lg px-3 py-1.5 focus:outline-none"
+            >
+              <option value="hub">Хаб</option>
+              <option value="kiosk">Киоск</option>
+            </select>
+          </div>
+
+          {/* Names */}
+          <div className="grid sm:grid-cols-3 gap-3">
+            {field("Название (RU)", "nameRu")}
+            {field("Название (EN)", "nameEn")}
+            {field("Название (KK)", "nameKk")}
+          </div>
+
+          {/* Addresses */}
+          <div className="grid sm:grid-cols-3 gap-3">
+            {field("Адрес (RU)", "addressRu")}
+            {field("Адрес (EN)", "addressEn")}
+            {field("Адрес (KK)", "addressKk")}
+          </div>
+
+          {/* Descriptions */}
+          <div className="grid sm:grid-cols-3 gap-3">
+            {field("Описание (RU)", "descriptionRu")}
+            {field("Описание (EN)", "descriptionEn")}
+            {field("Описание (KK)", "descriptionKk")}
+          </div>
+
+          {/* Coords */}
+          <div className="grid grid-cols-2 gap-3">
+            {field("Широта (lat)", "lat")}
+            {field("Долгота (lng)", "lng")}
+          </div>
+
+          {/* Contact */}
+          <div className="grid grid-cols-2 gap-3">
+            {field("Телефон", "phone")}
+            {field("Сайт", "website")}
+          </div>
+
+          {/* Materials */}
+          <div className="space-y-1.5">
+            <label className="text-xs font-medium text-muted-foreground">Материалы</label>
+            <div className="flex flex-wrap gap-1.5">
+              {ALL_MATERIALS.map((m) => {
+                const active = materials.includes(m);
+                return (
+                  <button
+                    key={m}
+                    type="button"
+                    onClick={() => toggleMaterial(m)}
+                    className={cn(
+                      "text-xs px-2.5 py-1 rounded-lg border transition-colors",
+                      active
+                        ? "border-accent/40 bg-accent/10 text-foreground"
+                        : "border-border text-muted-foreground hover:bg-muted"
+                    )}
+                  >
+                    {MATERIALS[m].label.ru}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div className="sticky bottom-0 bg-card border-t border-border px-5 py-3 flex justify-end gap-2">
+          <button
+            onClick={onClose}
+            className="text-sm px-4 py-1.5 rounded-lg border border-border text-muted-foreground hover:bg-muted transition-colors"
+          >
+            Отмена
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="text-sm font-semibold px-4 py-1.5 rounded-lg bg-primary text-primary-foreground disabled:opacity-50"
+          >
+            {saving ? "Сохранение…" : "Сохранить"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // ────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
@@ -158,6 +338,7 @@ export default function AdminPage() {
   const [search, setSearch] = useState("");
   const [filterCat, setFilterCat] = useState<"all" | "hub" | "kiosk">("all");
   const [filterVerified, setFilterVerified] = useState<"all" | "verified" | "unverified">("all");
+  const [editing, setEditing] = useState<Location | null>(null);
 
   // Guard: redirect non-admins
   useEffect(() => {
@@ -370,7 +551,7 @@ export default function AdminPage() {
                     </tr>
                   ) : (
                     filtered.map((loc) => (
-                      <LocationRow key={loc.id} loc={loc} onToggleVerify={handleToggleVerify} onDelete={handleDelete} />
+                      <LocationRow key={loc.id} loc={loc} onToggleVerify={handleToggleVerify} onDelete={handleDelete} onEdit={setEditing} />
                     ))
                   )}
                 </tbody>
@@ -431,6 +612,15 @@ export default function AdminPage() {
         </div>
       )}
 
+      {editing && (
+        <EditLocationModal
+          loc={editing}
+          onClose={() => setEditing(null)}
+          onSaved={(updated) =>
+            setLocations((prev) => prev.map((l) => (l.id === updated.id ? updated : l)))
+          }
+        />
+      )}
     </div>
   );
 }

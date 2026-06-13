@@ -59,7 +59,8 @@
     "photoAlt": "фото"
   },
   "actions": {
-    "addAnother": "Добавить ещё"
+    "addAnother": "Добавить ещё",
+    "clear": "Очистить"
   },
   "locations": {
     "title": "Все пункты переработки",
