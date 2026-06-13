@@ -59,7 +59,8 @@
     "photoAlt": "photo"
   },
   "actions": {
-    "addAnother": "Add another"
+    "addAnother": "Add another",
+    "clear": "Clear"
   },
   "locations": {
     "title": "All recycling points",

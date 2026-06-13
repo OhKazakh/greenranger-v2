@@ -13,6 +13,7 @@ import {
 import type { Request } from 'express';
 import { LocationsService } from './locations.service';
 import { CreateLocationDto } from './dto/create-location.dto';
+import { UpdateLocationDto } from './dto/update-location.dto';
 import { SuggestLocationDto } from './dto/suggest-location.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { AdminGuard } from '../auth/admin.guard';
@@ -59,6 +60,12 @@ export class LocationsController {
   @UseGuards(AdminGuard)
   verify(@Param('id') id: string, @Body('verified') verified: boolean) {
     return this.locations.setVerified(id, verified);
+  }
+
+  @Patch(':id')
+  @UseGuards(AdminGuard)
+  update(@Param('id') id: string, @Body() dto: UpdateLocationDto) {
+    return this.locations.update(id, dto);
   }
 
   @Delete(':id')

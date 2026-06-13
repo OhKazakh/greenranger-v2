@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
-import { Search, SlidersHorizontal, X } from "lucide-react";
+import { useState, useEffect, useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { Search, SlidersHorizontal, X, MapPin } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LocationCard } from "@/components/shared/LocationCard";
@@ -28,15 +29,28 @@ function LocationCardSkeleton() {
   );
 }
 
+// Matches a query against a location's names + addresses in all 3 languages.
+function matchesQuery(loc: Location, q: string): boolean {
+  if (!q) return true;
+  const haystack = [
+    loc.name.ru, loc.name.en, loc.name.kk,
+    loc.address.ru, loc.address.en, loc.address.kk,
+  ].join(" ").toLowerCase();
+  return haystack.includes(q);
+}
+
 export default function LocationsPage() {
-  const { t } = useLang();
+  const { t, lang } = useLang();
+  const router = useRouter();
 
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedMaterials, setSelectedMaterials] = useState<MaterialType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<LocationCategory | "all">("all");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     getLocations()
@@ -45,20 +59,28 @@ export default function LocationsPage() {
   }, []);
 
   const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase();
     return locations.filter((loc) => {
       const materialMatch =
         selectedMaterials.length === 0 ||
         selectedMaterials.some((m) => loc.materials.includes(m));
       const categoryMatch =
         selectedCategory === "all" || loc.category === selectedCategory;
-      const searchMatch =
-        search.trim() === "" ||
-        loc.name.ru.toLowerCase().includes(search.toLowerCase()) ||
-        loc.name.en.toLowerCase().includes(search.toLowerCase()) ||
-        loc.address.ru.toLowerCase().includes(search.toLowerCase());
-      return materialMatch && categoryMatch && searchMatch;
+      return materialMatch && categoryMatch && matchesQuery(loc, q);
     });
   }, [locations, selectedMaterials, selectedCategory, search]);
+
+  // Autocomplete suggestions — top matches by name/address, ignoring other filters.
+  const suggestions = useMemo(() => {
+    const q = search.trim().toLowerCase();
+    if (q.length < 2) return [];
+    return locations.filter((loc) => matchesQuery(loc, q)).slice(0, 6);
+  }, [locations, search]);
+
+  const goToLocation = (slug: string) => {
+    setShowSuggestions(false);
+    router.push(`/locations/${slug}`);
+  };
 
   const activeFilterCount = selectedMaterials.length + (selectedCategory !== "all" ? 1 : 0);
 
@@ -90,13 +112,63 @@ export default function LocationsPage() {
           {/* Search + mobile filter button */}
           <div className="flex gap-2 mb-6">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               <Input
                 placeholder={t("locations.search")}
                 value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-9"
+                onChange={(e) => { setSearch(e.target.value); setShowSuggestions(true); }}
+                onFocus={() => setShowSuggestions(true)}
+                onBlur={() => {
+                  // Delay so a click on a suggestion registers before hiding.
+                  blurTimer.current = setTimeout(() => setShowSuggestions(false), 150);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" && suggestions.length > 0) {
+                    goToLocation(suggestions[0].slug);
+                  } else if (e.key === "Escape") {
+                    setShowSuggestions(false);
+                  }
+                }}
+                className={cn("pl-9", search && "pr-9")}
               />
+              {search && (
+                <button
+                  type="button"
+                  onClick={() => { setSearch(""); setShowSuggestions(false); }}
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-0.5 rounded text-muted-foreground hover:text-foreground"
+                  aria-label={t("actions.clear")}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+
+              {/* Autocomplete dropdown */}
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute z-30 left-0 right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden">
+                  {suggestions.map((loc) => (
+                    <button
+                      key={loc.id}
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => {
+                        if (blurTimer.current) clearTimeout(blurTimer.current);
+                        goToLocation(loc.slug);
+                      }}
+                      className="w-full text-left px-3 py-2 flex items-start gap-2 hover:bg-muted transition-colors"
+                    >
+                      <MapPin className="w-3.5 h-3.5 text-accent mt-0.5 shrink-0" />
+                      <span className="min-w-0">
+                        <span className="block text-sm font-medium text-foreground truncate">
+                          {loc.name[lang]}
+                        </span>
+                        <span className="block text-xs text-muted-foreground truncate">
+                          {loc.address[lang]}
+                        </span>
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
             {/* Mobile filter button */}
             <button
