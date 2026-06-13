@@ -9,7 +9,7 @@
 // ────────────────────────────────────────────────────────────
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { GoogleMap, useJsApiLoader, Marker, MarkerClusterer, OverlayView } from "@react-google-maps/api";
 import { useTheme } from "next-themes";
 import { SlidersHorizontal, X } from "lucide-react";
@@ -25,6 +25,7 @@ import {
   MARKER_COLORS,
   MAP_STYLE_LIGHT,
   MAP_STYLE_DARK,
+  ALL_MATERIALS,
 } from "@/lib/constants";
 import { getLocations } from "@/lib/api";
 import type { Location, MaterialType, LocationCategory } from "@/types";
@@ -71,6 +72,8 @@ export default function MapContainer() {
   const { t, lang } = useLang();
   const { resolvedTheme } = useTheme();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   // Load Google Maps JS SDK
   const { isLoaded, loadError } = useJsApiLoader({
@@ -82,9 +85,18 @@ export default function MapContainer() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
 
-  // Filter state
-  const [selectedMaterials, setSelectedMaterials] = useState<MaterialType[]>([]);
-  const [selectedCategory, setSelectedCategory] = useState<LocationCategory | "all">("all");
+  // Filter state — initialized from URL query params (?category=hub&materials=plastic,paper)
+  const [selectedMaterials, setSelectedMaterials] = useState<MaterialType[]>(() => {
+    const raw = searchParams.get("materials");
+    if (!raw) return [];
+    return raw
+      .split(",")
+      .filter((m): m is MaterialType => (ALL_MATERIALS as readonly string[]).includes(m));
+  });
+  const [selectedCategory, setSelectedCategory] = useState<LocationCategory | "all">(() => {
+    const c = searchParams.get("category");
+    return c === "hub" || c === "kiosk" ? c : "all";
+  });
 
   // UI state
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
@@ -131,6 +143,19 @@ export default function MapContainer() {
     });
   }, [locations, selectedMaterials, selectedCategory]);
 
+  // Persist filter state to the URL so it survives reloads and can be shared.
+  // Preserve any existing params (e.g. ?focus=<slug>).
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (selectedCategory === "all") params.delete("category");
+    else params.set("category", selectedCategory);
+    if (selectedMaterials.length === 0) params.delete("materials");
+    else params.set("materials", selectedMaterials.join(","));
+    const qs = params.toString();
+    router.replace(qs ? `${pathname}?${qs}` : pathname, { scroll: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCategory, selectedMaterials]);
+
   const handleMarkerClick = useCallback((loc: Location) => {
     setSelectedLocation(loc);
     setFilterOpen(false);
@@ -161,7 +186,7 @@ export default function MapContainer() {
   if (loadError) {
     return (
       <div className="w-full h-full flex items-center justify-center bg-muted">
-        <p className="text-sm text-destructive">Не удалось загрузить Google Maps</p>
+        <p className="text-sm text-destructive">{t("map.loadError")}</p>
       </div>
     );
   }
