@@ -3,6 +3,7 @@
 import { Plus, Minus, Locate } from "lucide-react";
 import { useState } from "react";
 import type { RefObject } from "react";
+import { toast } from "sonner";
 import { useLang } from "@/context/LangContext";
 import { cn } from "@/lib/utils";
 import { MARKER_COLORS } from "@/lib/constants";
@@ -57,7 +58,10 @@ export function MapControls({ map }: MapControlsProps) {
   const handleLocate = () => {
     if (!map.current || locating) return;
 
-    if (!navigator.geolocation) return;
+    if (!navigator.geolocation) {
+      toast.error(t("map.geoUnavailable"));
+      return;
+    }
 
     setLocating(true);
 
@@ -90,6 +94,7 @@ export function MapControls({ map }: MapControlsProps) {
       },
       () => {
         setLocating(false);
+        toast.error(t("map.geoError"));
       },
       { enableHighAccuracy: true, timeout: 8000 }
     );

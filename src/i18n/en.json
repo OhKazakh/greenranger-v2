@@ -30,7 +30,10 @@
     "zoomOut": "Zoom out",
     "satellite": "Satellite",
     "noResults": "No points found for the selected filters",
-    "loading": "Loading map..."
+    "loading": "Loading map...",
+    "loadError": "Failed to load Google Maps",
+    "geoUnavailable": "Geolocation is not supported by your browser",
+    "geoError": "Couldn't determine your location"
   },
   "location": {
     "materials": "Accepted materials",
@@ -84,7 +87,10 @@
     "submitting": "Submitting...",
     "successTitle": "Thank you!",
     "successMessage": "Your point has been submitted for review. We'll publish it within 48 hours.",
-    "errorMessage": "Something went wrong. Please try again."
+    "errorMessage": "Something went wrong. Please try again.",
+    "mapLoading": "Loading map…",
+    "mapClickHint": "Click the map to drop a pin",
+    "mapPinRequired": "Please mark the location on the map"
   },
   "auth": {
     "loginTitle": "Log in",
@@ -177,5 +183,17 @@
     "noReviews": "No reviews yet.",
     "ratingRequired": "Please select a rating",
     "errorSubmit": "Failed to submit review"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "message": "The link may be outdated or mistyped.",
+    "home": "Go home",
+    "map": "Open map"
+  },
+  "errorPage": {
+    "title": "Something went wrong",
+    "message": "An unexpected error occurred. Please try refreshing the page.",
+    "retry": "Try again",
+    "home": "Go home"
   }
 }

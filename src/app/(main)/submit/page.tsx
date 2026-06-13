@@ -57,6 +57,7 @@ function CoordinatePicker({
   onChange: (pos: { lat: number; lng: number }) => void;
 }) {
   const { resolvedTheme } = useTheme();
+  const { t } = useLang();
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries: LIBRARIES,
@@ -93,7 +94,7 @@ function CoordinatePicker({
   if (!isLoaded) {
     return (
       <div className="h-48 rounded-xl border border-border bg-muted flex items-center justify-center">
-        <p className="text-xs text-muted-foreground">Загрузка карты…</p>
+        <p className="text-xs text-muted-foreground">{t("submit.mapLoading")}</p>
       </div>
     );
   }
@@ -160,7 +161,7 @@ function CoordinatePicker({
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="bg-background/90 border border-border rounded-lg px-3 py-2 flex items-center gap-2 shadow-md">
             <MapPin className="w-3.5 h-3.5 text-accent" />
-            <span className="text-xs font-medium">Нажмите на карту, чтобы поставить метку</span>
+            <span className="text-xs font-medium">{t("submit.mapClickHint")}</span>
           </div>
         </div>
       )}
@@ -193,7 +194,7 @@ export default function SubmitPage() {
   const onSubmit = async (values: SubmitFormValues) => {
     if (!pinPos) {
       setPinError(true);
-      toast.error("Пожалуйста, укажите местоположение на карте");
+      toast.error(t("submit.mapPinRequired"));
       return;
     }
     setPinError(false);
@@ -409,7 +410,7 @@ export default function SubmitPage() {
             <CoordinatePicker value={pinPos} onChange={(p) => { setPinPos(p); setPinError(false); }} />
           </div>
           {pinError && !pinPos && (
-            <p className="text-xs text-destructive">Укажите местоположение на карте</p>
+            <p className="text-xs text-destructive">{t("submit.mapPinRequired")}</p>
           )}
         </div>
 
