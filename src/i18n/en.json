@@ -57,7 +57,8 @@
     "noPhotos": "No photos available",
     "backToList": "Back to list",
     "notFound": "Location not found",
-    "photoAlt": "photo"
+    "photoAlt": "photo",
+    "photoCredit": "Photos: Wikimedia Commons"
   },
   "actions": {
     "addAnother": "Add another",
@@ -154,12 +155,15 @@
     "contactTitle": "Contact",
     "version": "Version 2.0",
     "serviceDesc": "A public service for finding separate waste collection points in Astana. Up-to-date data, interactive map, three languages.",
-    "role": "Software & AI Engineer",
+    "role": "SeoulTech student · developer",
     "contactLabel": "Contact",
     "openMap": "Open map",
     "addPoint": "Add a point",
     "footerNote": "GreenRanger v2 · Hack4Humanity 2024 laureate",
-    "city": "Astana · Kazakhstan"
+    "city": "Astana · Kazakhstan",
+    "storyLabel": "From the author",
+    "story1": "Hi, I'm Danial — a SeoulTech student and a developer from Astana. GreenRanger started with a simple problem: I had a pile of recyclables and couldn't figure out where to take them. Astana has plenty of recycling points — people just don't know they exist.",
+    "story2": "So I put them all on one map, with addresses, opening hours and accepted materials, verifying every point by hand. It began as a study project; I keep building it because recycling should be as easy as taking out the trash."
   },
   "common": {
     "loading": "Loading...",

@@ -14,6 +14,7 @@ import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { useLang } from "@/context/LangContext";
 import { getLocationBySlug } from "@/lib/api";
 import { MARKER_COLORS } from "@/lib/constants";
+import { wikimediaFilePage } from "@/lib/utils";
 import type { Location } from "@/types";
 import dynamic from "next/dynamic";
 import { ReviewSection } from "@/components/shared/ReviewSection";
@@ -217,17 +218,32 @@ export default function LocationDetailPage() {
         </button>
 
         {photosOpen && hasPhotos && (
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
-            {location.photos.map((src, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={i}
-                src={src}
-                alt={`${location.name[lang]} — фото ${i + 1}`}
-                className="w-full h-32 object-cover rounded-xl"
-              />
-            ))}
-          </div>
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {location.photos.map((src, i) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={i}
+                  src={src}
+                  alt={`${location.name[lang]} — фото ${i + 1}`}
+                  className="w-full h-32 object-cover rounded-xl"
+                />
+              ))}
+            </div>
+            {(() => {
+              const wiki = location.photos.map(wikimediaFilePage).find(Boolean);
+              return wiki ? (
+                <a
+                  href={wiki}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-[11px] text-muted-foreground hover:text-accent mt-1.5"
+                >
+                  {t("location.photoCredit")}
+                </a>
+              ) : null;
+            })()}
+          </>
         )}
       </div>
 

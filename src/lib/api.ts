@@ -271,6 +271,7 @@ export interface AdminLocationUpdate {
   materials?: string[];
   phone?: string;
   website?: string;
+  photos?: string[];
 }
 
 export async function adminUpdateLocation(

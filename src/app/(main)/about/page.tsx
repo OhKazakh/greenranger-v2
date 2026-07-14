@@ -1,6 +1,6 @@
 "use client";
 
-import { Mail, Phone, Recycle } from "lucide-react";
+import { Mail, Phone, Recycle, Code2 } from "lucide-react";
 import { ButtonLink } from "@/components/ui/button-link";
 import { useLang } from "@/context/LangContext";
 
@@ -30,6 +30,23 @@ export default function AboutPage() {
         <p className="text-[16px] leading-relaxed text-muted-foreground max-w-[56ch]">
           {t("about.serviceDesc")}
         </p>
+      </section>
+
+      <div className="border-t border-border" />
+
+      {/* Personal story */}
+      <section>
+        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground mb-6">
+          {t("about.storyLabel")}
+        </p>
+        <div className="space-y-4 max-w-[60ch]">
+          <p className="text-[15px] leading-relaxed text-foreground">
+            {t("about.story1")}
+          </p>
+          <p className="text-[15px] leading-relaxed text-muted-foreground">
+            {t("about.story2")}
+          </p>
+        </div>
       </section>
 
       <div className="border-t border-border" />
@@ -67,6 +84,23 @@ export default function AboutPage() {
             </div>
             <span className="font-mono text-[14px] text-foreground group-hover:text-accent transition-colors">
               danbaluanov@gmail.com
+            </span>
+          </a>
+
+          <a
+            href="https://github.com/OhKazakh"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 group w-fit"
+          >
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ background: "var(--teal-soft)" }}
+            >
+              <Code2 className="w-4 h-4" style={{ color: "var(--teal)" }} />
+            </div>
+            <span className="font-mono text-[14px] text-foreground group-hover:text-accent transition-colors">
+              github.com/OhKazakh
             </span>
           </a>
         </div>

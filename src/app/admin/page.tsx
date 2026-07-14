@@ -175,6 +175,7 @@ function EditLocationModal({
     phone: loc.phone ?? "", website: loc.website ?? "",
   });
   const [materials, setMaterials] = useState<MaterialType[]>(loc.materials);
+  const [photosText, setPhotosText] = useState(loc.photos.join("\n"));
   const [saving, setSaving] = useState(false);
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
@@ -197,6 +198,7 @@ function EditLocationModal({
       addressRu: form.addressRu, addressEn: form.addressEn, addressKk: form.addressKk,
       lat, lng, materials,
       phone: form.phone, website: form.website,
+      photos: photosText.split("\n").map((s) => s.trim()).filter(Boolean),
     };
     try {
       const updated = await adminUpdateLocation(loc.id, patch);
@@ -278,6 +280,28 @@ function EditLocationModal({
           <div className="grid grid-cols-2 gap-3">
             {field("Телефон", "phone")}
             {field("Сайт", "website")}
+          </div>
+
+          {/* Photos */}
+          <div className="space-y-1">
+            <label className="text-xs font-medium text-muted-foreground">
+              Фото (по одной ссылке на строку)
+            </label>
+            <textarea
+              value={photosText}
+              onChange={(e) => setPhotosText(e.target.value)}
+              rows={3}
+              placeholder={"https://example.com/photo1.jpg\nhttps://example.com/photo2.jpg"}
+              className="w-full text-sm bg-background border border-border rounded-lg px-3 py-1.5 resize-none focus:outline-none focus:ring-1 focus:ring-ring font-mono"
+            />
+            {photosText.trim() && (
+              <div className="flex gap-1.5 flex-wrap pt-1">
+                {photosText.split("\n").map((s) => s.trim()).filter(Boolean).slice(0, 6).map((src, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img key={i} src={src} alt={`фото ${i + 1}`} className="w-14 h-14 object-cover rounded-lg border border-border" />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Materials */}
