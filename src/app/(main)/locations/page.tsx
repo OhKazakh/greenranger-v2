@@ -1,16 +1,18 @@
 "use client";
 
-import { useState, useEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Search, SlidersHorizontal, X, MapPin } from "lucide-react";
+import { Search, SlidersHorizontal, X, MapPin, Navigation } from "lucide-react";
+import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { LocationCard } from "@/components/shared/LocationCard";
 import { FilterPanel } from "@/components/map/FilterPanel";
 import { useLang } from "@/context/LangContext";
 import { getLocations } from "@/lib/api";
+import { haversineKm } from "@/lib/geo";
 import { cn } from "@/lib/utils";
-import type { Location, MaterialType, LocationCategory } from "@/types";
+import type { Location, MaterialType, LocationCategory, LatLng } from "@/types";
 
 function LocationCardSkeleton() {
   return (
@@ -45,22 +47,51 @@ export default function LocationsPage() {
 
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadError, setLoadError] = useState(false);
   const [search, setSearch] = useState("");
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedMaterials, setSelectedMaterials] = useState<MaterialType[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<LocationCategory | "all">("all");
   const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
+  const [userPos, setUserPos] = useState<LatLng | null>(null);
+  const [locating, setLocating] = useState(false);
   const blurTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(() => {
+  const load = useCallback(() => {
+    setIsLoading(true);
+    setLoadError(false);
     getLocations()
       .then(setLocations)
+      .catch(() => setLoadError(true))
       .finally(() => setIsLoading(false));
   }, []);
 
+  useEffect(() => { load(); }, [load]);
+
+  // "Near me": toggle off if already active, otherwise geolocate
+  const handleNearMe = () => {
+    if (userPos) { setUserPos(null); return; }
+    if (!navigator.geolocation) {
+      toast.error(t("map.geoUnavailable"));
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        setUserPos({ lat: coords.latitude, lng: coords.longitude });
+        setLocating(false);
+      },
+      () => {
+        setLocating(false);
+        toast.error(t("map.geoError"));
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  };
+
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
-    return locations.filter((loc) => {
+    const result = locations.filter((loc) => {
       const materialMatch =
         selectedMaterials.length === 0 ||
         selectedMaterials.some((m) => loc.materials.includes(m));
@@ -68,7 +99,14 @@ export default function LocationsPage() {
         selectedCategory === "all" || loc.category === selectedCategory;
       return materialMatch && categoryMatch && matchesQuery(loc, q);
     });
-  }, [locations, selectedMaterials, selectedCategory, search]);
+    // Nearest first when the user shared their position
+    if (userPos) {
+      return [...result].sort(
+        (a, b) => haversineKm(userPos, a.position) - haversineKm(userPos, b.position)
+      );
+    }
+    return result;
+  }, [locations, selectedMaterials, selectedCategory, search, userPos]);
 
   // Autocomplete suggestions — top matches by name/address, ignoring other filters.
   const suggestions = useMemo(() => {
@@ -170,6 +208,22 @@ export default function LocationsPage() {
                 </div>
               )}
             </div>
+            {/* Near me: sort by distance */}
+            <button
+              onClick={handleNearMe}
+              disabled={locating}
+              className={cn(
+                "flex items-center gap-2 px-3 py-2 rounded-lg border text-sm font-medium shrink-0 transition-colors",
+                userPos
+                  ? "bg-accent/10 border-accent/30 text-accent"
+                  : "bg-background border-border text-muted-foreground hover:text-foreground",
+                locating && "opacity-60"
+              )}
+              title={t("locations.nearMe")}
+            >
+              <Navigation className={cn("w-4 h-4", locating && "animate-pulse")} />
+              <span className="hidden sm:inline">{t("locations.nearMe")}</span>
+            </button>
             {/* Mobile filter button */}
             <button
               onClick={() => setMobileFilterOpen(true)}
@@ -196,6 +250,16 @@ export default function LocationsPage() {
                 <LocationCardSkeleton key={i} />
               ))}
             </div>
+          ) : loadError ? (
+            <div className="text-center py-16">
+              <p className="text-muted-foreground mb-3">{t("locations.loadError")}</p>
+              <button
+                onClick={load}
+                className="text-sm text-accent hover:underline font-medium"
+              >
+                {t("common.retry")}
+              </button>
+            </div>
           ) : filtered.length === 0 ? (
             <div className="text-center py-16">
               <p className="text-muted-foreground">{t("locations.noResults")}</p>
@@ -203,7 +267,11 @@ export default function LocationsPage() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {filtered.map((loc) => (
-                <LocationCard key={loc.id} location={loc} />
+                <LocationCard
+                  key={loc.id}
+                  location={loc}
+                  distanceKm={userPos ? haversineKm(userPos, loc.position) : null}
+                />
               ))}
             </div>
           )}

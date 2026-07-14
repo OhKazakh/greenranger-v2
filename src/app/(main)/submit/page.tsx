@@ -3,7 +3,7 @@
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { CheckCircle2, LogIn, MapPin } from "lucide-react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
@@ -63,7 +63,16 @@ function CoordinatePicker({
     libraries: LIBRARIES,
   });
   const mapRef = useRef<google.maps.Map | null>(null);
+  const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
   const [ripple, setRipple] = useState<{ x: number; y: number; key: number } | null>(null);
+
+  // next-themes resolves the theme only after hydration — re-apply the style
+  // to the live map instance so it doesn't get stuck on the wrong one.
+  useEffect(() => {
+    mapInstance?.setOptions({
+      styles: resolvedTheme === "dark" ? MAP_STYLE_DARK : MAP_STYLE_LIGHT,
+    });
+  }, [mapInstance, resolvedTheme]);
 
   const handleClick = useCallback(
     (e: google.maps.MapMouseEvent) => {
@@ -114,7 +123,7 @@ function CoordinatePicker({
           restriction: { latLngBounds: ASTANA_BOUNDS, strictBounds: false },
           minZoom: 10,
         }}
-        onLoad={(map) => { mapRef.current = map; }}
+        onLoad={(map) => { mapRef.current = map; setMapInstance(map); }}
         onClick={handleClick}
       >
         {value && (
