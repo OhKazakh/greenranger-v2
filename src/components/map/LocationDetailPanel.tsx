@@ -7,7 +7,7 @@ import { Separator } from "@/components/ui/separator";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { useLang } from "@/context/LangContext";
 import { MARKER_COLORS } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+import { cn, wikimediaFilePage } from "@/lib/utils";
 import type { Location } from "@/types";
 
 interface LocationDetailPanelProps {
@@ -244,17 +244,32 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
 
             {/* Photo gallery */}
             {photosOpen && hasPhotos && (
-              <div className="mt-2 grid grid-cols-2 gap-2">
-                {shown.photos.map((src, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    key={i}
-                    src={src}
-                    alt={`${shown.name[lang]} — фото ${i + 1}`}
-                    className="w-full h-24 object-cover rounded-lg"
-                  />
-                ))}
-              </div>
+              <>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {shown.photos.map((src, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={i}
+                      src={src}
+                      alt={`${shown.name[lang]} — фото ${i + 1}`}
+                      className="w-full h-24 object-cover rounded-lg"
+                    />
+                  ))}
+                </div>
+                {(() => {
+                  const wiki = shown.photos.map(wikimediaFilePage).find(Boolean);
+                  return wiki ? (
+                    <a
+                      href={wiki}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="block text-[11px] text-muted-foreground hover:text-accent mt-1.5"
+                    >
+                      {t("location.photoCredit")}
+                    </a>
+                  ) : null;
+                })()}
+              </>
             )}
           </div>
         </div>

@@ -6,9 +6,9 @@
     "nameRu": "Ағайындар KZ",
     "nameEn": "Agayyndar KZ",
     "nameKk": "Ағайындар KZ",
-    "descriptionRu": "Приём картона, белой бумаги, полиэтилена, ПЭТ-бутылок, канистр, алюминиевых банок и прозрачного стекла.",
-    "descriptionEn": "Accepts cardboard, white paper, polyethylene, PET bottles, canisters, aluminium cans and clear glass.",
-    "descriptionKk": "Картон, ақ қағаз, полиэтилен, ПЭТ бөтелкелер, канистралар, алюминий банкалар және мөлдір шыны қабылдайды.",
+    "descriptionRu": "Принимают картон, белую бумагу, полиэтилен (прозрачный и цветной), ПЭТ, пластиковые ящики, канистры, алюминиевые банки и прозрачное стекло. Звоните: +7 778 968 11 08.",
+    "descriptionEn": "Cardboard, white paper, clear and coloured polyethylene, PET, plastic crates, canisters, aluminium cans, clear glass. Call +7 778 968 11 08.",
+    "descriptionKk": "Картон, ақ қағаз, полиэтилен, ПЭТ, пластик жәшіктер, канистралар, алюминий банкалар және мөлдір шыны қабылданады.",
     "addressRu": "ул. Шаймердена Косшыгулулы, 10/4",
     "addressEn": "Shaimerden Kosshygululy st., 10/4",
     "addressKk": "Шаймерден Қосшығұлұлы көш., 10/4",
@@ -25,7 +25,8 @@
     "scheduleSaturday": "09:00–19:00",
     "scheduleSunday": null,
     "phone": "+7 778 968 11 08",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "astanacleantime-dostyk",
@@ -34,9 +35,9 @@
     "nameRu": "AstanaCleanTime — Достык",
     "nameEn": "AstanaCleanTime — Dostyk",
     "nameKk": "AstanaCleanTime — Достық",
-    "descriptionRu": "Сеть экопунктов AstanaCleanTime (Зелёная Станция). Оплата за вторсырьё: 5–100 тг/кг. Принимает бумагу, картон, плёнку, ПЭТ-бутылки, стекло и алюминий.",
-    "descriptionEn": "AstanaCleanTime eco-station chain (Green Station). Pays 5–100 tenge/kg. Accepts paper, cardboard, film, PET bottles, glass and aluminium.",
-    "descriptionKk": "AstanaCleanTime экостанциялар желісі. 5–100 тг/кг төлейді. Қағаз, картон, пленка, ПЭТ бөтелкелер, шыны және алюминийді қабылдайды.",
+    "descriptionRu": "Сеть AstanaCleanTime: макулатура, стекло, пластик, металл, полиэтилен, стретч-плёнка. Работают вт–вс с 9:30 до 19:00, понедельник — выходной. Общий телефон сети: +7 701 351 37 00.",
+    "descriptionEn": "AstanaCleanTime network: paper, glass, plastic, metal, polyethylene, stretch film. Tue–Sun 9:30–19:00, closed Mondays.",
+    "descriptionKk": "AstanaCleanTime желісі: макулатура, шыны, пластик, металл, полиэтилен. Сс–Жс 9:30–19:00, дүйсенбі — демалыс.",
     "addressRu": "ул. Достык, 5/1",
     "addressEn": "Dostyk St 5/1",
     "addressKk": "Достық к. 5/1",
@@ -53,7 +54,8 @@
     "scheduleSaturday": "09:30–19:00",
     "scheduleSunday": null,
     "phone": "+7 701 351-37-00",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "astanacleantime-imanova",
@@ -62,9 +64,9 @@
     "nameRu": "AstanaCleanTime — Иманова",
     "nameEn": "AstanaCleanTime — Imanova",
     "nameKk": "AstanaCleanTime — Иманова",
-    "descriptionRu": "Экопункт AstanaCleanTime на улице Иманова. Принимает вторсырьё с оплатой за килограмм.",
-    "descriptionEn": "AstanaCleanTime eco-point on Imanova St. Accepts recyclables with payment per kilogram.",
-    "descriptionKk": "Иманова к-сіндегі AstanaCleanTime эконүктесі.",
+    "descriptionRu": "AstanaCleanTime на Иманова. Принимают макулатуру, ПЭТ, стекло и металл. Удобно, если живёте в центре — до пункта легко дойти пешком.",
+    "descriptionEn": "AstanaCleanTime on Imanov st. Paper, PET, glass, metal. Handy if you live downtown — easy walking distance.",
+    "descriptionKk": "Иманов көшесіндегі AstanaCleanTime. Макулатура, ПЭТ, шыны және металл қабылдайды. Орталықта тұрсаңыз — жаяу жетуге ыңғайлы.",
     "addressRu": "ул. Иманова, 50/1",
     "addressEn": "Imanova St 50/1",
     "addressKk": "Иманова к. 50/1",
@@ -81,7 +83,8 @@
     "scheduleSaturday": "09:30–19:00",
     "scheduleSunday": null,
     "phone": "+7 701 351-37-00",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "astanacleantime-kravtsova",
@@ -90,9 +93,9 @@
     "nameRu": "AstanaCleanTime — Кравцова",
     "nameEn": "AstanaCleanTime — Kravtsov",
     "nameKk": "AstanaCleanTime — Кравцов",
-    "descriptionRu": "Пункт приёма AstanaCleanTime: макулатура, стекло, пластик, металл, ПЭТ-бутылки. Пн — выходной.",
-    "descriptionEn": "AstanaCleanTime collection point: paper, glass, plastic, metal, PET bottles. Closed Mondays.",
-    "descriptionKk": "AstanaCleanTime қабылдау пункті: макулатура, шыны, пластик, металл, ПЭТ бөтелкелер. Дс — демалыс.",
+    "descriptionRu": "Пункт AstanaCleanTime возле набережной. Стандартный приём: бумага, стекло, пластик, металл. Вт–вс 9:30–19:00.",
+    "descriptionEn": "AstanaCleanTime near the embankment. Paper, glass, plastic, metal. Tue–Sun 9:30–19:00.",
+    "descriptionKk": "Жағалауға жақын AstanaCleanTime пункті. Қағаз, шыны, пластик, металл.",
     "addressRu": "ул. Александра Кравцова, 2/1",
     "addressEn": "Alexander Kravtsov st., 2/1",
     "addressKk": "Александр Кравцов көш., 2/1",
@@ -109,7 +112,8 @@
     "scheduleSaturday": "09:30–19:00",
     "scheduleSunday": "09:30–19:00",
     "phone": "+7 701 351 37 00",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "astanacleantime-seifullina",
@@ -118,9 +122,9 @@
     "nameRu": "AstanaCleanTime — Сейфуллина",
     "nameEn": "AstanaCleanTime — Seifullin",
     "nameKk": "AstanaCleanTime — Сейфуллин",
-    "descriptionRu": "Пункт приёма AstanaCleanTime: макулатура, стекло, пластик, металл, ПЭТ-бутылки. Пн — выходной.",
-    "descriptionEn": "AstanaCleanTime collection point: paper, glass, plastic, metal, PET bottles. Closed Mondays.",
-    "descriptionKk": "AstanaCleanTime қабылдау пункті: макулатура, шыны, пластик, металл, ПЭТ бөтелкелер. Дс — демалыс.",
+    "descriptionRu": "AstanaCleanTime на Сейфуллина, 65. Как и вся сеть — закрыт по понедельникам.",
+    "descriptionEn": "AstanaCleanTime at Seifullin 65. Like the whole network — closed on Mondays.",
+    "descriptionKk": "Сейфуллин 65 мекенжайындағы AstanaCleanTime. Дүйсенбіде жабық.",
     "addressRu": "ул. Сакена Сейфуллина, 65",
     "addressEn": "Saken Seifullin st., 65",
     "addressKk": "Сәкен Сейфуллин көш., 65",
@@ -137,7 +141,8 @@
     "scheduleSaturday": "09:30–19:00",
     "scheduleSunday": "09:30–19:00",
     "phone": "+7 701 351 37 00",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "astanacleantime-turkestan",
@@ -146,9 +151,9 @@
     "nameRu": "AstanaCleanTime — Түркістан",
     "nameEn": "AstanaCleanTime — Turkestan",
     "nameKk": "AstanaCleanTime — Түркістан",
-    "descriptionRu": "Экопункт AstanaCleanTime. Принимает бумагу, картон, полиэтилен, ПЭТ-бутылки, стекло и алюминий.",
-    "descriptionEn": "AstanaCleanTime eco-point. Accepts paper, cardboard, polyethylene, PET bottles, glass and aluminium.",
-    "descriptionKk": "AstanaCleanTime эконүктесі. Қағаз, картон, полиэтилен, ПЭТ бөтелкелер, шыны және алюминий қабылдайды.",
+    "descriptionRu": "Пункт сети AstanaCleanTime на Түркістане. Пн — выходной.",
+    "descriptionEn": "AstanaCleanTime point on Turkestan st. Closed Mondays.",
+    "descriptionKk": "Түркістан көшесіндегі AstanaCleanTime пункті. Дс — демалыс.",
     "addressRu": "ул. Түркістан, 30",
     "addressEn": "Turkestan St 30",
     "addressKk": "Түркістан к. 30",
@@ -165,7 +170,8 @@
     "scheduleSaturday": "09:30–19:00",
     "scheduleSunday": null,
     "phone": "+7 701 351-37-00",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "astana-qagazy",
@@ -174,9 +180,9 @@
     "nameRu": "AstanaQagazy",
     "nameEn": "AstanaQagazy",
     "nameKk": "AstanaQaғazy",
-    "descriptionRu": "Специализируется на скупке и переработке бумаги и картона. Возможен вывоз крупных партий.",
-    "descriptionEn": "Specialises in buying and recycling paper and cardboard. Large-batch collection available.",
-    "descriptionKk": "Қағаз бен картонды сатып алу және қайта өңдеуге маманданған. Ірі партияларды тасымалдау мүмкіндігі бар.",
+    "descriptionRu": "Приём макулатуры в промзоне. Оплата сразу на месте, для больших объёмов есть самовывоз. Металл не принимают — только бумагу и картон.",
+    "descriptionEn": "Paper buyback in the industrial zone. Instant payment, pickup available for big volumes. No metal — paper and cardboard only.",
+    "descriptionKk": "Өнеркәсіп аймағындағы макулатура қабылдау. Ақысы бірден төленеді, үлкен көлемге өзі алып кету қызметі бар. Металл қабылданбайды.",
     "addressRu": "70-й проезд, 7/5",
     "addressEn": "70th passage, 7/5",
     "addressKk": "70-ші өтпе жол, 7/5",
@@ -189,7 +195,8 @@
     "scheduleSaturday": null,
     "scheduleSunday": null,
     "phone": "+7 (7172) 33-45-67",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "astana-taza-kala-mustafina",
@@ -198,9 +205,9 @@
     "nameRu": "Astana Taza Kala — Мустафина",
     "nameEn": "Astana Taza Kala — Mustafin",
     "nameKk": "Astana Taza Kala — Мұстафин",
-    "descriptionRu": "Специализированный пункт приёма пластика.",
-    "descriptionEn": "Specialised plastic collection point.",
-    "descriptionKk": "Пластик қабылдайтын мамандандырылған пункт.",
+    "descriptionRu": "Узкий профиль — только пластик. Будни с 9 до 17, выходные — закрыто.",
+    "descriptionEn": "Plastic only. Weekdays 9:00–17:00, closed weekends.",
+    "descriptionKk": "Тек пластик қабылдайды. Жұмыс күндері 9:00–17:00.",
     "addressRu": "ул. Габидена Мустафина, 21",
     "addressEn": "Gabiden Mustafin st., 21",
     "addressKk": "Ғабиден Мұстафин көш., 21",
@@ -213,7 +220,8 @@
     "scheduleSaturday": null,
     "scheduleSunday": null,
     "phone": "+7 747 955 29 30",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "azia-group-hazardous",
@@ -222,9 +230,9 @@
     "nameRu": "Azia Group — Опасные отходы",
     "nameEn": "Azia Group — Hazardous Waste",
     "nameKk": "Azia Group — Қауіпті қалдықтар",
-    "descriptionRu": "Лицензированный переработчик опасных отходов. Принимает ртутьсодержащие приборы, люминесцентные лампы, принтеры, картриджи, аккумуляторы, автошины, антифриз и оргтехнику.",
-    "descriptionEn": "Licensed hazardous waste processor. Accepts mercury-containing devices, fluorescent lamps, printers, cartridges, accumulators, tyres, antifreeze and office equipment.",
-    "descriptionKk": "Лицензияланған қауіпті қалдықтарды өңдеуші. Сынап бар аспаптарды, люминесцентті шамдарды, принтерлерді, картридждерді қабылдайды.",
+    "descriptionRu": "Azia Group занимается опасными отходами: ртутные лампы, термометры, аккумуляторы, оргтехника. Работают в основном с организациями по договору, но проконсультируют и частных лиц. Офис на 3 этаже БЦ Taymas.",
+    "descriptionEn": "Azia Group handles hazardous waste: mercury lamps, thermometers, batteries, office equipment. Mostly contract work with organisations, but individuals can get advice too. 3rd floor of Taymas BC.",
+    "descriptionKk": "Azia Group қауіпті қалдықтармен айналысады: сынапты шамдар, термометрлер, аккумуляторлар. Негізінен ұйымдармен жұмыс істейді. Taymas БО, 3-қабат.",
     "addressRu": "ул. Беимбета Майлина, 19 (БЦ Taymas)",
     "addressEn": "Beimbet Mailin st., 19 (Taymas BC)",
     "addressKk": "Бейімбет Майлин көш., 19 (Taymas БО)",
@@ -239,7 +247,8 @@
     "scheduleSaturday": null,
     "scheduleSunday": null,
     "phone": "+7 708 425-44-16",
-    "website": "https://aziagroup.kz"
+    "website": "https://aziagroup.kz",
+    "photos": []
   },
   {
     "slug": "eco-polygon-astana",
@@ -248,9 +257,9 @@
     "nameRu": "Экополигон Астаны",
     "nameEn": "Eco Polygon of Astana",
     "nameKk": "Астана Экополигоны",
-    "descriptionRu": "Сертифицированный полигон для приёма промышленных и опасных отходов. Только для юридических лиц.",
-    "descriptionEn": "Certified facility for industrial and hazardous waste. Organisations only.",
-    "descriptionKk": "Өнеркәсіптік және қауіпті қалдықтарды қабылдауға арналған сертификатталған полигон. Тек заңды тұлғаларға.",
+    "descriptionRu": "Городской полигон ТБО за объездной. Сюда везут промышленные объёмы — металл, электронику, батарейки от организаций. Частнику проще сдать вторсырьё в пунктах в городе.",
+    "descriptionEn": "City landfill complex beyond the bypass road. Industrial volumes only — metal, electronics, batteries from organisations. Individuals are better off using in-city points.",
+    "descriptionKk": "Айналма жолдың сыртындағы қалалық полигон. Мұнда өнеркәсіптік көлемдер әкелінеді. Жеке тұлғаларға қаладағы пункттер ыңғайлырақ.",
     "addressRu": "Объездная дорога, 15 км от центра",
     "addressEn": "Ring Road, 15 km from centre",
     "addressKk": "Айналма жол, орталықтан 15 шақырым",
@@ -266,7 +275,8 @@
     "scheduleSaturday": null,
     "scheduleSunday": null,
     "phone": "+7 (7172) 70-00-01",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "eco-rbk-beibitshilik",
@@ -275,9 +285,9 @@
     "nameRu": "Eco-RBK",
     "nameEn": "Eco-RBK",
     "nameKk": "Eco-RBK",
-    "descriptionRu": "Пункт приёма и переработки вторсырья в районе Бейбитшилик.",
-    "descriptionEn": "Recycling collection and processing point in the Beibitshilik area.",
-    "descriptionKk": "Бейбітшілік ауданындағы қайта өңдеу жинау нүктесі.",
+    "descriptionRu": "Eco-RBK — сбор и утилизация медицинских отходов (классы А, Б, В) плюс приём вторсырья. Ориентированы на клиники и организации.",
+    "descriptionEn": "Eco-RBK — collection and disposal of medical waste (classes A, B, C) plus recyclables. Aimed at clinics and organisations.",
+    "descriptionKk": "Eco-RBK — медициналық қалдықтарды жинау және кәдеге жарату, қоса вторшикізат қабылдау. Клиникалар мен ұйымдарға бағытталған.",
     "addressRu": "ул. Бейбитшилик, 43",
     "addressEn": "Beibitshilik St 43",
     "addressKk": "Бейбітшілік к. 43",
@@ -292,7 +302,8 @@
     "scheduleSaturday": null,
     "scheduleSunday": null,
     "phone": "+7 747 790-93-60",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "kazmetkor-ushkonyar",
@@ -301,9 +312,9 @@
     "nameRu": "КазМетКор — Приём вторсырья",
     "nameEn": "KazMetKor — Secondary Materials",
     "nameKk": "КазМетКор — Қайталама шикізат",
-    "descriptionRu": "Ежедневный приём вторичного сырья: металл, аккумуляторы, электроника. Работает без выходных.",
-    "descriptionEn": "Daily collection of secondary materials: metal, accumulators, electronics. Open every day.",
-    "descriptionKk": "Металл, аккумулятор, электроника — күн сайын қайталама шикізат қабылдайды.",
+    "descriptionRu": "Скупка макулатуры, берут также аккумуляторы.",
+    "descriptionEn": "Paper buyback; car batteries accepted too.",
+    "descriptionKk": "Макулатура сатып алу, аккумуляторлар да қабылданады.",
     "addressRu": "ул. Ушконыр, 1/2",
     "addressEn": "Ushkonyir St 1/2",
     "addressKk": "Ұшқоныр к. 1/2",
@@ -318,7 +329,8 @@
     "scheduleSaturday": "09:00–19:00",
     "scheduleSunday": "09:00–19:00",
     "phone": "+7 771 700-23-86",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "kazrecycle-service",
@@ -327,9 +339,9 @@
     "nameRu": "KazRecycleService ТОО",
     "nameEn": "KazRecycleService LLP",
     "nameKk": "KazRecycleService ЖШС",
-    "descriptionRu": "Крупный промышленный переработчик. Принимает пластик, бумагу, стекло и металл оптом от организаций и частных лиц.",
-    "descriptionEn": "Major industrial recycler. Accepts plastic, paper, glass and metal in bulk from organisations and individuals.",
-    "descriptionKk": "Ірі өнеркәсіптік қайта өңдеуші. Ұйымдардан және жеке тұлғалардан жаппай пластик, қағаз, шыны және металл қабылдайды.",
+    "descriptionRu": "Промышленный переработчик на Алаше. Берут картон, ПЭТ, HDPE и LDPE — в основном оптом, но частных лиц тоже не разворачивают. Если сырья много, лучше позвонить заранее и договориться о приёмке.",
+    "descriptionEn": "Industrial recycler on Alash highway. Cardboard, PET, HDPE and LDPE — mostly bulk, but individuals are welcome too. Call ahead if you're bringing a large load.",
+    "descriptionKk": "Алаш тас жолындағы өнеркәсіптік қайта өңдеуші. Картон, ПЭТ, HDPE және LDPE қабылдайды. Көлемі үлкен болса, алдын ала қоңырау шалған жөн.",
     "addressRu": "шоссе Алаш, 72",
     "addressEn": "Alash highway, 72",
     "addressKk": "Алаш тас жолы, 72",
@@ -346,7 +358,8 @@
     "scheduleSaturday": "09:00–14:00",
     "scheduleSunday": null,
     "phone": "+7 (7172) 49-63-30",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "kazytorchermet-abaya",
@@ -355,9 +368,9 @@
     "nameRu": "Казвторчермет — Абая",
     "nameEn": "KazVtorChermet — Abay Ave",
     "nameKk": "Қазвторшермет — Абай д-лы",
-    "descriptionRu": "Астанинский филиал АО Казвторчермет. Скупает чёрный и цветной металлолом, принимает вторичное сырьё от предприятий и частных лиц.",
-    "descriptionEn": "Astana branch of KazVtorChermet JSC. Buys ferrous and non-ferrous scrap metal, accepts secondary materials from businesses and individuals.",
-    "descriptionKk": "ҚазВторЧермет АҚ Астана филиалы. Қара және түсті металл сынықтарын сатып алады.",
+    "descriptionRu": "Акмолинский филиал сети «Казвторчермет». Профиль — чёрный металлолом: от бытового железа до промышленных партий. Цена зависит от категории и веса.",
+    "descriptionEn": "Akmola branch of the Kazvtorchermet network. Ferrous scrap — from household iron to industrial lots. Price depends on grade and weight.",
+    "descriptionKk": "«Казвторчермет» желісінің Ақмола филиалы. Қара металл сынықтары: тұрмыстық темірден өнеркәсіптік партияларға дейін.",
     "addressRu": "шоссе Алаш, 9",
     "addressEn": "Alash highway, 9",
     "addressKk": "Алаш тас жолы, 9",
@@ -371,7 +384,8 @@
     "scheduleSaturday": "09:00–19:00",
     "scheduleSunday": null,
     "phone": "+7 708 618-08-88",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "ls-ecolife-egemen",
@@ -380,9 +394,9 @@
     "nameRu": "LS Ecolife — Егемен Казахстан",
     "nameEn": "LS Ecolife — Yegemen Kazakhstan",
     "nameKk": "LS Ecolife — Егемен Қазақстан",
-    "descriptionRu": "Пункт приёма вторсырья LS Ecolife: картон, бумага, ПЭТ, плёнка, стекло, алюминиевые банки. Пн — выходной.",
-    "descriptionEn": "LS Ecolife recycling point: cardboard, paper, PET, film, glass, aluminium cans. Closed Mondays.",
-    "descriptionKk": "LS Ecolife қабылдау пункті: картон, қағаз, ПЭТ, плёнка, шыны, алюминий банкалары. Дс — демалыс.",
+    "descriptionRu": "Пункт LS Ecolife в районе Байконур. Макулатура, пластик, стекло, металлические банки — платят по весу.",
+    "descriptionEn": "LS Ecolife point in Baikonur district. Paper, plastic, glass and cans — paid by weight.",
+    "descriptionKk": "Байқоңыр ауданындағы LS Ecolife пункті. Салмағы бойынша төлейді.",
     "addressRu": "ул. Егемен Казахстан, 2/1",
     "addressEn": "Yegemen Kazakhstan st., 2/1",
     "addressKk": "Егемен Қазақстан көш., 2/1",
@@ -400,7 +414,8 @@
     "scheduleSaturday": "10:00–19:00",
     "scheduleSunday": "10:00–19:00",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "ls-ecolife-hub",
@@ -409,9 +424,9 @@
     "nameRu": "LS Ecolife — Центральный хаб",
     "nameEn": "LS Ecolife — Central Hub",
     "nameKk": "LS Ecolife — Орталық хаб",
-    "descriptionRu": "Главный центр сбора вторсырья сети LS Ecolife. Принимает широкий спектр материалов, есть консультант.",
-    "descriptionEn": "Main collection centre of the LS Ecolife network. Wide range of materials accepted, staff on site.",
-    "descriptionKk": "LS Ecolife желісінің негізгі жинау орталығы. Материалдардың кең ауқымы қабылданады, кеңесші бар.",
+    "descriptionRu": "Главный пункт сети LS Ecolife. Принимают больше 17 видов вторсырья: от картона и ПЭТ до стретч-плёнки, канистр и 19-литровых бутылей. Платят на месте. Сырьё должно быть чистым и отсортированным — замасленный картон и бутылки с остатками не возьмут.",
+    "descriptionEn": "LS Ecolife's main point. Over 17 types of recyclables: cardboard, PET, stretch film, canisters, even 19L water bottles. Cash on the spot. Everything must be clean and sorted — greasy cardboard or half-full bottles get rejected.",
+    "descriptionKk": "LS Ecolife желісінің басты пункті. 17-ден астам шикізат түрін қабылдайды: картон, ПЭТ, стретч-плёнка, канистралар. Ақшасын сол жерде төлейді. Шикізат таза және сұрыпталған болуы керек.",
     "addressRu": "ул. Сарыарқа 31А",
     "addressEn": "Saryarka St 31A",
     "addressKk": "Сарыарқа к. 31А",
@@ -429,7 +444,8 @@
     "scheduleSaturday": "10:00–17:00",
     "scheduleSunday": null,
     "phone": "+7 (7172) 30-77-88",
-    "website": "https://lsecolife.kz"
+    "website": "https://lsecolife.kz",
+    "photos": []
   },
   {
     "slug": "ls-ecolife-koshkarbayeva",
@@ -438,9 +454,9 @@
     "nameRu": "LS Ecolife — Кошкарбаева",
     "nameEn": "LS Ecolife — Koshkarbayeva",
     "nameKk": "LS Ecolife — Қошқарбаева",
-    "descriptionRu": "Пункт приёма вторсырья LS Ecolife на проспекте Кошкарбаева.",
-    "descriptionEn": "LS Ecolife recycling drop-off on Koshkarbayeva Ave.",
-    "descriptionKk": "Қошқарбаева даңғылындағы LS Ecolife қайта өңдеу нүктесі.",
+    "descriptionRu": "Пункт LS Ecolife на Кошкарбаева. Картон, ПЭТ, плёнка, алюминиевые банки, стекло. Пн — выходной, обед 14:00–15:00. Цены меняются в зависимости от рынка — уточняйте на месте.",
+    "descriptionEn": "LS Ecolife on Koshkarbayev ave. Cardboard, PET, film, aluminium cans, glass. Closed Mondays, lunch 14:00–15:00. Prices float with the market.",
+    "descriptionKk": "Көшқарбаев даңғылындағы LS Ecolife пункті. Картон, ПЭТ, плёнка, алюминий банкалар, шыны. Дс — демалыс.",
     "addressRu": "просп. Рахимжана Кошкарбаева, 44",
     "addressEn": "Rakhimzhan Koshkarbayev Ave 44",
     "addressKk": "Рахымжан Қошқарбаев д-лы 44",
@@ -458,7 +474,8 @@
     "scheduleSaturday": "10:00–19:00",
     "scheduleSunday": "10:00–14:00",
     "phone": "+7 700 503-33-03",
-    "website": "https://ls.com.kz"
+    "website": "https://ls.com.kz",
+    "photos": []
   },
   {
     "slug": "ls-ecolife-kuyshi-dina",
@@ -467,9 +484,9 @@
     "nameRu": "LS Ecolife — Куйши Дина",
     "nameEn": "LS Ecolife — Kuyshi Dina",
     "nameKk": "LS Ecolife — Күйші Дина",
-    "descriptionRu": "Пункт приёма вторсырья LS Ecolife: картон, бумага, ПЭТ, плёнка, стекло, алюминиевые банки. Пн — выходной.",
-    "descriptionEn": "LS Ecolife recycling point: cardboard, paper, PET, film, glass, aluminium cans. Closed Mondays.",
-    "descriptionKk": "LS Ecolife қабылдау пункті: картон, қағаз, ПЭТ, плёнка, шыны, алюминий банкалары. Дс — демалыс.",
+    "descriptionRu": "Филиал LS Ecolife на правом берегу. Стандартный набор сети: макулатура, ПЭТ, плёнка, стекло, банки. Обед с 14 до 15.",
+    "descriptionEn": "LS Ecolife branch on the right bank. The network's usual list: paper, PET, film, glass, cans.",
+    "descriptionKk": "Оң жағалаудағы LS Ecolife филиалы. Макулатура, ПЭТ, плёнка, шыны, банкалар қабылданады.",
     "addressRu": "ул. Куйши Дина, 26а",
     "addressEn": "Kuyshi Dina st., 26a",
     "addressKk": "Күйші Дина көш., 26а",
@@ -487,7 +504,8 @@
     "scheduleSaturday": "10:00–19:00",
     "scheduleSunday": "10:00–19:00",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "ls-ecolife-manasa",
@@ -496,9 +514,9 @@
     "nameRu": "LS Ecolife — Манаса",
     "nameEn": "LS Ecolife — Manas",
     "nameKk": "LS Ecolife — Манас",
-    "descriptionRu": "Пункт приёма вторсырья LS Ecolife: картон, бумага, ПЭТ, плёнка, стекло, алюминиевые банки. Пн — выходной.",
-    "descriptionEn": "LS Ecolife recycling point: cardboard, paper, PET, film, glass, aluminium cans. Closed Mondays.",
-    "descriptionKk": "LS Ecolife қабылдау пункті: картон, қағаз, ПЭТ, плёнка, шыны, алюминий банкалары. Дс — демалыс.",
+    "descriptionRu": "Небольшой пункт у Манаса. Принимают всё то же, что и остальная сеть LS Ecolife. Понедельник — выходной.",
+    "descriptionEn": "Small LS Ecolife point near Manas st. Closed Mondays.",
+    "descriptionKk": "Манас көшесіндегі шағын пункт. Дүйсенбі — демалыс.",
     "addressRu": "ул. Манаса, 11/4",
     "addressEn": "Manas st., 11/4",
     "addressKk": "Манас көш., 11/4",
@@ -516,7 +534,8 @@
     "scheduleSaturday": "10:00–19:00",
     "scheduleSunday": "10:00–19:00",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "ls-ecolife-mustafina",
@@ -525,9 +544,9 @@
     "nameRu": "LS Ecolife — Габидена Мустафина",
     "nameEn": "LS Ecolife — Gabiden Mustafin",
     "nameKk": "LS Ecolife — Ғабиден Мұстафин",
-    "descriptionRu": "Пункт приёма вторсырья LS Ecolife. Принимает пластик, бумагу, стекло, алюминий и текстиль.",
-    "descriptionEn": "LS Ecolife recycling drop-off. Accepts plastic, paper, glass, aluminium and textiles.",
-    "descriptionKk": "LS Ecolife қабылдау нүктесі. Пластик, қағаз, шыны, алюминий және тоқыма қабылдайды.",
+    "descriptionRu": "Приём вторсырья за деньги: макулатура, пластик, стекло, банки. Один из самых загруженных пунктов сети — по выходным бывает очередь из машин.",
+    "descriptionEn": "Pays for paper, plastic, glass and cans. One of the busiest points in the network — expect a queue of cars on weekends.",
+    "descriptionKk": "Макулатура, пластик, шыны және банкаларды ақшаға қабылдайды. Желінің ең жүктелген пункттерінің бірі.",
     "addressRu": "ул. Габидена Мустафина, 17/1",
     "addressEn": "Gabiden Mustafin St 17/1",
     "addressKk": "Ғабиден Мұстафин к. 17/1",
@@ -545,7 +564,8 @@
     "scheduleSaturday": "09:00–18:00",
     "scheduleSunday": null,
     "phone": "+7 700 503-33-03",
-    "website": "https://ls.com.kz"
+    "website": "https://ls.com.kz",
+    "photos": []
   },
   {
     "slug": "ls-ecolife-shonanauly",
@@ -554,9 +574,9 @@
     "nameRu": "LS Ecolife — Телжан Шонанулы",
     "nameEn": "LS Ecolife — Telzhan Shonanuly",
     "nameKk": "LS Ecolife — Телжан Шонанулы",
-    "descriptionRu": "Пункт приёма вторсырья сети LS Ecolife. Принимает картон, макулатуру, плёнку, ПЭТ-бутылки, алюминий, стекло и одежду.",
-    "descriptionEn": "LS Ecolife network recycling point. Accepts cardboard, waste paper, film, PET bottles, aluminium, glass and clothing.",
-    "descriptionKk": "LS Ecolife желісінің қайта өңдеу нүктесі. Картон, макулатура, пленка, ПЭТ бөтелкелер, алюминий, шыны және киімді қабылдайды.",
+    "descriptionRu": "Филиал LS Ecolife. Понедельник — выходной, обед с 14:00 до 15:00.",
+    "descriptionEn": "LS Ecolife branch. Closed Mondays; lunch break 14:00–15:00.",
+    "descriptionKk": "LS Ecolife филиалы. Дүйсенбі — демалыс, түскі үзіліс 14:00–15:00.",
     "addressRu": "ул. Телжан Шонанулы, 36А",
     "addressEn": "Telzhan Shonanuly St 36A",
     "addressKk": "Телжан Шонанулы к. 36А",
@@ -574,7 +594,8 @@
     "scheduleSaturday": "09:00–18:00",
     "scheduleSunday": "09:00–18:00",
     "phone": "+7 700 503-33-03",
-    "website": "https://ls.com.kz"
+    "website": "https://ls.com.kz",
+    "photos": []
   },
   {
     "slug": "rop-operator-mangilik-el",
@@ -583,9 +604,9 @@
     "nameRu": "Оператор РОП — Жасыл Даму",
     "nameEn": "ROP Operator — Jasyl Damu",
     "nameKk": "РОП операторы — Жасыл Даму",
-    "descriptionRu": "Государственный оператор расширенной ответственности производителя (РОП). Координирует раздельный сбор и переработку упаковки в Казахстане.",
-    "descriptionEn": "State extended producer responsibility (ROP) operator. Coordinates separate collection and recycling of packaging across Kazakhstan.",
-    "descriptionKk": "Өндірушінің кеңейтілген жауапкершілігінің мемлекеттік операторы.",
+    "descriptionRu": "Информационный центр оператора РОП («Жасыл Даму»). Здесь не принимают вторсырьё — сюда можно обратиться по вопросам расширенных обязательств производителей, утильсбора и программ переработки.",
+    "descriptionEn": "Info centre of the ROP operator (Zhasyl Damu). No recyclables accepted here — this is where you go with questions about extended producer responsibility and recycling programs.",
+    "descriptionKk": "РОП операторының («Жасыл Даму») ақпараттық орталығы. Мұнда шикізат қабылданбайды — өндірушілердің кеңейтілген міндеттемелері туралы сұрақтармен жүгінуге болады.",
     "addressRu": "просп. Мәңгілік Ел, 18, 1 этаж (БЦ «Финансовый центр»)",
     "addressEn": "Mangilik El Ave 18, 1st floor (Finance Centre)",
     "addressKk": "Мәңгілік Ел д-лы 18, 1-қабат",
@@ -601,7 +622,8 @@
     "scheduleSaturday": null,
     "scheduleSunday": null,
     "phone": "+7 7172 72-79-60",
-    "website": "https://recycle.kz"
+    "website": "https://recycle.kz",
+    "photos": []
   },
   {
     "slug": "taza-alem-seifullin",
@@ -610,9 +632,9 @@
     "nameRu": "Taza Alem Astana",
     "nameEn": "Taza Alem Astana",
     "nameKk": "Taza Alem Astana",
-    "descriptionRu": "Пункт приёма и управления вторичными материалами. Принимает различные категории вторсырья от населения и организаций.",
-    "descriptionEn": "Secondary materials collection and management point. Accepts various recyclable categories from residents and organisations.",
-    "descriptionKk": "Қайталама материалдарды жинау және басқару нүктесі.",
+    "descriptionRu": "Приём вторсырья, офис 43. Перед поездкой лучше позвонить и уточнить часы.",
+    "descriptionEn": "Recyclables accepted, office 43. Better call ahead to confirm hours.",
+    "descriptionKk": "Вторшикізат қабылдау, 43-кеңсе. Бармас бұрын қоңырау шалған дұрыс.",
     "addressRu": "ул. Сейфуллина, 27/3, офис 43",
     "addressEn": "Seifullin St 27/3, office 43",
     "addressKk": "Сейфуллин к. 27/3, 43-кеңсе",
@@ -628,7 +650,8 @@
     "scheduleSaturday": null,
     "scheduleSunday": null,
     "phone": "+7 7172 49-26-04",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "taza-qala-mangilik-el",
@@ -637,9 +660,9 @@
     "nameRu": "Taza Qala — Мәңгілік Ел",
     "nameEn": "Taza Qala — Mangilik El",
     "nameKk": "Taza Qala — Мәңгілік Ел",
-    "descriptionRu": "Полноцикличный переработчик ПЭТ-тары и другого вторсырья. Принимает ПЭТ-бутылки, алюминиевые банки, стекло, бумагу, ПЭВП-канистры.",
-    "descriptionEn": "Full-cycle PET and secondary materials recycler. Accepts PET bottles, aluminium cans, glass, paper, HDPE canisters.",
-    "descriptionKk": "ПЭТ ыдыс және өзге де қайта өңделетін шикізаттың толық циклді өңдеушісі.",
+    "descriptionRu": "Taza Qala работает с 2016 года и принимает практически все виды пластика и бумаги. Есть услуга вывоза — можно не везти самому, а заказать машину.",
+    "descriptionEn": "Taza Qala has been running since 2016 and takes practically every kind of plastic and paper. They also do pickups — you don't have to drive it yourself.",
+    "descriptionKk": "Taza Qala 2016 жылдан бері жұмыс істейді, пластик пен қағаздың барлық түрін дерлік қабылдайды. Шығарып алу қызметі бар.",
     "addressRu": "просп. Мәңгілік Ел, 50",
     "addressEn": "Mangilik El Ave 50",
     "addressKk": "Мәңгілік Ел д-лы 50",
@@ -656,7 +679,8 @@
     "scheduleSaturday": "09:00–14:00",
     "scheduleSunday": null,
     "phone": "+7 705 875-82-32",
-    "website": "https://taza-qala.kz"
+    "website": "https://taza-qala.kz",
+    "photos": []
   },
   {
     "slug": "algys-clothes",
@@ -665,9 +689,9 @@
     "nameRu": "ALGYS — Контейнер для одежды",
     "nameEn": "ALGYS — Clothing Donation Bin",
     "nameKk": "ALGYS — Киім қайырымдылық контейнері",
-    "descriptionRu": "Благотворительная организация ALGYS. Принимает одежду, игрушки, книги.",
-    "descriptionEn": "Charity organisation ALGYS. Accepts clothes, toys and books.",
-    "descriptionKk": "ALGYS қайырымдылық ұйымы. Киім, ойыншықтар және кітаптарды қабылдайды.",
+    "descriptionRu": "Контейнер ALGYS для одежды и текстиля.",
+    "descriptionEn": "ALGYS container for clothes and textiles.",
+    "descriptionKk": "Киім мен тоқымаға арналған ALGYS контейнері.",
     "addressRu": "ул. Мангилик Ел 55",
     "addressEn": "Mangilik El St 55",
     "addressKk": "Мәңгілік Ел к. 55",
@@ -680,7 +704,8 @@
     "scheduleSaturday": "00:00–23:59",
     "scheduleSunday": "00:00–23:59",
     "phone": "+7 (701) 888-22-11",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "ecoplatform-keruen",
@@ -689,9 +714,9 @@
     "nameRu": "Экоплатформа — Фандомат ТРК Керуен",
     "nameEn": "Ecoplatform — Keruen Mall RVM",
     "nameKk": "Экоплатформа — Керуен СОК фандоматы",
-    "descriptionRu": "Фандобокс Ecoplatform: ПЭТ-бутылки, алюминиевые банки и крышки. Бонусы в приложении Ecoplatform.",
-    "descriptionEn": "Ecoplatform fandobox: PET bottles, aluminium cans and caps. Rewards via the Ecoplatform app.",
-    "descriptionKk": "Ecoplatform фандобоксы: ПЭТ бөтелкелер, алюминий банкалар мен қақпақтар. Ecoplatform қосымшасында бонус.",
+    "descriptionRu": "Фандобокс Ecoplatform в ТРК Керуен. Принимает ПЭТ, алюминиевые банки и даже крышечки.",
+    "descriptionEn": "Ecoplatform fandobox in Keruen mall. Takes PET, aluminium cans and even bottle caps.",
+    "descriptionKk": "Керуендегі Ecoplatform фандобоксы. ПЭТ, алюминий банкалар және қақпақтар.",
     "addressRu": "ул. Достык, 9 (ТРК Керуен)",
     "addressEn": "Dostyk st., 9 (Keruen Mall)",
     "addressKk": "Достық көш., 9 (Керуен СОК)",
@@ -706,7 +731,10 @@
     "scheduleSaturday": "10:00–22:00",
     "scheduleSunday": "10:00–22:00",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/6/66/Keruen_Mall.JPG/960px-Keruen_Mall.JPG"
+    ]
   },
   {
     "slug": "ecoplatform-mega-silk-way",
@@ -715,9 +743,9 @@
     "nameRu": "Экоплатформа — Фандомат MEGA Silk Way",
     "nameEn": "Ecoplatform RVM — MEGA Silk Way",
     "nameKk": "Экоплатформа — MEGA Silk Way фандоматы",
-    "descriptionRu": "Фандомат Ecoplatform: принимает алюминиевые банки, ПЭТ-бутылки и пластиковые крышки. Приложение не нужно. Работает ежедневно.",
-    "descriptionEn": "Ecoplatform reverse vending machine: accepts aluminium cans, PET bottles and plastic caps. No app needed. Open daily.",
-    "descriptionKk": "Ecoplatform фандоматы: алюминий банкалар, ПЭТ бөтелкелер және пластик қақпақтарды қабылдайды.",
+    "descriptionRu": "Фандомат Ecoplatform на первом этаже MEGA Silk Way. За каждую бутылку или банку — 10 экобонусов в приложении Ecoplatform: RVMs and bonuses. Работает в часы ТРЦ, с 10 до 22.",
+    "descriptionEn": "Ecoplatform fandomat on the 1st floor of MEGA Silk Way. Every bottle or can earns 10 ecobonuses in the Ecoplatform app. Open mall hours, 10:00–22:00.",
+    "descriptionKk": "MEGA Silk Way бірінші қабатындағы Ecoplatform фандоматы. Әр бөтелке үшін қосымшаға 10 экобонус. СОО жұмыс уақытында ашық.",
     "addressRu": "ТРЦ MEGA Silk Way, просп. Кабанбай батыра 62, 1 этаж",
     "addressEn": "MEGA Silk Way, Kabanbay Batyr Ave 62, 1st floor",
     "addressKk": "MEGA Silk Way, Қабанбай батыр д-лы 62, 1-қабат",
@@ -731,7 +759,10 @@
     "scheduleSaturday": "10:00–22:00",
     "scheduleSunday": "10:00–22:00",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/%D0%A2%D0%A0%D0%A6_MEGA_Silk-way_%D0%B8_%D0%BE%D1%82%D0%B5%D0%BB%D1%8C_Hilton.jpg/960px-%D0%A2%D0%A0%D0%A6_MEGA_Silk-way_%D0%B8_%D0%BE%D1%82%D0%B5%D0%BB%D1%8C_Hilton.jpg"
+    ]
   },
   {
     "slug": "green-station-abylay-khana",
@@ -740,9 +771,9 @@
     "nameRu": "Зелёная Станция — Абылай хана",
     "nameEn": "Green Station — Abylay Khan Ave",
     "nameKk": "Жасыл Станция — Абылай хан",
-    "descriptionRu": "Самостоятельный пункт раздельного сбора «Зелёная станция». Принимает бумагу, пластик, стекло и целлофан, платит за принятое сырьё.",
-    "descriptionEn": "Independent Green Station separate-collection point. Accepts paper, plastic, glass and cellophane, pays per kilogram.",
-    "descriptionKk": "Дербес «Жасыл Станция» бөлек жинау нүктесі. Қағаз, пластик, шыны және целлофанды қабылдайды, килограмм үшін ақы төлейді.",
+    "descriptionRu": "«Зелёная Станция» — приём макулатуры, пластика, стекла и целлофана. Платят от 3 до 100 тенге за позицию в зависимости от материала. Пн–сб с 9 до 18.",
+    "descriptionEn": "Green Station — paper, plastic, glass and cellophane. Pays 3 to 100 tenge per item depending on material. Mon–Sat 9:00–18:00.",
+    "descriptionKk": "«Жасыл Станция» — макулатура, пластик, шыны қабылдайды. Материалға қарай 3-тен 100 теңгеге дейін төлейді. Дс–Сб 9:00–18:00.",
     "addressRu": "просп. Абылай хана, 29/2",
     "addressEn": "Abylay Khan Ave 29/2",
     "addressKk": "Абылай хан д-лы 29/2",
@@ -757,7 +788,8 @@
     "scheduleSaturday": "09:00–13:00",
     "scheduleSunday": null,
     "phone": "+7 702 502-33-62",
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "likekomek-clothes",
@@ -766,9 +798,9 @@
     "nameRu": "Likekomek — Благотворительный контейнер",
     "nameEn": "Likekomek — Charity Clothing Bin",
     "nameKk": "Likekomek — Қайырымдылық киім контейнері",
-    "descriptionRu": "Благотворительный контейнер для одежды и обуви. Вещи идут нуждающимся семьям Астаны.",
-    "descriptionEn": "Charity bin for clothing and footwear. Items go to families in need in Astana.",
-    "descriptionKk": "Киім мен аяқ киімге арналған қайырымдылық контейнері. Заттар Астананың мұқтаж отбасыларына береді.",
+    "descriptionRu": "Контейнер благотворительного фонда LikeKomek. Одежда и обувь должны быть чистыми и целыми — вещи идут людям, а не на переработку. Также берут постельное бельё, шторы и полотенца.",
+    "descriptionEn": "LikeKomek charity container. Clothes and shoes must be clean and intact — they go to people, not to shredding. Bedding, curtains and towels accepted too.",
+    "descriptionKk": "LikeKomek қайырымдылық қорының контейнері. Киім таза және бүтін болуы керек — заттар адамдарға беріледі.",
     "addressRu": "ул. Иманова 15, у подъезда №2",
     "addressEn": "Imanov St 15, entrance 2",
     "addressKk": "Иманов к. 15, №2 кіреберіс",
@@ -781,7 +813,8 @@
     "scheduleSaturday": "00:00–23:59",
     "scheduleSunday": "00:00–23:59",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "likekomek-masaty",
@@ -790,9 +823,9 @@
     "nameRu": "LikeKomek — Склад приёма вещей",
     "nameEn": "LikeKomek — Donation warehouse",
     "nameKk": "LikeKomek — Заттар қабылдау қоймасы",
-    "descriptionRu": "Склад благотворительного фонда LikeKomek: чистая одежда, обувь, постельное бельё, шторы, полотенца.",
-    "descriptionEn": "LikeKomek charity warehouse: clean clothing, footwear, bedding, curtains, towels.",
-    "descriptionKk": "LikeKomek қайырымдылық қорының қоймасы: таза киім, аяқ киім, төсек-орын, перде, сүлгі.",
+    "descriptionRu": "Склад LikeKomek — сюда можно привезти сразу много вещей, минуя уличные контейнеры. Пн–сб с 8:30 до 17:00.",
+    "descriptionEn": "LikeKomek warehouse — bring large donations here instead of stuffing street boxes. Mon–Sat 8:30–17:00.",
+    "descriptionKk": "LikeKomek қоймасы — көп затты бірден осында әкелуге болады. Дс–Сб 8:30–17:00.",
     "addressRu": "ул. Масаты, 51",
     "addressEn": "Masaty st., 51",
     "addressKk": "Масаты көш., 51",
@@ -805,7 +838,8 @@
     "scheduleSaturday": "08:30–17:00",
     "scheduleSunday": null,
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "sparklo-aruzhan",
@@ -814,9 +848,9 @@
     "nameRu": "Sparklo — ТРЦ Аружан",
     "nameEn": "Sparklo — Aruzhan Mall",
     "nameKk": "Sparklo — Аружан СОО",
-    "descriptionRu": "Фандомат Sparklo: принимает ПЭТ-бутылки и алюминиевые банки, начисляет бонусы в приложении.",
-    "descriptionEn": "Sparklo reverse vending machine: accepts PET bottles and aluminium cans, rewards via the app.",
-    "descriptionKk": "Sparklo фандоматы: ПЭТ бөтелкелер мен алюминий банкаларын қабылдайды, қосымшада бонус береді.",
+    "descriptionRu": "Фандомат Sparklo в ТРЦ Аружан. Кидаете бутылку или банку — автомат считывает штрихкод, прессует тару и начисляет бонусы в приложении Sparklo.",
+    "descriptionEn": "Sparklo reverse vending machine in Aruzhan mall. Drop in a bottle or can — it scans the barcode, crushes it and credits bonuses to the Sparklo app.",
+    "descriptionKk": "Аружан СОО-дағы Sparklo фандоматы. Бөтелкені салсаңыз — автомат штрихкодты оқып, Sparklo қосымшасына бонус жазады.",
     "addressRu": "ул. Ильяса Жансугурова, 8/1 (ТРЦ Аружан)",
     "addressEn": "Ilyas Zhansugurov st., 8/1 (Aruzhan Mall)",
     "addressKk": "Ілияс Жансүгіров көш., 8/1 (Аружан СОО)",
@@ -831,7 +865,8 @@
     "scheduleSaturday": "10:00–22:00",
     "scheduleSunday": "10:00–22:00",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "sparklo-edil",
@@ -840,9 +875,9 @@
     "nameRu": "Sparklo — Едиль",
     "nameEn": "Sparklo — Yedil",
     "nameKk": "Sparklo — Еділ",
-    "descriptionRu": "Фандомат Sparklo: принимает ПЭТ-бутылки и алюминиевые банки, начисляет бонусы в приложении.",
-    "descriptionEn": "Sparklo reverse vending machine: accepts PET bottles and aluminium cans, rewards via the app.",
-    "descriptionKk": "Sparklo фандоматы: ПЭТ бөтелкелер мен алюминий банкаларын қабылдайды, қосымшада бонус береді.",
+    "descriptionRu": "Фандомат Sparklo на Едиле. Тара должна быть пустой и со штрихкодом — мятые бутылки без этикетки автомат не примет.",
+    "descriptionEn": "Sparklo fandomat on Yedil st. Containers must be empty with a readable barcode — crushed label-less bottles get rejected.",
+    "descriptionKk": "Еділдегі Sparklo фандоматы. Ыдыс бос және штрихкоды оқылатын болуы керек.",
     "addressRu": "ул. Едиль, 26",
     "addressEn": "Yedil st., 26",
     "addressKk": "Еділ көш., 26",
@@ -857,7 +892,8 @@
     "scheduleSaturday": "09:00–21:00",
     "scheduleSunday": "09:00–21:00",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "sparklo-syganak",
@@ -866,9 +902,9 @@
     "nameRu": "Sparklo — Сыганак",
     "nameEn": "Sparklo — Syganak",
     "nameKk": "Sparklo — Сығанақ",
-    "descriptionRu": "Фандомат Sparklo: принимает ПЭТ-бутылки и алюминиевые банки, начисляет бонусы в приложении.",
-    "descriptionEn": "Sparklo reverse vending machine: accepts PET bottles and aluminium cans, rewards via the app.",
-    "descriptionKk": "Sparklo фандоматы: ПЭТ бөтелкелер мен алюминий банкаларын қабылдайды, қосымшада бонус береді.",
+    "descriptionRu": "Автомат Sparklo на Сыганаке. ПЭТ-бутылки и алюминиевые банки, бонусы в приложении.",
+    "descriptionEn": "Sparklo machine on Syganak st. PET bottles and aluminium cans, app bonuses.",
+    "descriptionKk": "Сығанақтағы Sparklo автоматы. ПЭТ бөтелкелер мен алюминий банкалар.",
     "addressRu": "ул. Сыганак, 17/10",
     "addressEn": "Syganak st., 17/10",
     "addressKk": "Сығанақ көш., 17/10",
@@ -883,7 +919,8 @@
     "scheduleSaturday": "09:00–21:00",
     "scheduleSunday": "09:00–21:00",
     "phone": null,
-    "website": null
+    "website": null,
+    "photos": []
   },
   {
     "slug": "sulpak-astana-mall",
@@ -892,9 +929,9 @@
     "nameRu": "Sulpak — Батарейки/Электроника (Astana Mall)",
     "nameEn": "Sulpak — Battery & Electronics Drop-off (Astana Mall)",
     "nameKk": "Sulpak — Батарейка/Электроника (Astana Mall)",
-    "descriptionRu": "Контейнер для батареек и мелкой электроники у кассы Sulpak в Astana Mall. Бесплатная утилизация.",
-    "descriptionEn": "Battery and small electronics drop-off container at Sulpak checkout in Astana Mall. Free recycling.",
-    "descriptionKk": "Astana Mall-дағы Sulpak кассасы жанындағы батарейка және ұсақ электрониканы тастауға арналған контейнер.",
+    "descriptionRu": "Коробка для батареек в магазине Sulpak (ТРЦ Astana Mall). Стоит у входа — забросить батарейки можно по пути за покупками. Мелкую электронику тоже принимают.",
+    "descriptionEn": "Battery drop-off box at the Sulpak store in Astana Mall. It's by the entrance — dump your batteries on the way in. Small electronics accepted too.",
+    "descriptionKk": "Astana Mall-дағы Sulpak дүкеніндегі батарейкаларға арналған жәшік. Кіре берісте тұр. Ұсақ электроника да қабылданады.",
     "addressRu": "ТРЦ Astana Mall, просп. Тауелсиздик 34",
     "addressEn": "Astana Mall, Tauelsizdeek Ave 34",
     "addressKk": "Astana Mall, Тәуелсіздік д-лы 34",
@@ -908,7 +945,8 @@
     "scheduleSaturday": "10:00–22:00",
     "scheduleSunday": "10:00–22:00",
     "phone": null,
-    "website": "https://www.sulpak.kz"
+    "website": "https://www.sulpak.kz",
+    "photos": []
   },
   {
     "slug": "sulpak-khan-shatyr",
@@ -917,9 +955,9 @@
     "nameRu": "Sulpak — Батарейки/Электроника (Хан Шатыр)",
     "nameEn": "Sulpak — Battery & Electronics Drop-off (Khan Shatyr)",
     "nameKk": "Sulpak — Батарейка/Электроника (Хан Шатыр)",
-    "descriptionRu": "Контейнер для батареек и мелкой электроники у Sulpak в торговом центре Хан Шатыр. Бесплатная утилизация.",
-    "descriptionEn": "Battery and small electronics drop-off at Sulpak in Khan Shatyr mall. Free recycling.",
-    "descriptionKk": "Хан Шатыр сауда орталығындағы Sulpak жанындағы батарейка және ұсақ электрониканы тастауға арналған контейнер.",
+    "descriptionRu": "Приём батареек и мелкой электроники в Sulpak, ТЦ Хан Шатыр.",
+    "descriptionEn": "Battery and small-electronics drop-off at Sulpak, Khan Shatyr.",
+    "descriptionKk": "Хан Шатырдағы Sulpak-та батарейкалар мен ұсақ электроника қабылданады.",
     "addressRu": "ТЦ Хан Шатыр, просп. Туран 37",
     "addressEn": "Khan Shatyr, Turan Ave 37",
     "addressKk": "Хан Шатыр, Тұран д-лы 37",
@@ -933,6 +971,10 @@
     "scheduleSaturday": "10:00–22:00",
     "scheduleSunday": "10:00–22:00",
     "phone": null,
-    "website": "https://www.sulpak.kz"
+    "website": "https://www.sulpak.kz",
+    "photos": [
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Khan-Shatyr_shopping_mall.jpg/960px-Khan-Shatyr_shopping_mall.jpg",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Khan_Shatyr.jpg/960px-Khan_Shatyr.jpg"
+    ]
   }
 ]

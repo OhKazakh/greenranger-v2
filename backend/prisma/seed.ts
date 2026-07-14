@@ -16,8 +16,9 @@ async function main() {
   console.log('Cleared existing locations');
 
   for (const loc of locations) {
+    // locations.json always carries a photos array (exported from prod)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const data = { ...loc, photos: [] } as any;
+    const data = { ...loc } as any;
     await prisma.location.create({ data });
   }
 
