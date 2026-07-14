@@ -1,18 +1,21 @@
-import { MapPin, Clock, CheckCircle2 } from "lucide-react";
+import { MapPin, Clock, CheckCircle2, Navigation } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ButtonLink } from "@/components/ui/button-link";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { useLang } from "@/context/LangContext";
 import { MARKER_COLORS } from "@/lib/constants";
+import { formatDistance } from "@/lib/geo";
 import type { Location } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface LocationCardProps {
   location: Location;
   compact?: boolean;
+  /** Distance from the user in km — shows a badge when provided */
+  distanceKm?: number | null;
 }
 
-export function LocationCard({ location, compact = false }: LocationCardProps) {
+export function LocationCard({ location, compact = false, distanceKm = null }: LocationCardProps) {
   const { lang, t } = useLang();
   const isHub = location.category === "hub";
   const dotColor = isHub ? MARKER_COLORS.hub : MARKER_COLORS.kiosk;
@@ -39,12 +42,20 @@ export function LocationCard({ location, compact = false }: LocationCardProps) {
           >
             {isHub ? t("location.hub") : t("location.kiosk")}
           </span>
-          {location.verified && (
-            <CheckCircle2
-              className="w-4 h-4 text-accent"
-              aria-label={t("location.verified")}
-            />
-          )}
+          <span className="flex items-center gap-2">
+            {distanceKm != null && (
+              <span className="inline-flex items-center gap-1 text-xs font-semibold text-accent bg-accent/10 px-2 py-0.5 rounded-full">
+                <Navigation className="w-3 h-3" />
+                {formatDistance(distanceKm, lang)}
+              </span>
+            )}
+            {location.verified && (
+              <CheckCircle2
+                className="w-4 h-4 text-accent"
+                aria-label={t("location.verified")}
+              />
+            )}
+          </span>
         </div>
 
         {/* Name */}

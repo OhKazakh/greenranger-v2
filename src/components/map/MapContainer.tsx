@@ -84,6 +84,10 @@ export default function MapContainer() {
   // Data
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
+  // Held in state (not just the ref) so the theme-style effect below
+  // re-runs once the map instance actually exists.
+  const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
 
   // Filter state — initialized from URL query params (?category=hub&materials=plastic,paper)
   const [selectedMaterials, setSelectedMaterials] = useState<MaterialType[]>(() => {
@@ -107,13 +111,26 @@ export default function MapContainer() {
   // Stable reference — never changes, so GoogleMap never re-applies center on re-render
   const initialCenter = useMemo(() => ({ lat: ASTANA_CENTER.lat, lng: ASTANA_CENTER.lng }), []);
 
-  // Fetch once on mount
-  useEffect(() => {
+  // Fetch once on mount (retryable on failure)
+  const loadData = useCallback(() => {
     setIsLoadingData(true);
+    setLoadFailed(false);
     getLocations()
       .then(setLocations)
+      .catch(() => setLoadFailed(true))
       .finally(() => setIsLoadingData(false));
   }, []);
+
+  useEffect(() => { loadData(); }, [loadData]);
+
+  // next-themes resolves the theme only after hydration, so the map can be
+  // created with the wrong style. Re-apply styles whenever the theme (or the
+  // map instance) changes — the options prop alone doesn't cover this race.
+  useEffect(() => {
+    mapInstance?.setOptions({
+      styles: resolvedTheme === "dark" ? MAP_STYLE_DARK : MAP_STYLE_LIGHT,
+    });
+  }, [mapInstance, resolvedTheme]);
 
   // If ?focus=<slug> is in the URL, pan to that location and open its panel
   // once both the map SDK and data are ready.
@@ -231,7 +248,7 @@ export default function MapContainer() {
           center={initialCenter}
           zoom={ASTANA_DEFAULT_ZOOM}
           options={mapOptions}
-          onLoad={(map) => { mapRef.current = map; }}
+          onLoad={(map) => { mapRef.current = map; setMapInstance(map); }}
           onClick={() => setSelectedLocation(null)}
         >
           <MarkerClusterer
@@ -347,8 +364,23 @@ export default function MapContainer() {
         {/* Custom map controls (zoom, locate me) */}
         <MapControls map={mapRef} />
 
+        {/* Data load failure overlay */}
+        {loadFailed && (
+          <div className="absolute inset-0 flex items-center justify-center z-[5] pointer-events-none">
+            <div className="bg-background/95 border border-border rounded-xl px-6 py-4 text-center shadow-xl pointer-events-auto">
+              <p className="text-sm text-muted-foreground">{t("map.dataError")}</p>
+              <button
+                onClick={loadData}
+                className="text-xs text-accent hover:underline mt-1 block mx-auto"
+              >
+                {t("common.retry")}
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* No-results overlay */}
-        {filtered.length === 0 && (
+        {!loadFailed && filtered.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center z-[5] pointer-events-none">
             <div className="bg-background/95 border border-border rounded-xl px-6 py-4 text-center shadow-xl pointer-events-auto">
               <p className="text-sm text-muted-foreground">{t("map.noResults")}</p>

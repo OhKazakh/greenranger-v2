@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { useTheme } from "next-themes";
 import { MAP_STYLE_LIGHT, MAP_STYLE_DARK, MARKER_COLORS } from "@/lib/constants";
@@ -18,6 +19,15 @@ export default function MiniMap({ position, name }: MiniMapProps) {
     libraries: LIBRARIES,
   });
   const { resolvedTheme } = useTheme();
+  const [mapInstance, setMapInstance] = useState<google.maps.Map | null>(null);
+
+  // next-themes resolves the theme only after hydration — re-apply the style
+  // to the live map instance so it doesn't get stuck on the wrong one.
+  useEffect(() => {
+    mapInstance?.setOptions({
+      styles: resolvedTheme === "dark" ? MAP_STYLE_DARK : MAP_STYLE_LIGHT,
+    });
+  }, [mapInstance, resolvedTheme]);
 
   if (!isLoaded) {
     return <div className="w-full h-full bg-muted" />;
@@ -44,6 +54,7 @@ export default function MiniMap({ position, name }: MiniMapProps) {
         clickableIcons: false,
         styles: resolvedTheme === "dark" ? MAP_STYLE_DARK : MAP_STYLE_LIGHT,
       }}
+      onLoad={setMapInstance}
     >
       <Marker
         position={{ lat: position.lat, lng: position.lng }}

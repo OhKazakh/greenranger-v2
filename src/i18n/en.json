@@ -34,7 +34,8 @@
     "loading": "Loading map...",
     "loadError": "Failed to load Google Maps",
     "geoUnavailable": "Geolocation is not supported by your browser",
-    "geoError": "Couldn't determine your location"
+    "geoError": "Couldn't determine your location",
+    "dataError": "Failed to load points"
   },
   "location": {
     "materials": "Accepted materials",
@@ -68,7 +69,9 @@
     "search": "Search by name or address...",
     "noResults": "Nothing found. Try changing the filters.",
     "loading": "Loading...",
-    "filterLabel": "Material"
+    "filterLabel": "Material",
+    "nearMe": "Near me",
+    "loadError": "Failed to load data"
   },
   "submit": {
     "title": "Add a recycling point",
