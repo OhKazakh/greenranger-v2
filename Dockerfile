@@ -12,4 +12,7 @@ RUN npx prisma generate && npm run build
 # Must match the PORT the app binds to (set in render.yaml).
 EXPOSE 10000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/src/main"]
+# Migrations are applied separately (`npx prisma migrate deploy`), not on boot:
+# running them here delays startup past the host's health-check window, and
+# re-running them on every container start doesn't scale past one instance.
+CMD ["node", "dist/src/main"]
