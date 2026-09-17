@@ -14,18 +14,32 @@ const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001") + 
 const mockDelay = (ms = 300) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
+// Generous, because a sleeping free-tier backend can take ~50s to wake.
+// Without it a stalled server leaves the UI spinning forever instead of
+// showing the retry button.
+const REQUEST_TIMEOUT_MS = 60_000;
+
 export async function apiFetch<T>(
   path: string,
   options?: RequestInit
 ): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, {
-    ...options,
-    headers: {
-      "Content-Type": "application/json",
-      ...options?.headers,
-    },
-    credentials: "include", // sends httpOnly JWT cookie automatically
-  });
+  let res: Response;
+  try {
+    res = await fetch(`${API_BASE}${path}`, {
+      ...options,
+      headers: {
+        "Content-Type": "application/json",
+        ...options?.headers,
+      },
+      credentials: "include", // sends httpOnly JWT cookie automatically
+      signal: options?.signal ?? AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+  } catch (err) {
+    if (err instanceof DOMException && err.name === "TimeoutError") {
+      throw new Error("Request timed out");
+    }
+    throw err;
+  }
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
