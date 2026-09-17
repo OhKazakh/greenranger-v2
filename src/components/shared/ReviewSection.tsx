@@ -118,7 +118,6 @@ export function ReviewSection({ slug }: { slug: string }) {
         )}
       </div>
 
-      {/* Submit form */}
       {isAuthenticated && !myReview && (
         <form onSubmit={handleSubmit} className="mb-4 p-4 bg-muted/40 rounded-xl border border-border space-y-3">
           <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
@@ -143,7 +142,6 @@ export function ReviewSection({ slug }: { slug: string }) {
         </form>
       )}
 
-      {/* User's own review */}
       {myReview && (
         <div className="mb-4 p-4 bg-muted/40 rounded-xl border border-border">
           <div className="flex items-center justify-between mb-1">

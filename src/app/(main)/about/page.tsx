@@ -30,7 +30,6 @@ export default function AboutPage() {
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-16 space-y-12">
 
-      {/* Identity */}
       <section>
         <div className="flex items-center justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
@@ -54,7 +53,6 @@ export default function AboutPage() {
 
       <div className="border-t border-border" />
 
-      {/* Contact */}
       <section>
         <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground mb-6">
           {t("about.contactLabel")}
@@ -128,7 +126,6 @@ export default function AboutPage() {
 
       <div className="border-t border-border" />
 
-      {/* CTA */}
       <div className="flex flex-col sm:flex-row gap-3">
         <ButtonLink href="/map" className="flex-1 justify-center">
           {t("about.openMap")}

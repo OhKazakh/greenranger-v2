@@ -72,7 +72,6 @@ export default function ProfilePage() {
 
   return (
     <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8">
-      {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
           <UserIcon className="w-6 h-6 text-accent" />
@@ -83,7 +82,6 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-1 mb-5 border-b border-border">
         {(["reviews", "submissions"] as const).map((key) => (
           <button

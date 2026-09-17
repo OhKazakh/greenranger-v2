@@ -183,7 +183,6 @@ export default function LocationDetailPage() {
 
       <Separator className="mb-6" />
 
-      {/* Materials */}
       <div className="mb-6">
         <h2 className="heading text-sm font-bold text-foreground mb-3">
           {t("location.materials")}
@@ -195,7 +194,6 @@ export default function LocationDetailPage() {
         </div>
       </div>
 
-      {/* Photos */}
       <div className="mb-6">
         <button
           onClick={() => setPhotosOpen(!photosOpen)}
@@ -265,7 +263,6 @@ export default function LocationDetailPage() {
         <ReviewSection slug={location.slug} />
       </div>
 
-      {/* CTA */}
       <ButtonLink href={`/map?focus=${location.slug}`} className="w-full">{t("location.viewOnMap")}</ButtonLink>
     </div>
   );

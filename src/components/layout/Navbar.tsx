@@ -15,7 +15,6 @@ import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import type { TKey } from "@/context/LangContext";
 
-// Nav links
 const NAV_LINKS: { href: string; labelKey: TKey }[] = [
   { href: "/map", labelKey: "nav.map" },
   { href: "/locations", labelKey: "nav.locations" },
@@ -58,7 +57,6 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between gap-4">
-        {/* Logo */}
         <Link href="/map" className="flex items-center gap-2 shrink-0">
           <div
             className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0"
@@ -71,14 +69,12 @@ export function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-6">
           {NAV_LINKS.map((link) => (
             <NavLink key={link.href} href={link.href} labelKey={link.labelKey} />
           ))}
         </nav>
 
-        {/* Desktop right side */}
         <div className="hidden md:flex items-center gap-2">
           <LanguageSwitcher />
           <ThemeToggle />
@@ -129,7 +125,6 @@ export function Navbar() {
           )}
         </div>
 
-        {/* Mobile hamburger */}
         <div className="md:hidden flex items-center gap-2">
           <ThemeToggle />
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
@@ -138,7 +133,6 @@ export function Navbar() {
             </SheetTrigger>
             <SheetContent side="right" className="w-72 max-w-[82vw] rounded-l-2xl overflow-hidden pt-12 px-6">
               <div className="flex flex-col gap-6">
-                {/* Mobile links */}
                 <nav className="flex flex-col gap-4">
                   {NAV_LINKS.map((link) => (
                     <NavLink
@@ -154,7 +148,6 @@ export function Navbar() {
                 <LanguageSwitcher />
                 <Separator />
 
-                {/* Mobile auth */}
                 {isAuthenticated ? (
                   <div className="flex flex-col gap-2">
                     <Link

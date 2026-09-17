@@ -1,15 +1,7 @@
 "use client";
 
-//  Client-side providers wrapper.
-//
-//  Why this file exists:
-//  next-themes injects a `<script>` element to set the theme
-//  before paint (avoids flash of wrong theme). In Next.js 16,
-//  inline scripts inside Server Components trigger a warning
-//  because they don't execute on rehydration.
-//
-//  Wrapping all providers in a single "use client" component
-//  silences the warning and keeps the providers grouped.
+// Grouped here so next-themes' pre-paint script sits in a client component,
+// which avoids a hydration warning in Next 16.
 
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";

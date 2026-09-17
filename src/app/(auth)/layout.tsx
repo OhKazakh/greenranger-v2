@@ -8,7 +8,6 @@ export default function AuthLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-background">
-      {/* Logo */}
       <Link href="/map" className="flex items-center gap-2 mb-8">
         <div
             className="w-7 h-7 rounded-lg flex items-center justify-center"

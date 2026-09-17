@@ -1,11 +1,5 @@
 "use client";
 
-//  MapContainer — Google Maps version
-//
-//  Why "use client": Google Maps SDK reads `window` on init.
-//  We dynamic-import this from DynamicMap.tsx with ssr:false,
-//  so the file never runs on the server.
-
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { GoogleMap, useJsApiLoader, Marker, MarkerClusterer, OverlayView } from "@react-google-maps/api";
@@ -30,11 +24,7 @@ import type { Location, MaterialType, LocationCategory } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-// Build a custom pin SVG (data URL)
-// The pin path occupies x:0–28, y:0–36 in path coordinates.
-// The white stroke (up to 3px wide) extends ~1.5px outside that
-// on every side and would get clipped at the viewBox edges.
-// We pad the viewBox by 2px on each side to give the stroke room.
+// viewBox is padded by 2px so the white stroke isn't clipped at the edges.
 function pinSvg(color: string, isSelected: boolean): string {
   const stroke = isSelected ? 3 : 2;
   const svg = `
@@ -47,10 +37,7 @@ function pinSvg(color: string, isSelected: boolean): string {
   return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
 }
 
-// Cluster icon: round badge
-// We draw ONLY the visual (halo + circle + ring). The count is
-// rendered on top by MarkerClusterer via its `text` styling —
-// otherwise it'd be baked into the SVG forever.
+// Visual only — MarkerClusterer draws the count on top via its text styling.
 function clusterIconUrl(): string {
   const svg = `
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 60 60">
@@ -72,13 +59,11 @@ export default function MapContainer() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // Load Google Maps JS SDK
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "",
     libraries: LIBRARIES,
   });
 
-  // Data
   const [locations, setLocations] = useState<Location[]>([]);
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [loadFailed, setLoadFailed] = useState(false);
@@ -99,7 +84,6 @@ export default function MapContainer() {
     return c === "hub" || c === "kiosk" ? c : "all";
   });
 
-  // UI state
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -145,7 +129,6 @@ export default function MapContainer() {
     }
   }, [searchParams, isLoaded, isLoadingData, locations]);
 
-  // Apply filters locally (cheap + reactive)
   const filtered = useMemo(() => {
     return locations.filter((loc) => {
       const materialMatch =
@@ -218,7 +201,6 @@ export default function MapContainer() {
 
   return (
     <div className="relative w-full h-full flex">
-      {/* Desktop sidebar */}
       <aside className="hidden md:flex flex-col w-64 shrink-0 border-r border-border bg-background overflow-y-auto scroll-clean">
         <div className="p-4">
           <h2 className="heading text-sm font-bold text-foreground mb-4">
@@ -238,7 +220,6 @@ export default function MapContainer() {
         </div>
       </aside>
 
-      {/* Map area */}
       <div className="relative flex-1 min-w-0">
         <GoogleMap
           mapContainerClassName="w-full h-full"
@@ -372,7 +353,6 @@ export default function MapContainer() {
           </div>
         )}
 
-        {/* No-results overlay */}
         {!loadFailed && filtered.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center z-[5] pointer-events-none">
             <div className="bg-background/95 border border-border rounded-xl px-6 py-4 text-center shadow-xl pointer-events-auto">
@@ -390,13 +370,11 @@ export default function MapContainer() {
           </div>
         )}
 
-        {/* Detail panel */}
         <LocationDetailPanel
           location={selectedLocation}
           onClose={() => setSelectedLocation(null)}
         />
 
-        {/* Mobile filter FAB */}
         <button
           onClick={() => setFilterOpen(!filterOpen)}
           className={cn(
@@ -415,7 +393,6 @@ export default function MapContainer() {
           )}
         </button>
 
-        {/* Mobile filter drawer */}
         {filterOpen && (
           <>
             <div

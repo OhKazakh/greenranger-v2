@@ -94,7 +94,6 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
         {/* Colour accent strip */}
         <div className="h-1 w-full shrink-0" style={{ backgroundColor: dotColor }} />
 
-        {/* Header */}
         <div className="flex items-start justify-between gap-3 px-4 pt-4 pb-3 shrink-0">
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
@@ -139,7 +138,6 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
             {shown.description[lang]}
           </p>
 
-          {/* Materials */}
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2">
               {t("location.materials")}
@@ -184,7 +182,6 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
             </div>
           )}
 
-          {/* Contact */}
           {(shown.phone || shown.website) && (
             <div className="space-y-1.5">
               {shown.phone && (
@@ -242,7 +239,6 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
               )}
             </button>
 
-            {/* Photo gallery */}
             {photosOpen && hasPhotos && (
               <>
                 <div className="mt-2 grid grid-cols-2 gap-2">
@@ -274,7 +270,6 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
           </div>
         </div>
 
-        {/* Footer CTA */}
         <div className="px-4 pb-4 pt-3 shrink-0 border-t border-border">
           <ButtonLink href={`/locations/${shown.slug}`} className="w-full" size="sm">
             {t("location.viewDetail")}

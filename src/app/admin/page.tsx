@@ -16,7 +16,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import type { Location, MaterialType } from "@/types";
 
-// Stat card
 function StatCard({
   icon: Icon,
   label,
@@ -44,7 +43,6 @@ function StatCard({
   );
 }
 
-// Location row
 function LocationRow({
   loc,
   onToggleVerify,
@@ -156,7 +154,6 @@ function LocationRow({
   );
 }
 
-// Edit modal
 function EditLocationModal({
   loc,
   onClose,
@@ -236,7 +233,6 @@ function EditLocationModal({
         </div>
 
         <div className="p-5 space-y-5">
-          {/* Category */}
           <div className="space-y-1">
             <label className="text-xs font-medium text-muted-foreground">Тип</label>
             <select
@@ -249,40 +245,34 @@ function EditLocationModal({
             </select>
           </div>
 
-          {/* Names */}
           <div className="grid sm:grid-cols-3 gap-3">
             {field("Название (RU)", "nameRu")}
             {field("Название (EN)", "nameEn")}
             {field("Название (KK)", "nameKk")}
           </div>
 
-          {/* Addresses */}
           <div className="grid sm:grid-cols-3 gap-3">
             {field("Адрес (RU)", "addressRu")}
             {field("Адрес (EN)", "addressEn")}
             {field("Адрес (KK)", "addressKk")}
           </div>
 
-          {/* Descriptions */}
           <div className="grid sm:grid-cols-3 gap-3">
             {field("Описание (RU)", "descriptionRu")}
             {field("Описание (EN)", "descriptionEn")}
             {field("Описание (KK)", "descriptionKk")}
           </div>
 
-          {/* Coords */}
           <div className="grid grid-cols-2 gap-3">
             {field("Широта (lat)", "lat")}
             {field("Долгота (lng)", "lng")}
           </div>
 
-          {/* Contact */}
           <div className="grid grid-cols-2 gap-3">
             {field("Телефон", "phone")}
             {field("Сайт", "website")}
           </div>
 
-          {/* Photos */}
           <div className="space-y-1">
             <label className="text-xs font-medium text-muted-foreground">
               Фото (по одной ссылке на строку)
@@ -304,7 +294,6 @@ function EditLocationModal({
             )}
           </div>
 
-          {/* Materials */}
           <div className="space-y-1.5">
             <label className="text-xs font-medium text-muted-foreground">Материалы</label>
             <div className="flex flex-wrap gap-1.5">
@@ -363,7 +352,6 @@ export default function AdminPage() {
   const [filterVerified, setFilterVerified] = useState<"all" | "verified" | "unverified">("all");
   const [editing, setEditing] = useState<Location | null>(null);
 
-  // Guard: redirect non-admins
   useEffect(() => {
     if (!authLoading && (!user || user.role !== "admin")) {
       router.replace("/map");
@@ -405,20 +393,17 @@ export default function AdminPage() {
     }
   }, [load]);
 
-  // Derived stats
   const hubs = locations.filter((l) => l.category === "hub").length;
   const kiosks = locations.filter((l) => l.category === "kiosk").length;
   const verified = locations.filter((l) => l.verified).length;
   const unverified = locations.filter((l) => !l.verified).length;
 
-  // Material distribution
   const matCounts: Partial<Record<MaterialType, number>> = {};
   locations.forEach((l) => l.materials.forEach((m) => { matCounts[m] = (matCounts[m] ?? 0) + 1; }));
   const topMaterials = (Object.entries(matCounts) as [MaterialType, number][])
     .sort((a, b) => b[1] - a[1])
     .slice(0, 6);
 
-  // Filtered table
   const filtered = locations.filter((l) => {
     const q = search.toLowerCase();
     const matchSearch = !q || l.name.ru.toLowerCase().includes(q) || l.address.ru.toLowerCase().includes(q);
@@ -440,7 +425,6 @@ export default function AdminPage() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-      {/* Header */}
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
@@ -460,7 +444,6 @@ export default function AdminPage() {
         </button>
       </div>
 
-      {/* Tabs */}
       <div className="flex gap-1 bg-muted rounded-lg p-1 w-fit">
         <button
           onClick={() => setTab("locations")}
@@ -479,7 +462,6 @@ export default function AdminPage() {
       </div>
 
       {tab === "locations" && <>
-        {/* Stats */}
         {loading ? (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {Array.from({ length: 4 }).map((_, i) => (
@@ -513,7 +495,6 @@ export default function AdminPage() {
           </div>
         )}
 
-        {/* Locations table */}
         <div className="bg-card border border-border rounded-xl overflow-hidden">
           <div className="px-4 py-3 border-b border-border flex flex-col sm:flex-row gap-3 items-start sm:items-center">
             <h2 className="heading text-sm font-bold text-foreground shrink-0">

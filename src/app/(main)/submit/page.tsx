@@ -22,7 +22,6 @@ import { cn } from "@/lib/utils";
 
 const LIBRARIES: ("places")[] = [];
 
-// Zod schema
 const submitSchema = z.object({
   name: z.string().min(3, "Минимум 3 символа"),
   address: z.string().min(5, "Введите полный адрес"),
@@ -34,7 +33,6 @@ const submitSchema = z.object({
 
 type SubmitFormValues = z.infer<typeof submitSchema>;
 
-// Ripple animation styles
 const rippleKeyframes = `
 @keyframes map-ripple {
   0%   { transform: translate(-50%,-50%) scale(0.4); opacity: 0.8; }
@@ -48,7 +46,6 @@ const rippleKeyframes = `
 }
 `;
 
-// Coordinate picker map
 function CoordinatePicker({
   value,
   onChange,
@@ -141,7 +138,6 @@ function CoordinatePicker({
         )}
       </GoogleMap>
 
-      {/* Click ripple overlay */}
       {ripple && (
         <div
           key={ripple.key}
@@ -312,7 +308,6 @@ export default function SubmitPage() {
           {errors.description && <p className="text-xs text-destructive">{errors.description.message}</p>}
         </div>
 
-        {/* Materials */}
         <div className="space-y-1.5">
           <Label>{t("submit.materialsLabel")}</Label>
           <Controller

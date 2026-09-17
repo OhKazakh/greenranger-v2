@@ -1,14 +1,3 @@
-//  GreenRanger v2 — Centralised API Client
-//
-//  HOW IT WORKS:
-//  ┌─ NEXT_PUBLIC_USE_MOCK=true  → returns mock data immediately (no network)
-//  └─ NEXT_PUBLIC_USE_MOCK=false → calls the real NestJS backend
-//
-//  When the backend is ready:
-//   1. Set NEXT_PUBLIC_USE_MOCK=false in .env.local
-//   2. Set NEXT_PUBLIC_API_URL=https://api.greenranger.kz
-//   3. Zero component code changes needed.
-
 import type {
   Location,
   SubmitLocationPayload,
@@ -19,15 +8,12 @@ import type {
 } from "@/types";
 import { mockLocations } from "@/lib/mock-data";
 
-// Config
 const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK !== "false"; // default = mock ON
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001") + "/api";
 
-// ── Small delay to simulate real network latency in mock mode ─
 const mockDelay = (ms = 300) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-// Base fetcher (used in real mode only)
 export async function apiFetch<T>(
   path: string,
   options?: RequestInit
@@ -48,8 +34,6 @@ export async function apiFetch<T>(
 
   return res.json() as Promise<T>;
 }
-
-//  SHAPE TRANSFORM — backend flat → frontend nested
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toLocation(r: any): Location {
@@ -75,15 +59,12 @@ function toLocation(r: any): Location {
   };
 }
 
-//  LOCATIONS
 
-/** Fetch all locations (optionally filtered server-side) */
 export async function getLocations(filter?: Partial<FilterState>): Promise<Location[]> {
   if (USE_MOCK) {
     await mockDelay();
     let results = [...mockLocations];
 
-    // Apply filter locally (same logic the server would run)
     if (filter?.materials && filter.materials.length > 0) {
       results = results.filter((loc) =>
         filter.materials!.some((m) => loc.materials.includes(m))
@@ -105,7 +86,6 @@ export async function getLocations(filter?: Partial<FilterState>): Promise<Locat
     return results;
   }
 
-  // Build query string from filter
   const params = new URLSearchParams();
   if (filter?.materials?.length) params.set("materials", filter.materials.join(","));
   if (filter?.category && filter.category !== "all") params.set("category", filter.category);
@@ -115,7 +95,6 @@ export async function getLocations(filter?: Partial<FilterState>): Promise<Locat
   return raw.map(toLocation);
 }
 
-/** Fetch a single location by slug */
 export async function getLocationBySlug(slug: string): Promise<Location | null> {
   if (USE_MOCK) {
     await mockDelay(150);
@@ -125,7 +104,6 @@ export async function getLocationBySlug(slug: string): Promise<Location | null> 
   return toLocation(raw);
 }
 
-/** Fetch a single location by id */
 export async function getLocationById(id: string): Promise<Location | null> {
   if (USE_MOCK) {
     await mockDelay(150);
@@ -135,7 +113,6 @@ export async function getLocationById(id: string): Promise<Location | null> {
   return toLocation(raw);
 }
 
-/** Submit a new location suggestion (requires auth) */
 export async function submitLocation(payload: SubmitLocationPayload): Promise<void> {
   if (USE_MOCK) {
     await mockDelay(600);
@@ -148,7 +125,6 @@ export async function submitLocation(payload: SubmitLocationPayload): Promise<vo
   });
 }
 
-//  REVIEWS
 
 export async function getReviews(slug: string): Promise<ReviewsResponse> {
   if (USE_MOCK) {
@@ -174,8 +150,6 @@ export async function deleteReview(slug: string): Promise<void> {
   if (USE_MOCK) return;
   await apiFetch(`/locations/${slug}/reviews`, { method: "DELETE" });
 }
-
-//  PROFILE — current user's own activity
 
 interface RawLocalized {
   slug: string;
@@ -212,7 +186,6 @@ export async function getMyActivity(): Promise<MyActivity> {
   return apiFetch<MyActivity>("/users/me/activity");
 }
 
-//  ADMIN
 
 export interface AdminUser {
   id: string;
@@ -273,7 +246,6 @@ export async function adminUpdateLocation(
   return toLocation(raw);
 }
 
-//  AUTH
 
 export interface LoginPayload {
   email: string;

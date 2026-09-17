@@ -124,7 +124,6 @@ export default function LocationsPage() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-      {/* Header */}
       <div className="mb-6">
         <h1 className="heading text-2xl font-bold text-foreground mb-1">
           {t("locations.title")}
@@ -147,7 +146,6 @@ export default function LocationsPage() {
 
         {/* Main content */}
         <div className="flex-1 min-w-0">
-          {/* Search + mobile filter button */}
           <div className="flex gap-2 mb-6">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
@@ -243,7 +241,6 @@ export default function LocationsPage() {
             </button>
           </div>
 
-          {/* Grid */}
           {isLoading ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {Array.from({ length: 9 }).map((_, i) => (
@@ -278,7 +275,6 @@ export default function LocationsPage() {
         </div>
       </div>
 
-      {/* Mobile filter drawer */}
       {mobileFilterOpen && (
         <>
           <div
