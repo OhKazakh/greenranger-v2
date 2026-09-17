@@ -22,7 +22,7 @@ import { cn } from "@/lib/utils";
 
 const LIBRARIES: ("places")[] = [];
 
-// ── Zod schema ────────────────────────────────────────────────
+// Zod schema
 const submitSchema = z.object({
   name: z.string().min(3, "Минимум 3 символа"),
   address: z.string().min(5, "Введите полный адрес"),
@@ -34,7 +34,7 @@ const submitSchema = z.object({
 
 type SubmitFormValues = z.infer<typeof submitSchema>;
 
-// ── Ripple animation styles ───────────────────────────────────
+// Ripple animation styles
 const rippleKeyframes = `
 @keyframes map-ripple {
   0%   { transform: translate(-50%,-50%) scale(0.4); opacity: 0.8; }
@@ -48,7 +48,7 @@ const rippleKeyframes = `
 }
 `;
 
-// ── Coordinate picker map ─────────────────────────────────────
+// Coordinate picker map
 function CoordinatePicker({
   value,
   onChange,
@@ -178,7 +178,6 @@ function CoordinatePicker({
   );
 }
 
-// ────────────────────────────────────────────────────────────
 
 export default function SubmitPage() {
   const { t, lang } = useLang();

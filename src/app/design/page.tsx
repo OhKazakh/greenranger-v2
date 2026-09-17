@@ -10,7 +10,7 @@ import { useLang } from "@/context/LangContext";
 import type { Lang, MaterialType } from "@/types";
 import { cn } from "@/lib/utils";
 
-// ── Palette options ───────────────────────────────────────────
+// Palette options
 const PALETTES = {
   eco: {
     label: "Eco Green (current)",
@@ -32,7 +32,7 @@ const PALETTES = {
   },
 };
 
-// ── Token table ───────────────────────────────────────────────
+// Token table
 const BRAND_TOKENS = [
   { token: "--forest / --primary", value: "#1B4332", role: "Primary buttons, navbar, hub pins" },
   { token: "--teal / --accent", value: "#2EC4B6", role: "Links, kiosk pins, focus rings, CTAs" },
@@ -64,7 +64,6 @@ const MATERIAL_LIST = ALL_MATERIALS.map((m) => {
   return { type: m, color: colorMap[m] };
 });
 
-// ── Helpers ───────────────────────────────────────────────────
 function CopyButton({ value }: { value: string }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
@@ -100,7 +99,7 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-// ── Demo location card (no deps on router) ────────────────────
+// Demo location card (no deps on router)
 function DemoCard({ category }: { category: "hub" | "kiosk" }) {
   const isHub = category === "hub";
   const dotColor = isHub ? MARKER_COLORS.hub : MARKER_COLORS.kiosk;
@@ -146,7 +145,7 @@ function DemoCard({ category }: { category: "hub" | "kiosk" }) {
   );
 }
 
-// ── Filter demo ───────────────────────────────────────────────
+// Filter demo
 function FilterDemo() {
   const [active, setActive] = useState<MaterialType[]>([]);
   const [cat, setCat] = useState<"all" | "hub" | "kiosk">("all");
@@ -200,7 +199,7 @@ function FilterDemo() {
   );
 }
 
-// ── Map pin demo ──────────────────────────────────────────────
+// Map pin demo
 function PinDemo() {
   function Pin({ color, label, selected }: { color: string; label: string; selected?: boolean }) {
     return (
@@ -238,7 +237,7 @@ function PinDemo() {
   );
 }
 
-// ── Main page ─────────────────────────────────────────────────
+// Main page
 export default function DesignPage() {
   const { resolvedTheme, setTheme } = useTheme();
   const isDark = resolvedTheme === "dark";

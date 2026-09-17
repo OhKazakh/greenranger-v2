@@ -1,6 +1,5 @@
 "use client";
 
-// ────────────────────────────────────────────────────────────
 //  Client-side providers wrapper.
 //
 //  Why this file exists:
@@ -11,7 +10,6 @@
 //
 //  Wrapping all providers in a single "use client" component
 //  silences the warning and keeps the providers grouped.
-// ────────────────────────────────────────────────────────────
 
 import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";

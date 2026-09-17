@@ -1,4 +1,3 @@
-// ────────────────────────────────────────────────────────────
 //  GreenRanger v2 — Centralised API Client
 //
 //  HOW IT WORKS:
@@ -9,7 +8,6 @@
 //   1. Set NEXT_PUBLIC_USE_MOCK=false in .env.local
 //   2. Set NEXT_PUBLIC_API_URL=https://api.greenranger.kz
 //   3. Zero component code changes needed.
-// ────────────────────────────────────────────────────────────
 
 import type {
   Location,
@@ -21,7 +19,7 @@ import type {
 } from "@/types";
 import { mockLocations } from "@/lib/mock-data";
 
-// ── Config ────────────────────────────────────────────────────
+// Config
 const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK !== "false"; // default = mock ON
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001") + "/api";
 
@@ -29,7 +27,7 @@ const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001") + 
 const mockDelay = (ms = 300) =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-// ── Base fetcher (used in real mode only) ────────────────────
+// Base fetcher (used in real mode only)
 export async function apiFetch<T>(
   path: string,
   options?: RequestInit
@@ -51,9 +49,7 @@ export async function apiFetch<T>(
   return res.json() as Promise<T>;
 }
 
-// ════════════════════════════════════════════════════════════
 //  SHAPE TRANSFORM — backend flat → frontend nested
-// ════════════════════════════════════════════════════════════
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function toLocation(r: any): Location {
@@ -79,9 +75,7 @@ function toLocation(r: any): Location {
   };
 }
 
-// ════════════════════════════════════════════════════════════
 //  LOCATIONS
-// ════════════════════════════════════════════════════════════
 
 /** Fetch all locations (optionally filtered server-side) */
 export async function getLocations(filter?: Partial<FilterState>): Promise<Location[]> {
@@ -154,9 +148,7 @@ export async function submitLocation(payload: SubmitLocationPayload): Promise<vo
   });
 }
 
-// ════════════════════════════════════════════════════════════
 //  REVIEWS
-// ════════════════════════════════════════════════════════════
 
 export async function getReviews(slug: string): Promise<ReviewsResponse> {
   if (USE_MOCK) {
@@ -183,9 +175,7 @@ export async function deleteReview(slug: string): Promise<void> {
   await apiFetch(`/locations/${slug}/reviews`, { method: "DELETE" });
 }
 
-// ════════════════════════════════════════════════════════════
 //  PROFILE — current user's own activity
-// ════════════════════════════════════════════════════════════
 
 interface RawLocalized {
   slug: string;
@@ -222,9 +212,7 @@ export async function getMyActivity(): Promise<MyActivity> {
   return apiFetch<MyActivity>("/users/me/activity");
 }
 
-// ════════════════════════════════════════════════════════════
 //  ADMIN
-// ════════════════════════════════════════════════════════════
 
 export interface AdminUser {
   id: string;
@@ -285,9 +273,7 @@ export async function adminUpdateLocation(
   return toLocation(raw);
 }
 
-// ════════════════════════════════════════════════════════════
 //  AUTH
-// ════════════════════════════════════════════════════════════
 
 export interface LoginPayload {
   email: string;

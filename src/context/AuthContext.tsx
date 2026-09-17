@@ -11,9 +11,7 @@ import React, {
 import type { User } from "@/types";
 import { getMe, logout as apiLogout } from "@/lib/api";
 
-// ────────────────────────────────────────────────────────────
 //  Context value
-// ────────────────────────────────────────────────────────────
 interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
@@ -25,9 +23,7 @@ interface AuthContextValue {
 
 const AuthContext = createContext<AuthContextValue | null>(null);
 
-// ────────────────────────────────────────────────────────────
 //  Provider
-// ────────────────────────────────────────────────────────────
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -60,9 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// ────────────────────────────────────────────────────────────
 //  Hook
-// ────────────────────────────────────────────────────────────
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) throw new Error("useAuth must be used inside <AuthProvider>");

@@ -1,12 +1,10 @@
 import type { Location } from "@/types";
 
-// ────────────────────────────────────────────────────────────
 //  Mock locations — all real Astana recycling points
 //  sourced from v1 (green-map-astana) + expanded
-// ────────────────────────────────────────────────────────────
 
 export const mockLocations: Location[] = [
-  // ── BIG HUBS (category: "hub") ──────────────────────────────
+  // BIG HUBS (category: "hub")
 
   {
     id: "1",
@@ -177,7 +175,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-03-01",
   },
 
-  // ── KIOSKS (category: "kiosk") ───────────────────────────────
+  // KIOSKS (category: "kiosk")
 
   {
     id: "7",
@@ -628,7 +626,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-04-01",
   },
 
-  // ── LS Ecolife additional branches ─────────────────────────
+  // LS Ecolife additional branches
 
   {
     id: "23",
@@ -715,7 +713,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-04-10",
   },
 
-  // ── AstanaCleanTime / Зелёная станция ──────────────────────
+  // AstanaCleanTime / Зелёная станция
 
   {
     id: "26",
@@ -802,7 +800,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-04-15",
   },
 
-  // ── Taza Qala (updated / new locations) ────────────────────
+  // Taza Qala (updated / new locations)
 
   {
     id: "29",
@@ -833,7 +831,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-04-20",
   },
 
-  // ── Azia Group — hazardous waste ───────────────────────────
+  // Azia Group — hazardous waste
 
   {
     id: "30",
@@ -864,7 +862,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-04-22",
   },
 
-  // ── KazVtorChermet — metals ─────────────────────────────────
+  // KazVtorChermet — metals
 
   {
     id: "31",
@@ -895,7 +893,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-04-25",
   },
 
-  // ── KazMetKor — metals & batteries ─────────────────────────
+  // KazMetKor — metals & batteries
 
   {
     id: "32",
@@ -926,7 +924,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-04-28",
   },
 
-  // ── Eco-RBK ─────────────────────────────────────────────────
+  // Eco-RBK
 
   {
     id: "33",
@@ -957,7 +955,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-05-01",
   },
 
-  // ── Оператор РОП / Жасыл Даму ──────────────────────────────
+  // Оператор РОП / Жасыл Даму
 
   {
     id: "34",
@@ -988,7 +986,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-05-05",
   },
 
-  // ── Ecoplatform fandomat — MEGA Silk Way ───────────────────
+  // Ecoplatform fandomat — MEGA Silk Way
 
   {
     id: "35",
@@ -1019,7 +1017,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-05-08",
   },
 
-  // ── Sulpak in-store battery/electronics drop-offs ──────────
+  // Sulpak in-store battery/electronics drop-offs
 
   {
     id: "36",
@@ -1078,7 +1076,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-05-10",
   },
 
-  // ── Taza Alem Astana ────────────────────────────────────────
+  // Taza Alem Astana
 
   {
     id: "38",
@@ -1109,7 +1107,7 @@ export const mockLocations: Location[] = [
     createdAt: "2024-05-12",
   },
 
-  // ── Green Station / Абылай хана ─────────────────────────────
+  // Green Station / Абылай хана
 
   {
     id: "39",

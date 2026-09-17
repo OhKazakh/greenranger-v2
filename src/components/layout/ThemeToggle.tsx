@@ -9,7 +9,7 @@ export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  // ── Hydration guard ──────────────────────────────────────
+  // Hydration guard
   // The server has no access to localStorage, so it can't know
   // whether the user prefers light or dark. We render a stable
   // placeholder until mounted on the client.

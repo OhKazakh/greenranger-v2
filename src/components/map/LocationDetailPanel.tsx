@@ -23,7 +23,7 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
   const { lang, t } = useLang();
   const [photosOpen, setPhotosOpen] = useState(false);
 
-  // ── Exit animation state machine ─────────────────────────────
+  // Exit animation state machine
   // We need to keep rendering the previous location during the
   // exit animation, so we maintain our own copy and a flag.
   //

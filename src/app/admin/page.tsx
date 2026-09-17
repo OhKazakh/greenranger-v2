@@ -16,7 +16,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 import type { Location, MaterialType } from "@/types";
 
-// ── Stat card ────────────────────────────────────────────────
+// Stat card
 function StatCard({
   icon: Icon,
   label,
@@ -44,7 +44,7 @@ function StatCard({
   );
 }
 
-// ── Location row ─────────────────────────────────────────────
+// Location row
 function LocationRow({
   loc,
   onToggleVerify,
@@ -156,7 +156,7 @@ function LocationRow({
   );
 }
 
-// ── Edit modal ───────────────────────────────────────────────
+// Edit modal
 function EditLocationModal({
   loc,
   onClose,
@@ -350,7 +350,6 @@ function EditLocationModal({
   );
 }
 
-// ────────────────────────────────────────────────────────────
 
 export default function AdminPage() {
   const { user, isLoading: authLoading } = useAuth();

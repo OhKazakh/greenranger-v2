@@ -1,6 +1,6 @@
 import type { MaterialMeta, MaterialType } from "@/types";
 
-// ── Astana map defaults ───────────────────────────────────────
+// Astana map defaults
 export const ASTANA_CENTER = { lat: 51.1282, lng: 71.4306 } as const;
 export const ASTANA_DEFAULT_ZOOM = 12;
 export const ASTANA_BOUNDS = {
@@ -10,7 +10,7 @@ export const ASTANA_BOUNDS = {
   west: 71.15,
 } as const;
 
-// ── Material display metadata ─────────────────────────────────
+// Material display metadata
 // color = Tailwind bg-* class used for badges
 export const MATERIALS: Record<MaterialType, MaterialMeta> = {
   plastic: {
@@ -77,7 +77,7 @@ export const MATERIALS: Record<MaterialType, MaterialMeta> = {
 
 export const ALL_MATERIALS = Object.keys(MATERIALS) as MaterialType[];
 
-// ── Marker colours by category ────────────────────────────────
+// Marker colours by category
 // v1 eco-green palette.
 export const MARKER_COLORS = {
   hub: "#1B4332",       // forest green — large recycling centres
@@ -87,7 +87,7 @@ export const MARKER_COLORS = {
   clusterRing: "#1B4332", // forest green — ring around cluster
 } as const;
 
-// ── Google Maps style (light) ─────────────────────────────────
+// Google Maps style (light)
 // Warm off-white base matching #fafaf5, muted greens for parks.
 export const MAP_STYLE_LIGHT: google.maps.MapTypeStyle[] = [
   // Base geometry colour
@@ -120,7 +120,7 @@ export const MAP_STYLE_LIGHT: google.maps.MapTypeStyle[] = [
   { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#d4e8d0" }] },
 ];
 
-// ── Google Maps style (dark) ──────────────────────────────────
+// Google Maps style (dark)
 // Deep charcoal base matching #1a1a2e, forest-green tinted roads/parks.
 export const MAP_STYLE_DARK: google.maps.MapTypeStyle[] = [
   { elementType: "geometry", stylers: [{ color: "#1a1a2e" }] },

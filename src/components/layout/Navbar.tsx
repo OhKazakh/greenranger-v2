@@ -15,7 +15,7 @@ import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import type { TKey } from "@/context/LangContext";
 
-// ── Nav links ─────────────────────────────────────────────────
+// Nav links
 const NAV_LINKS: { href: string; labelKey: TKey }[] = [
   { href: "/map", labelKey: "nav.map" },
   { href: "/locations", labelKey: "nav.locations" },

@@ -1,6 +1,5 @@
 "use client";
 
-// ────────────────────────────────────────────────────────────
 //  DynamicMap — Client Component wrapper for the Leaflet map.
 //
 //  WHY THIS FILE EXISTS:
@@ -8,7 +7,6 @@
 //  Components. The solution is to wrap the dynamic import
 //  inside a "use client" component, then use *that* component
 //  from the (server) page.
-// ────────────────────────────────────────────────────────────
 
 import dynamic from "next/dynamic";
 import { Suspense } from "react";

@@ -14,9 +14,7 @@ import ru from "@/i18n/ru.json";
 import en from "@/i18n/en.json";
 import kk from "@/i18n/kk.json";
 
-// ────────────────────────────────────────────────────────────
 //  Type helpers
-// ────────────────────────────────────────────────────────────
 type TranslationDict = typeof ru;
 
 // Nested key path type — lets TypeScript catch typos in t("nav.map")
@@ -28,16 +26,12 @@ type DotPaths<T, Prefix extends string = ""> = {
 
 export type TKey = DotPaths<TranslationDict>;
 
-// ────────────────────────────────────────────────────────────
 //  Dictionary map
-// ────────────────────────────────────────────────────────────
 const DICTS: Record<Lang, TranslationDict> = { ru, en, kk };
 const STORAGE_KEY = "gr_lang";
 const DEFAULT_LANG: Lang = "ru";
 
-// ────────────────────────────────────────────────────────────
 //  Context value
-// ────────────────────────────────────────────────────────────
 interface LangContextValue {
   lang: Lang;
   setLang: (lang: Lang) => void;
@@ -47,9 +41,7 @@ interface LangContextValue {
 
 const LangContext = createContext<LangContextValue | null>(null);
 
-// ────────────────────────────────────────────────────────────
 //  Provider
-// ────────────────────────────────────────────────────────────
 export function LangProvider({ children }: { children: ReactNode }) {
   const [lang, setLangState] = useState<Lang>(DEFAULT_LANG);
 
@@ -106,9 +98,7 @@ export function LangProvider({ children }: { children: ReactNode }) {
   );
 }
 
-// ────────────────────────────────────────────────────────────
 //  Hook
-// ────────────────────────────────────────────────────────────
 export function useLang(): LangContextValue {
   const ctx = useContext(LangContext);
   if (!ctx) throw new Error("useLang must be used inside <LangProvider>");

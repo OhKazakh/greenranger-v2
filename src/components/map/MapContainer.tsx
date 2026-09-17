@@ -1,12 +1,10 @@
 "use client";
 
-// ────────────────────────────────────────────────────────────
 //  MapContainer — Google Maps version
 //
 //  Why "use client": Google Maps SDK reads `window` on init.
 //  We dynamic-import this from DynamicMap.tsx with ssr:false,
 //  so the file never runs on the server.
-// ────────────────────────────────────────────────────────────
 
 import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
@@ -32,7 +30,7 @@ import type { Location, MaterialType, LocationCategory } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
-// ── Build a custom pin SVG (data URL) ────────────────────────
+// Build a custom pin SVG (data URL)
 // The pin path occupies x:0–28, y:0–36 in path coordinates.
 // The white stroke (up to 3px wide) extends ~1.5px outside that
 // on every side and would get clipped at the viewBox edges.
@@ -49,7 +47,7 @@ function pinSvg(color: string, isSelected: boolean): string {
   return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
 }
 
-// ── Cluster icon: round badge ─────────────────────────────────
+// Cluster icon: round badge
 // We draw ONLY the visual (halo + circle + ring). The count is
 // rendered on top by MarkerClusterer via its `text` styling —
 // otherwise it'd be baked into the SVG forever.
@@ -66,7 +64,6 @@ function clusterIconUrl(): string {
 
 const LIBRARIES: ("places")[] = [];
 
-// ────────────────────────────────────────────────────────────
 
 export default function MapContainer() {
   const { t, lang } = useLang();
