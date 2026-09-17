@@ -10,6 +10,9 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
+      # Pinned so the app's bind port and the Dockerfile's EXPOSE agree.
+      - key: PORT
+        value: 10000
       - key: FRONTEND_URL
         value: https://greenranger.kz,https://www.greenranger.kz
       # Set these in the Render dashboard (marked sync:false = not in git):

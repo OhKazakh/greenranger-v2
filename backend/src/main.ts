@@ -32,9 +32,11 @@ async function bootstrap() {
 
   app.setGlobalPrefix('api');
 
-  // Bind to 0.0.0.0, not localhost — container hosts (Render, Fly) route
-  // external traffic to the container IP and can't reach a loopback bind.
-  await app.listen(process.env.PORT ?? 3001, '0.0.0.0');
+  // Bind to 0.0.0.0, not localhost — container hosts route external traffic
+  // to the container IP and can't reach a loopback bind.
+  const port = Number(process.env.PORT ?? 3001);
+  await app.listen(port, '0.0.0.0');
+  console.log(`listening on 0.0.0.0:${port}`);
 }
 bootstrap();
 
