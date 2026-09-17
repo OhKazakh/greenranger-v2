@@ -4,9 +4,9 @@ services:
     runtime: docker
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    region: singapore
+    # Free instances only run in Oregon; other regions are ignored.
+    region: oregon
     plan: free
-    healthCheckPath: /api
     envVars:
       - key: NODE_ENV
         value: production
