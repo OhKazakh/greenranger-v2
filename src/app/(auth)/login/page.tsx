@@ -9,13 +9,13 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLang } from "@/context/LangContext";
+import { useLang, type TKey } from "@/context/LangContext";
 import { useAuth } from "@/context/AuthContext";
 import { login } from "@/lib/api";
 
 const loginSchema = z.object({
-  email: z.string().email("Введите корректный email"),
-  password: z.string().min(6, "Минимум 6 символов"),
+  email: z.string().email("auth.errors.invalidEmail"),
+  password: z.string().min(6, "auth.errors.passwordTooShort"),
 });
 
 type LoginValues = z.infer<typeof loginSchema>;
@@ -63,7 +63,7 @@ export default function LoginPage() {
             className={errors.email ? "border-destructive" : ""}
           />
           {errors.email && (
-            <p className="text-xs text-destructive">{errors.email.message}</p>
+            <p className="text-xs text-destructive">{t(errors.email.message as TKey)}</p>
           )}
         </div>
 
@@ -84,7 +84,7 @@ export default function LoginPage() {
             className={errors.password ? "border-destructive" : ""}
           />
           {errors.password && (
-            <p className="text-xs text-destructive">{errors.password.message}</p>
+            <p className="text-xs text-destructive">{t(errors.password.message as TKey)}</p>
           )}
         </div>
 

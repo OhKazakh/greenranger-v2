@@ -9,14 +9,14 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLang } from "@/context/LangContext";
+import { useLang, type TKey } from "@/context/LangContext";
 import { useAuth } from "@/context/AuthContext";
 import { register as apiRegister } from "@/lib/api";
 
 const registerSchema = z.object({
-  name: z.string().min(2, "Введите имя"),
-  email: z.string().email("Введите корректный email"),
-  password: z.string().min(6, "Минимум 6 символов"),
+  name: z.string().min(2, "auth.errors.nameRequired"),
+  email: z.string().email("auth.errors.invalidEmail"),
+  password: z.string().min(6, "auth.errors.passwordTooShort"),
 });
 
 type RegisterValues = z.infer<typeof registerSchema>;
@@ -41,7 +41,7 @@ export default function RegisterPage() {
       toast.success(t("auth.welcome").replace("{{name}}", user.name));
       router.push("/map");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Ошибка регистрации");
+      toast.error(err instanceof Error ? err.message : t("auth.errors.invalidCredentials"));
     }
   };
 
@@ -64,7 +64,7 @@ export default function RegisterPage() {
             className={errors.name ? "border-destructive" : ""}
           />
           {errors.name && (
-            <p className="text-xs text-destructive">{errors.name.message}</p>
+            <p className="text-xs text-destructive">{t(errors.name.message as TKey)}</p>
           )}
         </div>
 
@@ -80,7 +80,7 @@ export default function RegisterPage() {
             className={errors.email ? "border-destructive" : ""}
           />
           {errors.email && (
-            <p className="text-xs text-destructive">{errors.email.message}</p>
+            <p className="text-xs text-destructive">{t(errors.email.message as TKey)}</p>
           )}
         </div>
 
@@ -96,7 +96,7 @@ export default function RegisterPage() {
             className={errors.password ? "border-destructive" : ""}
           />
           {errors.password && (
-            <p className="text-xs text-destructive">{errors.password.message}</p>
+            <p className="text-xs text-destructive">{t(errors.password.message as TKey)}</p>
           )}
         </div>
 

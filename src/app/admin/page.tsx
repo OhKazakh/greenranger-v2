@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/context/AuthContext";
+import { useLang } from "@/context/LangContext";
 import { adminGetAllLocations, adminSetVerified, adminDeleteLocation, adminGetUsers, adminUpdateLocation } from "@/lib/api";
 import type { AdminUser, AdminLocationUpdate } from "@/lib/api";
 import { MATERIALS, ALL_MATERIALS } from "@/lib/constants";
@@ -54,6 +55,7 @@ function LocationRow({
   onDelete: (id: string) => void;
   onEdit: (loc: Location) => void;
 }) {
+  const { t } = useLang();
   return (
     <tr className="border-b border-border hover:bg-muted/30 transition-colors">
       <td className="px-4 py-3">
@@ -78,7 +80,7 @@ function LocationRow({
               : "bg-accent/10 text-accent"
           )}
         >
-          {loc.category === "hub" ? "Хаб" : "Киоск"}
+          {loc.category === "hub" ? t("admin.typeHub") : t("admin.typeKiosk")}
         </span>
       </td>
       <td className="px-4 py-3 hidden lg:table-cell">
@@ -112,7 +114,7 @@ function LocationRow({
             <AlertCircle className="w-3 h-3" />
           )}
           <span className="hidden sm:inline">
-            {loc.verified ? "Верифицирован" : "Не верифицирован"}
+            {loc.verified ? t("admin.verified") : t("admin.unverified")}
           </span>
         </button>
       </td>
@@ -123,27 +125,27 @@ function LocationRow({
             target="_blank"
             rel="noopener noreferrer"
             className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-            title="Открыть"
+            title={t("admin.open")}
           >
             <ExternalLink className="w-3.5 h-3.5" />
           </a>
           <button
             onClick={() => onEdit(loc)}
             className="p-1.5 rounded-lg hover:bg-muted transition-colors text-muted-foreground hover:text-foreground"
-            title="Редактировать"
+            title={t("admin.edit")}
           >
             <Pencil className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => onToggleVerify(loc.id, loc.verified)}
             className="p-1.5 rounded-lg hover:bg-primary/10 transition-colors text-muted-foreground hover:text-primary"
-            title={loc.verified ? "Снять верификацию" : "Верифицировать"}
+            title={loc.verified ? t("admin.doUnverify") : t("admin.doVerify")}
           >
             <ShieldCheck className="w-3.5 h-3.5" />
           </button>
           <button
             className="p-1.5 rounded-lg hover:bg-destructive/10 transition-colors text-muted-foreground hover:text-destructive"
-            title="Удалить"
+            title={t("admin.delete")}
             onClick={() => onDelete(loc.id)}
           >
             <Trash2 className="w-3.5 h-3.5" />
@@ -174,6 +176,7 @@ function EditLocationModal({
   const [materials, setMaterials] = useState<MaterialType[]>(loc.materials);
   const [photosText, setPhotosText] = useState(loc.photos.join("\n"));
   const [saving, setSaving] = useState(false);
+  const { t } = useLang();
 
   const set = (k: keyof typeof form, v: string) => setForm((f) => ({ ...f, [k]: v }));
 
@@ -184,7 +187,7 @@ function EditLocationModal({
     const lat = parseFloat(form.lat);
     const lng = parseFloat(form.lng);
     if (Number.isNaN(lat) || Number.isNaN(lng)) {
-      toast.error("Некорректные координаты");
+      toast.error(t("admin.badCoords"));
       return;
     }
     setSaving(true);
@@ -199,11 +202,11 @@ function EditLocationModal({
     };
     try {
       const updated = await adminUpdateLocation(loc.id, patch);
-      toast.success("Изменения сохранены");
+      toast.success(t("admin.saved"));
       onSaved(updated);
       onClose();
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Не удалось сохранить");
+      toast.error(e instanceof Error ? e.message : t("admin.saveFailed"));
     } finally {
       setSaving(false);
     }
@@ -226,7 +229,7 @@ function EditLocationModal({
       <div className="absolute inset-0 bg-black/50" onClick={onClose} />
       <div className="relative bg-card border border-border rounded-2xl w-full max-w-2xl max-h-[88vh] overflow-y-auto shadow-2xl">
         <div className="sticky top-0 bg-card border-b border-border px-5 py-3.5 flex items-center justify-between z-10">
-          <h2 className="heading text-sm font-bold text-foreground">Редактировать пункт</h2>
+          <h2 className="heading text-sm font-bold text-foreground">{t("admin.editTitle")}</h2>
           <button onClick={onClose} className="p-1 rounded-lg hover:bg-muted text-muted-foreground">
             <X className="w-4 h-4" />
           </button>
@@ -234,48 +237,48 @@ function EditLocationModal({
 
         <div className="p-5 space-y-5">
           <div className="space-y-1">
-            <label className="text-xs font-medium text-muted-foreground">Тип</label>
+            <label className="text-xs font-medium text-muted-foreground">{t("admin.fieldType")}</label>
             <select
               value={form.category}
               onChange={(e) => set("category", e.target.value)}
               className="w-full text-sm bg-background border border-border rounded-lg px-3 py-1.5 focus:outline-none"
             >
-              <option value="hub">Хаб</option>
-              <option value="kiosk">Киоск</option>
+              <option value="hub">{t("admin.typeHub")}</option>
+              <option value="kiosk">{t("admin.typeKiosk")}</option>
             </select>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-3">
-            {field("Название (RU)", "nameRu")}
-            {field("Название (EN)", "nameEn")}
-            {field("Название (KK)", "nameKk")}
+            {field(`${t("admin.fieldName")} (RU)`, "nameRu")}
+            {field(`${t("admin.fieldName")} (EN)`, "nameEn")}
+            {field(`${t("admin.fieldName")} (KK)`, "nameKk")}
           </div>
 
           <div className="grid sm:grid-cols-3 gap-3">
-            {field("Адрес (RU)", "addressRu")}
-            {field("Адрес (EN)", "addressEn")}
-            {field("Адрес (KK)", "addressKk")}
+            {field(`${t("admin.fieldAddress")} (RU)`, "addressRu")}
+            {field(`${t("admin.fieldAddress")} (EN)`, "addressEn")}
+            {field(`${t("admin.fieldAddress")} (KK)`, "addressKk")}
           </div>
 
           <div className="grid sm:grid-cols-3 gap-3">
-            {field("Описание (RU)", "descriptionRu")}
-            {field("Описание (EN)", "descriptionEn")}
-            {field("Описание (KK)", "descriptionKk")}
+            {field(`${t("admin.fieldDesc")} (RU)`, "descriptionRu")}
+            {field(`${t("admin.fieldDesc")} (EN)`, "descriptionEn")}
+            {field(`${t("admin.fieldDesc")} (KK)`, "descriptionKk")}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {field("Широта (lat)", "lat")}
-            {field("Долгота (lng)", "lng")}
+            {field(t("admin.fieldLat"), "lat")}
+            {field(t("admin.fieldLng"), "lng")}
           </div>
 
           <div className="grid grid-cols-2 gap-3">
-            {field("Телефон", "phone")}
-            {field("Сайт", "website")}
+            {field(t("admin.fieldPhone"), "phone")}
+            {field(t("admin.fieldWebsite"), "website")}
           </div>
 
           <div className="space-y-1">
             <label className="text-xs font-medium text-muted-foreground">
-              Фото (по одной ссылке на строку)
+              {t("admin.fieldPhotos")}
             </label>
             <textarea
               value={photosText}
@@ -288,14 +291,14 @@ function EditLocationModal({
               <div className="flex gap-1.5 flex-wrap pt-1">
                 {photosText.split("\n").map((s) => s.trim()).filter(Boolean).slice(0, 6).map((src, i) => (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img key={i} src={src} alt={`фото ${i + 1}`} className="w-14 h-14 object-cover rounded-lg border border-border" />
+                  <img key={i} src={src} alt={`${t("location.photoAlt")} ${i + 1}`} className="w-14 h-14 object-cover rounded-lg border border-border" />
                 ))}
               </div>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-muted-foreground">Материалы</label>
+            <label className="text-xs font-medium text-muted-foreground">{t("admin.fieldMaterials")}</label>
             <div className="flex flex-wrap gap-1.5">
               {ALL_MATERIALS.map((m) => {
                 const active = materials.includes(m);
@@ -324,14 +327,14 @@ function EditLocationModal({
             onClick={onClose}
             className="text-sm px-4 py-1.5 rounded-lg border border-border text-muted-foreground hover:bg-muted transition-colors"
           >
-            Отмена
+            {t("admin.cancel")}
           </button>
           <button
             onClick={handleSave}
             disabled={saving}
             className="text-sm font-semibold px-4 py-1.5 rounded-lg bg-primary text-primary-foreground disabled:opacity-50"
           >
-            {saving ? "Сохранение…" : "Сохранить"}
+            {saving ? t("admin.saving") : t("admin.save")}
           </button>
         </div>
       </div>
@@ -342,6 +345,7 @@ function EditLocationModal({
 
 export default function AdminPage() {
   const { user, isLoading: authLoading } = useAuth();
+  const { t } = useLang();
   const router = useRouter();
   const [tab, setTab] = useState<"locations" | "users">("locations");
   const [locations, setLocations] = useState<Location[]>([]);
@@ -383,7 +387,7 @@ export default function AdminPage() {
   }, []);
 
   const handleDelete = useCallback(async (id: string) => {
-    if (!window.confirm("Удалить этот пункт? Это действие нельзя отменить.")) return;
+    if (!window.confirm(t("admin.confirmDelete"))) return;
     setLocations((prev) => prev.filter((l) => l.id !== id));
     try {
       await adminDeleteLocation(id);
@@ -418,7 +422,7 @@ export default function AdminPage() {
   if (authLoading || (!authLoading && user?.role !== "admin")) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <p className="text-muted-foreground text-sm">Проверка доступа…</p>
+        <p className="text-muted-foreground text-sm">{t("admin.checkingAccess")}</p>
       </div>
     );
   }
@@ -431,8 +435,8 @@ export default function AdminPage() {
             <LayoutDashboard className="w-4.5 h-4.5 text-primary-foreground" />
           </div>
           <div>
-            <h1 className="heading text-xl font-bold text-foreground">Панель администратора</h1>
-            <p className="text-xs text-muted-foreground">GreenRanger — управление контентом</p>
+            <h1 className="heading text-xl font-bold text-foreground">{t("admin.title")}</h1>
+            <p className="text-xs text-muted-foreground">{t("admin.subtitle")}</p>
           </div>
         </div>
         <button
@@ -440,7 +444,7 @@ export default function AdminPage() {
           className="flex items-center gap-2 text-xs text-muted-foreground hover:text-foreground border border-border rounded-lg px-3 py-1.5 transition-colors"
         >
           <RefreshCw className="w-3.5 h-3.5" />
-          Обновить
+          {t("admin.refresh")}
         </button>
       </div>
 
@@ -450,14 +454,14 @@ export default function AdminPage() {
           className={cn("flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors",
             tab === "locations" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
         >
-          <MapPin className="w-3.5 h-3.5" /> Пункты
+          <MapPin className="w-3.5 h-3.5" /> {t("admin.tabLocations")}
         </button>
         <button
           onClick={() => setTab("users")}
           className={cn("flex items-center gap-2 px-4 py-1.5 rounded-md text-sm font-medium transition-colors",
             tab === "users" ? "bg-background shadow-sm text-foreground" : "text-muted-foreground hover:text-foreground")}
         >
-          <Users className="w-3.5 h-3.5" /> Пользователи {users.length > 0 && <span className="text-xs bg-muted-foreground/20 px-1.5 py-0.5 rounded-full">{users.length}</span>}
+          <Users className="w-3.5 h-3.5" /> {t("admin.tabUsers")} {users.length > 0 && <span className="text-xs bg-muted-foreground/20 px-1.5 py-0.5 rounded-full">{users.length}</span>}
         </button>
       </div>
 
@@ -470,10 +474,10 @@ export default function AdminPage() {
           </div>
         ) : (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <StatCard icon={MapPin} label="Всего пунктов" value={locations.length} color="text-accent" />
-            <StatCard icon={Building2} label="Хабы / Киоски" value={`${hubs} / ${kiosks}`} />
-            <StatCard icon={CheckCircle2} label="Верифицировано" value={verified} color="text-accent" />
-            <StatCard icon={AlertCircle} label="На проверке" value={unverified} color="text-destructive" sub={unverified > 0 ? "требуют проверки" : undefined} />
+            <StatCard icon={MapPin} label={t("admin.statTotal")} value={locations.length} color="text-accent" />
+            <StatCard icon={Building2} label={t("admin.statHubsKiosks")} value={`${hubs} / ${kiosks}`} />
+            <StatCard icon={CheckCircle2} label={t("admin.statVerified")} value={verified} color="text-accent" />
+            <StatCard icon={AlertCircle} label={t("admin.statPending")} value={unverified} color="text-destructive" sub={unverified > 0 ? t("admin.statPendingSub") : undefined} />
           </div>
         )}
 
@@ -482,13 +486,13 @@ export default function AdminPage() {
           <div className="bg-card border border-border rounded-xl p-5">
             <h2 className="heading text-sm font-bold text-foreground mb-4 flex items-center gap-2">
               <Cpu className="w-4 h-4 text-accent" />
-              Топ материалов
+              {t("admin.topMaterials")}
             </h2>
             <div className="flex flex-wrap gap-3">
               {topMaterials.map(([m, count]) => (
                 <div key={m} className="flex items-center gap-2">
                   <MaterialBadge material={m} />
-                  <span className="text-xs text-muted-foreground">{count} пунктов</span>
+                  <span className="text-xs text-muted-foreground">{count} {t("admin.pointsWord")}</span>
                 </div>
               ))}
             </div>
@@ -498,14 +502,14 @@ export default function AdminPage() {
         <div className="bg-card border border-border rounded-xl overflow-hidden">
           <div className="px-4 py-3 border-b border-border flex flex-col sm:flex-row gap-3 items-start sm:items-center">
             <h2 className="heading text-sm font-bold text-foreground shrink-0">
-              Пункты ({filtered.length})
+              {t("admin.tabLocations")} ({filtered.length})
             </h2>
             <div className="flex flex-1 gap-2 flex-wrap">
               <input
                 type="text"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Поиск…"
+                placeholder={t("admin.searchPlaceholder")}
                 className="text-sm bg-background border border-border rounded-lg px-3 py-1.5 flex-1 min-w-[140px] focus:outline-none focus:ring-1 focus:ring-ring"
               />
               <select
@@ -513,18 +517,18 @@ export default function AdminPage() {
                 onChange={(e) => setFilterCat(e.target.value as typeof filterCat)}
                 className="text-sm bg-background border border-border rounded-lg px-2.5 py-1.5 focus:outline-none"
               >
-                <option value="all">Все типы</option>
-                <option value="hub">Хабы</option>
-                <option value="kiosk">Киоски</option>
+                <option value="all">{t("admin.allTypes")}</option>
+                <option value="hub">{t("admin.typeHubs")}</option>
+                <option value="kiosk">{t("admin.typeKiosks")}</option>
               </select>
               <select
                 value={filterVerified}
                 onChange={(e) => setFilterVerified(e.target.value as typeof filterVerified)}
                 className="text-sm bg-background border border-border rounded-lg px-2.5 py-1.5 focus:outline-none"
               >
-                <option value="all">Все статусы</option>
-                <option value="verified">Верифицированные</option>
-                <option value="unverified">Не верифицированные</option>
+                <option value="all">{t("admin.allStatuses")}</option>
+                <option value="verified">{t("admin.verifiedPlural")}</option>
+                <option value="unverified">{t("admin.unverifiedPlural")}</option>
               </select>
             </div>
           </div>
@@ -538,19 +542,19 @@ export default function AdminPage() {
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-border bg-muted/30">
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Название</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">Тип</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">Адрес</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden xl:table-cell">Материалы</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Статус</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Действия</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("admin.colName")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">{t("admin.colType")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">{t("admin.colAddress")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden xl:table-cell">{t("admin.colMaterials")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("admin.colStatus")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("admin.colActions")}</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.length === 0 ? (
                     <tr>
                       <td colSpan={6} className="px-4 py-10 text-center text-sm text-muted-foreground">
-                        Ничего не найдено
+                        {t("admin.nothingFound")}
                       </td>
                     </tr>
                   ) : (
@@ -568,7 +572,7 @@ export default function AdminPage() {
       {tab === "users" && (
         <div className="bg-card border border-border rounded-xl overflow-hidden">
           <div className="px-4 py-3 border-b border-border">
-            <h2 className="heading text-sm font-bold text-foreground">Пользователи ({users.length})</h2>
+            <h2 className="heading text-sm font-bold text-foreground">{t("admin.usersTitle")} ({users.length})</h2>
           </div>
           {loading ? (
             <div className="p-4 space-y-2">
@@ -579,12 +583,12 @@ export default function AdminPage() {
               <table className="w-full text-left">
                 <thead>
                   <tr className="border-b border-border bg-muted/30">
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Имя</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">Email</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden sm:table-cell">Роль</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">Отзывы</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">Заявки</th>
-                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">Дата рег.</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("admin.colName")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide">{t("admin.colEmail")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden sm:table-cell">{t("admin.colRole")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">{t("admin.colReviews")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden md:table-cell">{t("admin.colSubmissions")}</th>
+                    <th className="px-4 py-2.5 text-xs font-semibold text-muted-foreground uppercase tracking-wide hidden lg:table-cell">{t("admin.colRegistered")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -599,7 +603,7 @@ export default function AdminPage() {
                             ? "bg-primary/10 text-primary"
                             : "bg-muted text-muted-foreground"
                         )}>
-                          {u.role === "ADMIN" ? "Админ" : "Пользователь"}
+                          {u.role === "ADMIN" ? t("admin.roleAdmin") : t("admin.roleUser")}
                         </span>
                       </td>
                       <td className="px-4 py-3 text-sm text-muted-foreground hidden md:table-cell">{u._count.reviews}</td>

@@ -56,7 +56,7 @@ export default function LocationDetailPage() {
   if (!location) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center">
-        <p className="text-muted-foreground mb-4">Пункт не найден</p>
+        <p className="text-muted-foreground mb-4">{t("location.notFound")}</p>
         <ButtonLink href="/locations" variant="outline">{t("location.backToList")}</ButtonLink>
       </div>
     );
@@ -223,7 +223,7 @@ export default function LocationDetailPage() {
                 <img
                   key={i}
                   src={src}
-                  alt={`${location.name[lang]} — фото ${i + 1}`}
+                  alt={`${location.name[lang]} — ${t("location.photoAlt")} ${i + 1}`}
                   className="w-full h-32 object-cover rounded-xl"
                 />
               ))}

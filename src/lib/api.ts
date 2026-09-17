@@ -291,7 +291,7 @@ export async function login(payload: LoginPayload): Promise<User> {
       sessionStorage.setItem("mock_user", JSON.stringify(mockUser));
       return mockUser;
     }
-    throw new Error("Неверный email или пароль");
+    throw new Error("auth.errors.invalidCredentials");
   }
   const res = await apiFetch<{ user: User }>("/auth/login", {
     method: "POST",

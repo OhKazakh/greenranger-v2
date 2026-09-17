@@ -247,7 +247,7 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
                     <img
                       key={i}
                       src={src}
-                      alt={`${shown.name[lang]} — фото ${i + 1}`}
+                      alt={`${shown.name[lang]} — ${t("location.photoAlt")} ${i + 1}`}
                       className="w-full h-24 object-cover rounded-lg"
                     />
                   ))}

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ButtonLink } from "@/components/ui/button-link";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useLang } from "@/context/LangContext";
+import { useLang, type TKey } from "@/context/LangContext";
 import { useAuth } from "@/context/AuthContext";
 import { useTheme } from "next-themes";
 import { submitLocation } from "@/lib/api";
@@ -23,12 +23,12 @@ import { cn } from "@/lib/utils";
 const LIBRARIES: ("places")[] = [];
 
 const submitSchema = z.object({
-  name: z.string().min(3, "Минимум 3 символа"),
-  address: z.string().min(5, "Введите полный адрес"),
-  description: z.string().min(10, "Минимум 10 символов"),
-  materials: z.array(z.string()).min(1, "Выберите хотя бы один материал"),
-  phone: z.string().regex(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, "Введите номер в формате +7 (XXX) XXX-XX-XX").optional().or(z.literal("")),
-  website: z.string().url("Введите корректный URL").optional().or(z.literal("")),
+  name: z.string().min(3, "validation.nameMin"),
+  address: z.string().min(5, "validation.addressMin"),
+  description: z.string().min(10, "validation.descMin"),
+  materials: z.array(z.string()).min(1, "validation.materialsMin"),
+  phone: z.string().regex(/^\+7 \(\d{3}\) \d{3}-\d{2}-\d{2}$/, "validation.phoneFormat").optional().or(z.literal("")),
+  website: z.string().url("validation.urlInvalid").optional().or(z.literal("")),
 });
 
 type SubmitFormValues = z.infer<typeof submitSchema>;
@@ -275,7 +275,7 @@ export default function SubmitPage() {
             {...register("name")}
             className={errors.name ? "border-destructive" : ""}
           />
-          {errors.name && <p className="text-xs text-destructive">{errors.name.message}</p>}
+          {errors.name && <p className="text-xs text-destructive">{t(errors.name.message as TKey)}</p>}
         </div>
 
         {/* Address */}
@@ -287,7 +287,7 @@ export default function SubmitPage() {
             {...register("address")}
             className={errors.address ? "border-destructive" : ""}
           />
-          {errors.address && <p className="text-xs text-destructive">{errors.address.message}</p>}
+          {errors.address && <p className="text-xs text-destructive">{t(errors.address.message as TKey)}</p>}
         </div>
 
         {/* Description */}
@@ -305,7 +305,7 @@ export default function SubmitPage() {
               errors.description ? "border-destructive" : "border-input"
             )}
           />
-          {errors.description && <p className="text-xs text-destructive">{errors.description.message}</p>}
+          {errors.description && <p className="text-xs text-destructive">{t(errors.description.message as TKey)}</p>}
         </div>
 
         <div className="space-y-1.5">
@@ -346,7 +346,7 @@ export default function SubmitPage() {
               </div>
             )}
           />
-          {errors.materials && <p className="text-xs text-destructive">{errors.materials.message}</p>}
+          {errors.materials && <p className="text-xs text-destructive">{t(errors.materials.message as TKey)}</p>}
         </div>
 
         {/* Phone */}
@@ -382,7 +382,7 @@ export default function SubmitPage() {
               />
             )}
           />
-          {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
+          {errors.phone && <p className="text-xs text-destructive">{t(errors.phone.message as TKey)}</p>}
         </div>
 
         {/* Website */}
@@ -395,7 +395,7 @@ export default function SubmitPage() {
             {...register("website")}
             className={errors.website ? "border-destructive" : ""}
           />
-          {errors.website && <p className="text-xs text-destructive">{errors.website.message}</p>}
+          {errors.website && <p className="text-xs text-destructive">{t(errors.website.message as TKey)}</p>}
         </div>
 
         {/* Coordinate picker */}
