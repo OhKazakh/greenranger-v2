@@ -321,13 +321,9 @@ export default function MapContainer() {
                   );
                 })}
 
-                {/* ── Hover label ─────────────────────────────────
-                    Custom OverlayView instead of InfoWindow.
-                    InfoWindow has a hard-coded white background, an
-                    arrow tail, and a close button — clunky for a
-                    short hover hint. OverlayView gives us a plain
-                    DOM node we style with our own tokens.
-                ─────────────────────────────────────────────────── */}
+                {/* OverlayView, not InfoWindow: InfoWindow forces a white
+                    background, an arrow tail and a close button, which is
+                    far too heavy for a hover hint. */}
                 {(() => {
                   const hovered = filtered.find((l) => l.id === hoveredId);
                   if (!hovered || hovered.id === selectedLocation?.id) return null;
