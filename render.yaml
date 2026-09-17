@@ -1,0 +1,26 @@
+services:
+  - type: web
+    name: greenranger-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: frankfurt
+    plan: free
+    healthCheckPath: /api
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        value: https://greenranger.kz,https://www.greenranger.kz
+      # Set these in the Render dashboard (marked sync:false = not in git):
+      #   DATABASE_URL — Neon pooled connection string
+      #   JWT_SECRET   — openssl rand -base64 48
+      #   RESEND_API_KEY, RESEND_FROM — transactional email
+      - key: DATABASE_URL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: RESEND_API_KEY
+        sync: false
+      - key: RESEND_FROM
+        sync: false
