@@ -6,13 +6,8 @@ import type {
   Review,
   ReviewsResponse,
 } from "@/types";
-import { mockLocations } from "@/lib/mock-data";
 
-const USE_MOCK = process.env.NEXT_PUBLIC_USE_MOCK !== "false"; // default = mock ON
 const API_BASE = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001") + "/api";
-
-const mockDelay = (ms = 300) =>
-  new Promise((resolve) => setTimeout(resolve, ms));
 
 // Generous, because a sleeping free-tier backend can take ~50s to wake.
 // Without it a stalled server leaves the UI spinning forever instead of
@@ -73,33 +68,7 @@ function toLocation(r: any): Location {
   };
 }
 
-
 export async function getLocations(filter?: Partial<FilterState>): Promise<Location[]> {
-  if (USE_MOCK) {
-    await mockDelay();
-    let results = [...mockLocations];
-
-    if (filter?.materials && filter.materials.length > 0) {
-      results = results.filter((loc) =>
-        filter.materials!.some((m) => loc.materials.includes(m))
-      );
-    }
-    if (filter?.category && filter.category !== "all") {
-      results = results.filter((loc) => loc.category === filter.category);
-    }
-    if (filter?.search) {
-      const q = filter.search.toLowerCase();
-      results = results.filter(
-        (loc) =>
-          loc.name.ru.toLowerCase().includes(q) ||
-          loc.name.en.toLowerCase().includes(q) ||
-          loc.address.ru.toLowerCase().includes(q)
-      );
-    }
-
-    return results;
-  }
-
   const params = new URLSearchParams();
   if (filter?.materials?.length) params.set("materials", filter.materials.join(","));
   if (filter?.category && filter.category !== "all") params.set("category", filter.category);
@@ -110,40 +79,23 @@ export async function getLocations(filter?: Partial<FilterState>): Promise<Locat
 }
 
 export async function getLocationBySlug(slug: string): Promise<Location | null> {
-  if (USE_MOCK) {
-    await mockDelay(150);
-    return mockLocations.find((l) => l.slug === slug) ?? null;
-  }
   const raw = await apiFetch<unknown>(`/locations/${slug}`);
   return toLocation(raw);
 }
 
 export async function getLocationById(id: string): Promise<Location | null> {
-  if (USE_MOCK) {
-    await mockDelay(150);
-    return mockLocations.find((l) => l.id === id) ?? null;
-  }
   const raw = await apiFetch<unknown>(`/locations/id/${id}`);
   return toLocation(raw);
 }
 
 export async function submitLocation(payload: SubmitLocationPayload): Promise<void> {
-  if (USE_MOCK) {
-    await mockDelay(600);
-    console.log("[MOCK] submitLocation", payload);
-    return;
-  }
   await apiFetch("/locations/suggest", {
     method: "POST",
     body: JSON.stringify(payload),
   });
 }
 
-
 export async function getReviews(slug: string): Promise<ReviewsResponse> {
-  if (USE_MOCK) {
-    return { reviews: [], avgRating: null, count: 0 };
-  }
   return apiFetch<ReviewsResponse>(`/locations/${slug}/reviews`);
 }
 
@@ -151,9 +103,6 @@ export async function submitReview(
   slug: string,
   payload: { rating: number; comment?: string }
 ): Promise<Review> {
-  if (USE_MOCK) {
-    throw new Error("Not available in mock mode");
-  }
   return apiFetch<Review>(`/locations/${slug}/reviews`, {
     method: "POST",
     body: JSON.stringify(payload),
@@ -161,7 +110,6 @@ export async function submitReview(
 }
 
 export async function deleteReview(slug: string): Promise<void> {
-  if (USE_MOCK) return;
   await apiFetch(`/locations/${slug}/reviews`, { method: "DELETE" });
 }
 
@@ -199,7 +147,6 @@ export interface MyActivity {
 export async function getMyActivity(): Promise<MyActivity> {
   return apiFetch<MyActivity>("/users/me/activity");
 }
-
 
 export interface AdminUser {
   id: string;
@@ -260,7 +207,6 @@ export async function adminUpdateLocation(
   return toLocation(raw);
 }
 
-
 export interface LoginPayload {
   email: string;
   password: string;
@@ -272,27 +218,8 @@ export interface RegisterPayload {
   password: string;
 }
 
-/**
- * Login — on success the server sets an httpOnly cookie.
- * We return the user object so the UI can update immediately.
- */
+// The server sets the httpOnly cookie; the returned user updates the UI right away.
 export async function login(payload: LoginPayload): Promise<User> {
-  if (USE_MOCK) {
-    await mockDelay(800);
-    // Simulate a successful login
-    if (payload.email && payload.password.length >= 6) {
-      const mockUser: User = {
-        id: "mock-user-1",
-        email: payload.email,
-        name: payload.email.split("@")[0],
-        role: "user",
-      };
-      // Store in sessionStorage for mock persistence across page reloads
-      sessionStorage.setItem("mock_user", JSON.stringify(mockUser));
-      return mockUser;
-    }
-    throw new Error("auth.errors.invalidCredentials");
-  }
   const res = await apiFetch<{ user: User }>("/auth/login", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -301,17 +228,6 @@ export async function login(payload: LoginPayload): Promise<User> {
 }
 
 export async function register(payload: RegisterPayload): Promise<User> {
-  if (USE_MOCK) {
-    await mockDelay(800);
-    const mockUser: User = {
-      id: "mock-user-" + Date.now(),
-      email: payload.email,
-      name: payload.name,
-      role: "user",
-    };
-    sessionStorage.setItem("mock_user", JSON.stringify(mockUser));
-    return mockUser;
-  }
   const res = await apiFetch<{ user: User }>("/auth/register", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -320,23 +236,11 @@ export async function register(payload: RegisterPayload): Promise<User> {
 }
 
 export async function logout(): Promise<void> {
-  if (USE_MOCK) {
-    sessionStorage.removeItem("mock_user");
-    return;
-  }
   await apiFetch("/auth/logout", { method: "POST" });
 }
 
-/**
- * Get the currently logged-in user.
- * In real mode: verifies the cookie with the server.
- * In mock mode: reads sessionStorage.
- */
+// Verifies the auth cookie with the server; null when logged out.
 export async function getMe(): Promise<User | null> {
-  if (USE_MOCK) {
-    const raw = sessionStorage.getItem("mock_user");
-    return raw ? (JSON.parse(raw) as User) : null;
-  }
   try {
     return await apiFetch<User>("/auth/me");
   } catch {

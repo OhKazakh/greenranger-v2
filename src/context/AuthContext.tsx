@@ -28,7 +28,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // On mount: check if already logged in (cookie or mock session)
+  // On mount: check if already logged in
   useEffect(() => {
     getMe()
       .then(setUser)
