@@ -12,11 +12,12 @@ them on one map.
 ## Features
 
 - Map and list views, filterable by material and by type of point
-- Sort by distance from your location
+- Sort by distance, and "nearest points": type an address, use your location
+  or tap the map to get the three closest points with directions
 - Details per point: address, hours, phone, what they actually accept
 - User reviews and ratings
 - Anyone can submit a missing point; an admin reviews it before it goes live
-- Russian, English and Kazakh
+- English, Russian and Kazakh
 - Light and dark themes
 
 ## Stack
@@ -28,8 +29,8 @@ Render, database on Neon.
 
 ## Data
 
-Every point is verified by hand against 2GIS, company websites and phone calls
-before it's published. The dataset lives in `backend/prisma/locations.json`.
+Every point is checked by hand against 2GIS and company websites before it's
+published. The dataset lives in `backend/prisma/locations.json`.
 If you spot something wrong, the "add a point" form takes corrections too.
 
 ## Running locally
@@ -46,8 +47,19 @@ npx prisma migrate dev
 npm run start:dev
 ```
 
-Both need env files — see `backend/.env.example` for the backend and set
-`NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` plus `NEXT_PUBLIC_API_URL` for the frontend.
+Both need env files: copy `.env.example` to `.env.local` for the frontend and
+`backend/.env.example` to `backend/.env` for the backend.
+
+## Streamlit version
+
+`insights/` is a small Python app (Streamlit) with the same "find the nearest
+point" feature. It reads the live API and falls back to the local dataset.
+
+```bash
+cd insights
+pip install -r requirements.txt
+streamlit run app.py
+```
 
 ## License
 
