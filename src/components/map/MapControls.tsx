@@ -1,15 +1,14 @@
 "use client";
 
 import { Plus, Minus, Locate } from "lucide-react";
-import { useState } from "react";
 import type { RefObject } from "react";
-import { toast } from "sonner";
 import { useLang } from "@/context/LangContext";
 import { cn } from "@/lib/utils";
-import { MARKER_COLORS } from "@/lib/constants";
 
 interface MapControlsProps {
   map: RefObject<google.maps.Map | null>;
+  locating: boolean;
+  onLocate: () => void;
 }
 
 function ControlButton({
@@ -39,10 +38,8 @@ function ControlButton({
   );
 }
 
-export function MapControls({ map }: MapControlsProps) {
+export function MapControls({ map, locating, onLocate }: MapControlsProps) {
   const { t } = useLang();
-  const [locating, setLocating] = useState(false);
-  const [userMarker, setUserMarker] = useState<google.maps.Marker | null>(null);
 
   const zoomIn = () => {
     const m = map.current;
@@ -55,51 +52,6 @@ export function MapControls({ map }: MapControlsProps) {
     m.setZoom((m.getZoom() ?? 12) - 1);
   };
 
-  const handleLocate = () => {
-    if (!map.current || locating) return;
-
-    if (!navigator.geolocation) {
-      toast.error(t("map.geoUnavailable"));
-      return;
-    }
-
-    setLocating(true);
-
-    navigator.geolocation.getCurrentPosition(
-      ({ coords }) => {
-        const pos = { lat: coords.latitude, lng: coords.longitude };
-        map.current!.panTo(pos);
-        map.current!.setZoom(15);
-
-        // Remove previous user marker
-        userMarker?.setMap(null);
-
-        const marker = new google.maps.Marker({
-          position: pos,
-          map: map.current!,
-          icon: {
-            path: google.maps.SymbolPath.CIRCLE,
-            scale: 8,
-            fillColor: MARKER_COLORS.user,
-            fillOpacity: 1,
-            strokeColor: "#ffffff",
-            strokeWeight: 2.5,
-          },
-          title: "My location",
-          zIndex: 999,
-        });
-
-        setUserMarker(marker);
-        setLocating(false);
-      },
-      () => {
-        setLocating(false);
-        toast.error(t("map.geoError"));
-      },
-      { enableHighAccuracy: true, timeout: 8000 }
-    );
-  };
-
   return (
     <div className="absolute bottom-6 right-4 z-10 flex flex-col gap-1">
       <ControlButton onClick={zoomIn} label={t("map.zoomIn")}>
@@ -109,7 +61,7 @@ export function MapControls({ map }: MapControlsProps) {
         <Minus className="w-4 h-4" />
       </ControlButton>
       <ControlButton
-        onClick={handleLocate}
+        onClick={onLocate}
         label={t("map.myLocation")}
         className={cn("mt-1", locating ? "text-muted-foreground animate-pulse" : "text-accent")}
       >

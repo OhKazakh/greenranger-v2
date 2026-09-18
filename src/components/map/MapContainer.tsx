@@ -5,10 +5,12 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { GoogleMap, useJsApiLoader, Marker, MarkerClusterer, OverlayView } from "@react-google-maps/api";
 import { useTheme } from "next-themes";
 import { SlidersHorizontal, X } from "lucide-react";
+import { toast } from "sonner";
 
 import { LocationDetailPanel } from "@/components/map/LocationDetailPanel";
 import { FilterPanel } from "@/components/map/FilterPanel";
 import { MapControls } from "@/components/map/MapControls";
+import { NearestPanel } from "@/components/map/NearestPanel";
 import { useLang } from "@/context/LangContext";
 import {
   ASTANA_CENTER,
@@ -20,7 +22,8 @@ import {
   ALL_MATERIALS,
 } from "@/lib/constants";
 import { getLocations } from "@/lib/api";
-import type { Location, MaterialType, LocationCategory } from "@/types";
+import { nearestTo } from "@/lib/geo";
+import type { LatLng, Location, MaterialType, LocationCategory } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
@@ -50,6 +53,14 @@ function clusterIconUrl(): string {
 }
 
 const LIBRARIES: ("places")[] = [];
+const NEAREST_COUNT = 3;
+
+function insideAstana({ lat, lng }: LatLng): boolean {
+  return (
+    lat >= ASTANA_BOUNDS.south && lat <= ASTANA_BOUNDS.north &&
+    lng >= ASTANA_BOUNDS.west && lng <= ASTANA_BOUNDS.east
+  );
+}
 
 
 export default function MapContainer() {
@@ -87,6 +98,10 @@ export default function MapContainer() {
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
+
+  const [origin, setOrigin] = useState<LatLng | null>(null);
+  const [picking, setPicking] = useState(false);
+  const [locating, setLocating] = useState(false);
 
   const mapRef = useRef<google.maps.Map | null>(null);
   // Stable reference — never changes, so GoogleMap never re-applies center on re-render
@@ -153,6 +168,63 @@ export default function MapContainer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCategory, selectedMaterials]);
 
+  const nearest = useMemo(
+    () => (origin ? nearestTo(origin, filtered, NEAREST_COUNT) : []),
+    [origin, filtered]
+  );
+
+  const focusOrigin = useCallback((pos: LatLng) => {
+    setOrigin(pos);
+    setPicking(false);
+    // The drawer is mobile-only; reopening it there brings the results into view.
+    setFilterOpen(true);
+
+    const map = mapRef.current;
+    if (!map) return;
+    const top = nearestTo(pos, filtered, NEAREST_COUNT);
+    if (top.length === 0) {
+      map.panTo(pos);
+      map.setZoom(14);
+      return;
+    }
+    const bounds = new google.maps.LatLngBounds(pos);
+    top.forEach(({ location }) => bounds.extend(location.position));
+    map.fitBounds(bounds, 80);
+  }, [filtered]);
+
+  const locateUser = useCallback(() => {
+    if (locating) return;
+    if (!navigator.geolocation) {
+      toast.error(t("map.geoUnavailable"));
+      return;
+    }
+    setLocating(true);
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        setLocating(false);
+        const pos = { lat: coords.latitude, lng: coords.longitude };
+        if (insideAstana(pos)) focusOrigin(pos);
+        else toast.error(t("nearest.outsideCity"));
+      },
+      () => {
+        setLocating(false);
+        toast.error(t("map.geoError"));
+      },
+      { enableHighAccuracy: true, timeout: 8000 }
+    );
+  }, [locating, focusOrigin, t]);
+
+  const togglePicking = () => {
+    // Close the mobile drawer so the map underneath can be tapped.
+    if (!picking) setFilterOpen(false);
+    setPicking(!picking);
+  };
+
+  const clearOrigin = () => {
+    setOrigin(null);
+    setPicking(false);
+  };
+
   const handleMarkerClick = useCallback((loc: Location) => {
     setSelectedLocation(loc);
     setFilterOpen(false);
@@ -160,6 +232,20 @@ export default function MapContainer() {
       mapRef.current.panTo({ lat: loc.position.lat, lng: loc.position.lng });
     }
   }, []);
+
+  const nearestPanel = (
+    <NearestPanel
+      origin={origin}
+      nearest={nearest}
+      locating={locating}
+      picking={picking}
+      onOrigin={focusOrigin}
+      onLocate={locateUser}
+      onTogglePick={togglePicking}
+      onClear={clearOrigin}
+      onSelect={handleMarkerClick}
+    />
+  );
 
   const mapOptions: google.maps.MapOptions = useMemo(
     () => ({
@@ -176,8 +262,9 @@ export default function MapContainer() {
         strictBounds: false,
       },
       minZoom: 10,
+      draggableCursor: picking ? "crosshair" : undefined,
     }),
-    [resolvedTheme]
+    [resolvedTheme, picking]
   );
 
   if (loadError) {
@@ -206,6 +293,8 @@ export default function MapContainer() {
           <h2 className="heading text-sm font-bold text-foreground mb-4">
             {t("map.title")}
           </h2>
+          {nearestPanel}
+          <div className="border-t border-border my-4" />
           <FilterPanel
             selectedMaterials={selectedMaterials}
             selectedCategory={selectedCategory}
@@ -227,8 +316,26 @@ export default function MapContainer() {
           zoom={ASTANA_DEFAULT_ZOOM}
           options={mapOptions}
           onLoad={(map) => { mapRef.current = map; setMapInstance(map); }}
-          onClick={() => setSelectedLocation(null)}
+          onClick={(e) => {
+            if (picking && e.latLng) focusOrigin({ lat: e.latLng.lat(), lng: e.latLng.lng() });
+            else setSelectedLocation(null);
+          }}
         >
+          {origin && (
+            <Marker
+              position={origin}
+              title={t("nearest.youAreHere")}
+              zIndex={999}
+              icon={{
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                fillColor: MARKER_COLORS.user,
+                fillOpacity: 1,
+                strokeColor: "#ffffff",
+                strokeWeight: 2.5,
+              }}
+            />
+          )}
           <MarkerClusterer
             options={{
               gridSize: 60,
@@ -335,8 +442,16 @@ export default function MapContainer() {
           </MarkerClusterer>
         </GoogleMap>
 
-        {/* Custom map controls (zoom, locate me) */}
-        <MapControls map={mapRef} />
+        <MapControls map={mapRef} locating={locating} onLocate={locateUser} />
+
+        {picking && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2 bg-background/95 border border-accent/40 text-accent text-xs font-medium rounded-xl pl-3 pr-2 py-2 shadow-lg whitespace-nowrap">
+            {t("nearest.pickHint")}
+            <button onClick={() => setPicking(false)} aria-label={t("common.cancel")}>
+              <X className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
 
         {/* Data load failure overlay */}
         {loadFailed && (
@@ -396,10 +511,10 @@ export default function MapContainer() {
         {filterOpen && (
           <>
             <div
-              className="md:hidden absolute inset-0 z-[8] bg-black/30"
+              className="md:hidden absolute inset-0 z-[15] bg-black/30"
               onClick={() => setFilterOpen(false)}
             />
-            <div className="md:hidden absolute bottom-0 left-0 right-0 z-[9] bg-background rounded-t-2xl border-t border-border max-h-[70vh] overflow-y-auto slide-up">
+            <div className="md:hidden absolute bottom-0 left-0 right-0 z-20 bg-background rounded-t-2xl border-t border-border max-h-[70vh] overflow-y-auto slide-up">
               <div className="flex items-center justify-between px-4 pt-4 pb-2">
                 <h3 className="heading text-sm font-bold">
                   {t("map.filtersTitle")}
@@ -409,6 +524,8 @@ export default function MapContainer() {
                 </button>
               </div>
               <div className="px-4 pb-8">
+                {nearestPanel}
+                <div className="border-t border-border my-4" />
                 <FilterPanel
                   selectedMaterials={selectedMaterials}
                   selectedCategory={selectedCategory}

@@ -287,5 +287,22 @@
     "materialsMin": "Select at least one material",
     "phoneFormat": "Use the format +7 (XXX) XXX-XX-XX",
     "urlInvalid": "Enter a valid URL"
+  },
+  "nearest": {
+    "title": "Nearest points",
+    "addressPlaceholder": "Address, e.g. Kabanbay Batyr 62",
+    "search": "Search",
+    "pickOnMap": "Pick on map",
+    "pickHint": "Click the spot on the map",
+    "hint": "Search an address or pick a spot to see the three closest points that match your filters.",
+    "notFound": "Couldn't find that address in Astana",
+    "searchFailed": "Address search is unavailable right now",
+    "directions": "Directions",
+    "open": "Open now",
+    "closed": "Closed now",
+    "unknown": "Hours unknown",
+    "youAreHere": "You are here",
+    "attribution": "Address search © OpenStreetMap",
+    "outsideCity": "Looks like you're not in Astana right now"
   }
 }

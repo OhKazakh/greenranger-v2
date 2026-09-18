@@ -46,9 +46,3 @@ next-env.d.ts
 .claude/
 AGENTS.md
 CLAUDE.md
-
-# insights (python)
-insights/.venv/
-__pycache__/
-*.pyc
-.streamlit/secrets.toml
