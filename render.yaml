@@ -7,6 +7,12 @@ services:
     # Free instances only run in Oregon; other regions are ignored.
     region: oregon
     plan: free
+    # Only the backend goes into the image, so only backend changes need a rebuild.
+    buildFilter:
+      paths:
+        - backend/**
+        - Dockerfile
+        - render.yaml
     envVars:
       - key: NODE_ENV
         value: production
