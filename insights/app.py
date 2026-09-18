@@ -17,10 +17,6 @@ LEAF = (
     'stroke-linecap="round" stroke-linejoin="round"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2'
     'c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>'
 )
-ARROW = (
-    '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" '
-    'stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>'
-)
 
 
 def svg_image(svg, size):
@@ -29,40 +25,54 @@ def svg_image(svg, size):
 
 
 LEAF_IMG = svg_image(LEAF, 16)
-ARROW_IMG = svg_image(ARROW.replace("currentColor", "#8ba090"), 12)
 
 STYLES = """
 <style>
+:root {
+  --gr-text: #eef5f0; --gr-muted: #8ba090; --gr-border: rgba(255,255,255,0.08); --gr-sep: rgba(255,255,255,0.12);
+  --gr-hover: rgba(39,39,64,0.4); --gr-accent: #2ec4b6; --gr-accent-edge: rgba(46,196,182,0.4);
+  --gr-open-bg: rgba(46,196,182,0.1); --gr-closed: #f87171; --gr-closed-bg: rgba(248,113,113,0.1);
+  --gr-unknown-bg: #272740;
+}
+@media (prefers-color-scheme: light) {
+  :root {
+    --gr-text: #0d2818; --gr-muted: #5a6b5e; --gr-border: #d4ccb4; --gr-sep: #d4ccb4;
+    --gr-hover: #f3efe4; --gr-accent: #0f766e; --gr-accent-edge: rgba(15,118,110,0.45);
+    --gr-open-bg: rgba(15,118,110,0.1); --gr-closed: #b91c1c; --gr-closed-bg: rgba(185,28,28,0.1);
+    --gr-unknown-bg: #eeeade;
+  }
+}
 [data-testid="stHeader"] { display: none; }
 [data-testid="stMainBlockContainer"] { padding-top: 1.1rem; padding-bottom: 1.5rem; max-width: 1440px; }
 [data-testid="InputInstructions"] { display: none; }
 .gr-brand { display: flex; align-items: center; gap: 10px; }
-.gr-brand a { display: flex; align-items: center; gap: 9px; text-decoration: none; color: #eef5f0; }
+.gr-brand a { display: flex; align-items: center; gap: 9px; text-decoration: none; color: var(--gr-text); }
 .gr-logo { width: 30px; height: 30px; border-radius: 8px; background: #1b4332;
            display: flex; align-items: center; justify-content: center; }
 .gr-name { font-family: "Space Grotesk", sans-serif; font-weight: 700; font-size: 17px; }
-.gr-sep { width: 1px; height: 18px; background: rgba(255,255,255,0.12); }
-.gr-page { color: #2ec4b6; font-size: 14px; font-weight: 500; }
+.gr-sep { width: 1px; height: 18px; background: var(--gr-sep); }
+.gr-page { color: var(--gr-accent); font-size: 14px; font-weight: 500; }
 .gr-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
-            color: #8ba090; margin: 2px 0 6px; }
-.gr-muted { font-size: 13px; color: #8ba090; line-height: 1.5; }
-.gr-tiny { font-size: 11px; color: #8ba090; margin-top: -6px; }
+            color: var(--gr-muted); margin: 2px 0 6px; }
+.gr-muted { font-size: 13px; color: var(--gr-muted); line-height: 1.5; }
+.gr-tiny { font-size: 11px; color: var(--gr-muted); margin-top: -6px; }
 .gr-cards { display: flex; flex-direction: column; gap: 8px; }
-.gr-card { border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 11px 12px;
+.gr-card { border: 1px solid var(--gr-border); border-radius: 10px; padding: 11px 12px;
            display: flex; justify-content: space-between; gap: 10px; transition: border-color .15s, background .15s; }
-.gr-card:hover { border-color: rgba(46,196,182,0.4); background: rgba(39,39,64,0.4); }
-.gr-card-name { font-size: 14px; font-weight: 600; color: #eef5f0; text-decoration: none; line-height: 1.35; }
-.gr-card-name:hover { color: #2ec4b6; }
+.gr-card:hover { border-color: var(--gr-accent-edge); background: var(--gr-hover); }
+.gr-card-name { font-size: 14px; font-weight: 600; color: var(--gr-text); text-decoration: none; line-height: 1.35; }
+.gr-card-name:hover { color: var(--gr-accent); }
 .gr-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 7px; margin-top: 7px; }
 .gr-badge { font-size: 11.5px; font-weight: 500; padding: 2px 7px; border-radius: 5px; }
-.gr-open { background: rgba(46,196,182,0.1); color: #2ec4b6; }
-.gr-closed { background: rgba(248,113,113,0.1); color: #f87171; }
-.gr-unknown { background: #272740; color: #8ba090; }
-.gr-hours { font-size: 11.5px; color: #8ba090; }
+.gr-open { background: var(--gr-open-bg); color: var(--gr-accent); }
+.gr-closed { background: var(--gr-closed-bg); color: var(--gr-closed); }
+.gr-unknown { background: var(--gr-unknown-bg); color: var(--gr-muted); }
+.gr-hours { font-size: 11.5px; color: var(--gr-muted); }
 .gr-side { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; flex-shrink: 0; }
-.gr-dist { font-size: 13.5px; font-weight: 600; color: #2ec4b6; }
-.gr-dir { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #8ba090; text-decoration: none; }
-.gr-dir:hover { color: #2ec4b6; }
+.gr-dist { font-size: 13.5px; font-weight: 600; color: var(--gr-text); }
+.gr-dir { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--gr-muted); text-decoration: none; }
+.gr-dir:hover { color: var(--gr-accent); }
+@media (prefers-reduced-motion: reduce) { .gr-card { transition: none; } }
 </style>
 """
 
@@ -90,7 +100,7 @@ def card_html(rank, point, origin, now, lang):
         f'<div class="gr-meta"><span class="gr-badge gr-{status}">{t("status_" + status)}</span>{hours_html}</div>'
         '</div><div class="gr-side">'
         f'<span class="gr-dist">{format_distance(point["distance_km"])}</span>'
-        f'<a class="gr-dir" href="{route}" target="_blank">{ARROW_IMG}{t("directions")}</a>'
+        f'<a class="gr-dir" href="{route}" target="_blank">↗ {t("directions")}</a>'
         "</div></div>"
     )
 
@@ -106,7 +116,7 @@ with switch:
         "lang",
         list(LANGUAGES),
         format_func=LANGUAGES.get,
-        default="ru",
+        default="en",
         required=True,
         key="lang",
         label_visibility="collapsed",

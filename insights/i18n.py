@@ -1,6 +1,6 @@
 import streamlit as st
 
-LANGUAGES = {"ru": "РУ", "en": "EN", "kk": "ҚАЗ"}
+LANGUAGES = {"en": "EN", "ru": "РУ", "kk": "ҚАЗ"}
 
 MATERIALS = {
     "plastic": {"ru": "Пластик", "en": "Plastic", "kk": "Пластик", "icon": "recycling"},
@@ -107,7 +107,7 @@ TEXT = {
 
 
 def current_language():
-    return st.session_state.get("lang") or "ru"
+    return st.session_state.get("lang") or "en"
 
 
 def t(key, **values):

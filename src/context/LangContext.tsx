@@ -29,7 +29,7 @@ export type TKey = DotPaths<TranslationDict>;
 //  Dictionary map
 const DICTS: Record<Lang, TranslationDict> = { ru, en, kk };
 const STORAGE_KEY = "gr_lang";
-const DEFAULT_LANG: Lang = "ru";
+const DEFAULT_LANG: Lang = "en";
 
 //  Context value
 interface LangContextValue {
@@ -50,6 +50,11 @@ export function LangProvider({ children }: { children: ReactNode }) {
     const stored = localStorage.getItem(STORAGE_KEY) as Lang | null;
     if (stored && stored in DICTS) setLangState(stored);
   }, []);
+
+  // Keep <html lang> in sync so screen readers pronounce the text correctly.
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const setLang = useCallback((newLang: Lang) => {
     setLangState(newLang);

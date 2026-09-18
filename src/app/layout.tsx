@@ -10,7 +10,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: "GreenRanger — Astana",
     description: "Recycling map of Astana",
-    locale: "ru_KZ",
+    locale: "en_US",
+    alternateLocale: ["ru_KZ", "kk_KZ"],
     type: "website",
   },
 };
@@ -21,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ru" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body>
         <Providers>{children}</Providers>
       </body>

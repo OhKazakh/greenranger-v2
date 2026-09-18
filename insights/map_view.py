@@ -1,6 +1,7 @@
 import streamlit as st
 
-HUB_COLOR = "#40916C"
+HUB_COLOR = "#1B4332"
+HUB_COLOR_DARK = "#40916C"
 KIOSK_COLOR = "#2EC4B6"
 
 JS = """
@@ -24,7 +25,15 @@ function loadLibrary() {
   return window.__grMapLibre;
 }
 
-function mapStyle(lang) {
+const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+const PALETTES = {
+  dark: { land: "#1a1a2e", park: "#142218", water: "#0d1e2a", road: "#252540", highway: "#2a2a45", label: "#8ba090" },
+  light: { land: "#f5f0e8", park: "#d4e8d0", water: "#b8d8e8", road: "#ffffff", highway: "#fdf8ed", label: "#5a6b5e" },
+};
+
+function mapStyle(lang, dark) {
+  const c = dark ? PALETTES.dark : PALETTES.light;
   const name = ["coalesce", ["get", "name:" + lang], ["get", "name"]];
   const roadWidth = (low, high) => ["interpolate", ["linear"], ["zoom"], 10, low, 16, high];
   return {
@@ -32,29 +41,29 @@ function mapStyle(lang) {
     glyphs: "https://tiles.openfreemap.org/fonts/{fontstack}/{range}.pbf",
     sources: { omt: { type: "vector", url: "https://tiles.openfreemap.org/planet" } },
     layers: [
-      { id: "land", type: "background", paint: { "background-color": "#1a1a2e" } },
+      { id: "land", type: "background", paint: { "background-color": c.land } },
       { id: "park", type: "fill", source: "omt", "source-layer": "park",
-        paint: { "fill-color": "#142218" } },
+        paint: { "fill-color": c.park } },
       { id: "greenery", type: "fill", source: "omt", "source-layer": "landcover",
         filter: ["in", ["get", "class"], ["literal", ["grass", "wood"]]],
-        paint: { "fill-color": "#142218" } },
+        paint: { "fill-color": c.park } },
       { id: "water", type: "fill", source: "omt", "source-layer": "water",
-        paint: { "fill-color": "#0d1e2a" } },
+        paint: { "fill-color": c.water } },
       { id: "rivers", type: "line", source: "omt", "source-layer": "waterway",
-        paint: { "line-color": "#0d1e2a", "line-width": 1.5 } },
+        paint: { "line-color": c.water, "line-width": 1.5 } },
       { id: "roads", type: "line", source: "omt", "source-layer": "transportation",
         filter: ["in", ["get", "class"], ["literal", ["primary", "secondary", "tertiary", "minor", "service"]]],
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": "#252540", "line-width": roadWidth(0.5, 7) } },
+        paint: { "line-color": c.road, "line-width": roadWidth(0.5, 7) } },
       { id: "highways", type: "line", source: "omt", "source-layer": "transportation",
         filter: ["in", ["get", "class"], ["literal", ["motorway", "trunk"]]],
         layout: { "line-cap": "round", "line-join": "round" },
-        paint: { "line-color": "#2a2a45", "line-width": roadWidth(1, 10) } },
+        paint: { "line-color": c.highway, "line-width": roadWidth(1, 10) } },
       { id: "road-names", type: "symbol", source: "omt", "source-layer": "transportation_name",
         minzoom: 13,
         layout: { "symbol-placement": "line", "text-field": name,
                   "text-font": ["Noto Sans Regular"], "text-size": 11 },
-        paint: { "text-color": "#8ba090", "text-halo-color": "#1a1a2e", "text-halo-width": 1.2 } },
+        paint: { "text-color": c.label, "text-halo-color": c.land, "text-halo-width": 1.2 } },
     ],
   };
 }
@@ -65,7 +74,7 @@ function swallow(el) {
   }
 }
 
-function pinElement(color, hub, big) {
+function pinElement(color, stroke, hub, big) {
   const w = big ? 44 : 36;
   const h = big ? 55 : 45;
   const glyph = hub
@@ -77,13 +86,14 @@ function pinElement(color, hub, big) {
   el.innerHTML =
     `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="-2 -2 32 40">` +
     `<path d="M14 0C6.268 0 0 6.268 0 14c0 9.333 14 22 14 22S28 23.333 28 14C28 6.268 21.732 0 14 0z" ` +
-    `fill="${color}" stroke="white" stroke-width="${big ? 3 : 2}"/>` + glyph + `</svg>`;
+    `fill="${color}" stroke="${stroke}" stroke-width="${big ? 3 : 2}"/>` + glyph + `</svg>`;
   swallow(el);
   return el;
 }
 
 function render(maplibregl, component) {
   const { data, parentElement, setTriggerValue } = component;
+  const dark = darkQuery.matches;
   let state = parentElement.__gr;
 
   if (!state) {
@@ -94,7 +104,7 @@ function render(maplibregl, component) {
 
     const map = new maplibregl.Map({
       container,
-      style: mapStyle(data.lang),
+      style: mapStyle(data.lang, dark),
       center: [data.center[1], data.center[0]],
       zoom: 12,
       minZoom: 9,
@@ -106,20 +116,25 @@ function render(maplibregl, component) {
     state = {
       map,
       lang: data.lang,
+      dark,
       markers: [],
       origin: null,
       fittedTo: null,
       tip: new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: "gr-tip" }),
     };
     map.on("click", (e) => state.onClick(e));
+    darkQuery.addEventListener("change", () => render(maplibregl, state.component));
     parentElement.__gr = state;
   }
 
+  state.component = component;
+
   state.onClick = (e) => setTriggerValue("click", { lat: e.lngLat.lat, lng: e.lngLat.lng });
 
-  if (state.lang !== data.lang) {
+  if (state.lang !== data.lang || state.dark !== dark) {
     state.lang = data.lang;
-    state.map.setStyle(mapStyle(data.lang));
+    state.dark = dark;
+    state.map.setStyle(mapStyle(data.lang, dark));
   }
 
   state.markers.forEach((marker) => marker.remove());
@@ -127,7 +142,8 @@ function render(maplibregl, component) {
   const ordered = [...data.points].sort((a, b) => Number(a.near) - Number(b.near));
   for (const p of ordered) {
     const hub = p.category === "hub";
-    const el = pinElement(hub ? data.hubColor : data.kioskColor, hub, p.near);
+    const fill = hub ? (dark ? data.hubColorDark : data.hubColor) : data.kioskColor;
+    const el = pinElement(fill, dark ? "#ffffff" : data.hubColor, hub, p.near);
     el.addEventListener("mouseenter", () => {
       state.tip.setOffset([0, p.near ? -56 : -46]).setLngLat([p.lng, p.lat]).setText(p.name).addTo(state.map);
     });
@@ -170,10 +186,18 @@ export default function (component) {
 
 CSS = """
 .gr-map {
+  --gr-map-surface: #1a1a2e; --gr-map-text: #eef5f0; --gr-map-muted: #8ba090;
+  --gr-map-border: rgba(255, 255, 255, 0.08); --gr-map-icon: invert(1) opacity(0.85);
   width: 100%;
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--gr-map-border);
+}
+@media (prefers-color-scheme: light) {
+  .gr-map {
+    --gr-map-surface: #ffffff; --gr-map-text: #0d2818; --gr-map-muted: #5a6b5e;
+    --gr-map-border: #d4ccb4; --gr-map-icon: none;
+  }
 }
 .gr-pin { cursor: pointer; }
 .gr-origin {
@@ -185,27 +209,27 @@ CSS = """
   box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.25);
 }
 .gr-tip .maplibregl-popup-content {
-  background: #212135;
-  color: #eef5f0;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--gr-map-surface, #212135);
+  color: var(--gr-map-text, #eef5f0);
+  border: 1px solid var(--gr-map-border, rgba(255, 255, 255, 0.08));
   border-radius: 8px;
   padding: 4px 10px;
   font: 600 12px Inter, sans-serif;
   white-space: nowrap;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
 }
 .gr-tip .maplibregl-popup-tip { display: none; }
 .gr-map .maplibregl-ctrl-group {
-  background: #1a1a2e;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: var(--gr-map-surface);
+  border: 1px solid var(--gr-map-border);
   box-shadow: none;
 }
 .gr-map .maplibregl-ctrl-group button { width: 36px; height: 36px; }
-.gr-map .maplibregl-ctrl-group button + button { border-top: 1px solid rgba(255, 255, 255, 0.08); }
-.gr-map .maplibregl-ctrl-icon { filter: invert(1) opacity(0.85); }
-.gr-map .maplibregl-ctrl-attrib { background: rgba(26, 26, 46, 0.85); color: #8ba090; }
-.gr-map .maplibregl-ctrl-attrib a { color: #8ba090; }
-.gr-map .maplibregl-ctrl-attrib-button { filter: invert(1); }
+.gr-map .maplibregl-ctrl-group button + button { border-top: 1px solid var(--gr-map-border); }
+.gr-map .maplibregl-ctrl-icon { filter: var(--gr-map-icon); }
+.gr-map .maplibregl-ctrl-attrib { background: var(--gr-map-surface); color: var(--gr-map-muted); opacity: 0.9; }
+.gr-map .maplibregl-ctrl-attrib a { color: var(--gr-map-muted); }
+.gr-map .maplibregl-ctrl-attrib-button { filter: var(--gr-map-icon); }
 """
 
 _component = st.components.v2.component("greenranger_map", js=JS, css=CSS, isolate_styles=False)
@@ -222,6 +246,7 @@ def map_view(points, origin, center, lang, you_are_here, height):
             "youAreHere": you_are_here,
             "height": height,
             "hubColor": HUB_COLOR,
+            "hubColorDark": HUB_COLOR_DARK,
             "kioskColor": KIOSK_COLOR,
         },
         height=height,

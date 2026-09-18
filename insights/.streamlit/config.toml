@@ -1,15 +1,24 @@
 [theme]
-base = "dark"
+baseRadius = "0.6rem"
+showWidgetBorder = true
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+headingFont = "Space Grotesk:https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"
+
+[theme.light]
+primaryColor = "#0f766e"
+backgroundColor = "#fafaf5"
+secondaryBackgroundColor = "#eeeade"
+textColor = "#0d2818"
+linkColor = "#0f766e"
+borderColor = "#d4ccb4"
+
+[theme.dark]
 primaryColor = "#2ec4b6"
 backgroundColor = "#1a1a2e"
 secondaryBackgroundColor = "#212135"
 textColor = "#eef5f0"
 linkColor = "#2ec4b6"
 borderColor = "#2c2c44"
-baseRadius = "0.6rem"
-showWidgetBorder = true
-font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-headingFont = "Space Grotesk:https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"
 
 [client]
 toolbarMode = "minimal"

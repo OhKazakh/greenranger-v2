@@ -5,8 +5,8 @@ import type { Lang } from "@/types";
 import { cn } from "@/lib/utils";
 
 const LANGS: { code: Lang; label: string }[] = [
-  { code: "ru", label: "РУ" },
   { code: "en", label: "EN" },
+  { code: "ru", label: "РУ" },
   { code: "kk", label: "ҚАЗ" },
 ];
 
