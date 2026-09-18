@@ -46,7 +46,7 @@ STYLES = """
 .gr-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase;
             color: #8ba090; margin: 2px 0 6px; }
 .gr-muted { font-size: 13px; color: #8ba090; line-height: 1.5; }
-.gr-tiny { font-size: 11px; color: rgba(139,160,144,0.7); margin-top: -6px; }
+.gr-tiny { font-size: 11px; color: #8ba090; margin-top: -6px; }
 .gr-cards { display: flex; flex-direction: column; gap: 8px; }
 .gr-card { border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; padding: 11px 12px;
            display: flex; justify-content: space-between; gap: 10px; transition: border-color .15s, background .15s; }
@@ -56,7 +56,7 @@ STYLES = """
 .gr-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 7px; margin-top: 7px; }
 .gr-badge { font-size: 11.5px; font-weight: 500; padding: 2px 7px; border-radius: 5px; }
 .gr-open { background: rgba(46,196,182,0.1); color: #2ec4b6; }
-.gr-closed { background: rgba(239,68,68,0.1); color: #ef4444; }
+.gr-closed { background: rgba(248,113,113,0.1); color: #f87171; }
 .gr-unknown { background: #272740; color: #8ba090; }
 .gr-hours { font-size: 11.5px; color: #8ba090; }
 .gr-side { display: flex; flex-direction: column; align-items: flex-end; gap: 7px; flex-shrink: 0; }

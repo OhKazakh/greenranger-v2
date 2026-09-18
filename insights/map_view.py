@@ -1,6 +1,6 @@
 import streamlit as st
 
-HUB_COLOR = "#1B4332"
+HUB_COLOR = "#40916C"
 KIOSK_COLOR = "#2EC4B6"
 
 JS = """
@@ -65,17 +65,19 @@ function swallow(el) {
   }
 }
 
-function pinElement(color, big) {
+function pinElement(color, hub, big) {
   const w = big ? 44 : 36;
   const h = big ? 55 : 45;
+  const glyph = hub
+    ? `<rect x="9.5" y="8.5" width="9" height="9" rx="2" fill="white" fill-opacity="0.95"/>`
+    : `<circle cx="14" cy="13" r="5" fill="white" fill-opacity="0.95"/>`;
   const el = document.createElement("div");
   el.className = "gr-pin";
   el.style.zIndex = big ? "2" : "1";
   el.innerHTML =
     `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="-2 -2 32 40">` +
     `<path d="M14 0C6.268 0 0 6.268 0 14c0 9.333 14 22 14 22S28 23.333 28 14C28 6.268 21.732 0 14 0z" ` +
-    `fill="${color}" stroke="white" stroke-width="${big ? 3 : 2}"/>` +
-    `<circle cx="14" cy="13" r="5" fill="white" fill-opacity="0.95"/></svg>`;
+    `fill="${color}" stroke="white" stroke-width="${big ? 3 : 2}"/>` + glyph + `</svg>`;
   swallow(el);
   return el;
 }
@@ -124,7 +126,8 @@ function render(maplibregl, component) {
   state.markers = [];
   const ordered = [...data.points].sort((a, b) => Number(a.near) - Number(b.near));
   for (const p of ordered) {
-    const el = pinElement(p.category === "hub" ? data.hubColor : data.kioskColor, p.near);
+    const hub = p.category === "hub";
+    const el = pinElement(hub ? data.hubColor : data.kioskColor, hub, p.near);
     el.addEventListener("mouseenter", () => {
       state.tip.setOffset([0, p.near ? -56 : -46]).setLngLat([p.lng, p.lat]).setText(p.name).addTo(state.map);
     });
