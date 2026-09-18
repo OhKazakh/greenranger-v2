@@ -1,0 +1,15 @@
+[theme]
+base = "dark"
+primaryColor = "#2ec4b6"
+backgroundColor = "#1a1a2e"
+secondaryBackgroundColor = "#212135"
+textColor = "#eef5f0"
+linkColor = "#2ec4b6"
+borderColor = "#2c2c44"
+baseRadius = "0.6rem"
+showWidgetBorder = true
+font = "Inter:https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+headingFont = "Space Grotesk:https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&display=swap"
+
+[client]
+toolbarMode = "minimal"

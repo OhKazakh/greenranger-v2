@@ -1,7 +1,18 @@
-# GreenRanger Insights
+# GreenRanger — Find a point
 
-Streamlit companion to the map: coverage gaps by material, and a nearest-point finder.
+A Streamlit version of the site's "nearest points" finder: search an address or click the map, and it lists the three closest recycling points that match your filters, with today's hours, whether they're open right now, and a directions link.
 
-Reads data from the public API (`https://api.greenranger.kz/api/locations`), falling back to `../backend/prisma/locations.json`.
+Data comes from the public API (`https://api.greenranger.kz/api/locations`), falling back to `../backend/prisma/locations.json` if the API is unreachable. Map tiles are from OpenFreeMap, address search from OpenStreetMap's Nominatim.
 
-Deployed on Streamlit Community Cloud with main file path `insights/app.py`; dependencies go in `insights/requirements.txt`.
+## Run locally
+
+```bash
+cd insights
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+.venv/bin/streamlit run app.py
+```
+
+## Deploy
+
+Streamlit Community Cloud, main file path `insights/app.py`. The theme in `.streamlit/config.toml` is picked up automatically.
