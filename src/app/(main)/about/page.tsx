@@ -64,7 +64,7 @@ export default function AboutPage() {
         </div>
 
         <div className="space-y-3">
-          <a href="tel:+77072883881" className="flex items-center gap-3 group w-fit">
+          <a href="tel:+821075047031" className="flex items-center gap-3 group w-fit">
             <div
               className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
               style={{ background: "var(--teal-soft)" }}
@@ -72,7 +72,7 @@ export default function AboutPage() {
               <Phone className="w-4 h-4" style={{ color: "var(--teal)" }} />
             </div>
             <span className="font-mono text-[14px] text-foreground group-hover:text-accent transition-colors">
-              +7 707 288 38 81
+              +82 10 7504 7031
             </span>
           </a>
 
