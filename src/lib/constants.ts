@@ -16,7 +16,7 @@ export const MATERIALS: Record<MaterialType, MaterialMeta> = {
   plastic: {
     id: "plastic",
     label: { ru: "Пластик", en: "Plastic", kk: "Пластик" },
-    color: "bg-blue-500",
+    color: "bg-blue-600",
     icon: "♳",
   },
   paper: {
@@ -28,13 +28,13 @@ export const MATERIALS: Record<MaterialType, MaterialMeta> = {
   glass: {
     id: "glass",
     label: { ru: "Стекло", en: "Glass", kk: "Шыны" },
-    color: "bg-cyan-500",
+    color: "bg-cyan-700",
     icon: "🫙",
   },
   metal: {
     id: "metal",
     label: { ru: "Металл", en: "Metal", kk: "Металл" },
-    color: "bg-gray-500",
+    color: "bg-gray-600",
     icon: "⚙️",
   },
   aluminium: {
@@ -46,25 +46,25 @@ export const MATERIALS: Record<MaterialType, MaterialMeta> = {
   bottles: {
     id: "bottles",
     label: { ru: "Бутылки", en: "Bottles", kk: "Бөтелкелер" },
-    color: "bg-emerald-500",
+    color: "bg-emerald-700",
     icon: "🍾",
   },
   clothes: {
     id: "clothes",
     label: { ru: "Одежда", en: "Clothes", kk: "Киім" },
-    color: "bg-purple-500",
+    color: "bg-purple-700",
     icon: "👕",
   },
   electronics: {
     id: "electronics",
     label: { ru: "Электроника", en: "Electronics", kk: "Электроника" },
-    color: "bg-orange-500",
+    color: "bg-orange-700",
     icon: "📱",
   },
   batteries: {
     id: "batteries",
     label: { ru: "Батарейки", en: "Batteries", kk: "Батареялар" },
-    color: "bg-red-500",
+    color: "bg-red-700",
     icon: "🔋",
   },
   industrial: {
@@ -81,6 +81,7 @@ export const ALL_MATERIALS = Object.keys(MATERIALS) as MaterialType[];
 // v1 eco-green palette.
 export const MARKER_COLORS = {
   hub: "#1B4332",       // forest green — large recycling centres
+  hubDark: "#40916C",   // lighter forest for the dark map (1.5:1 → 4.5:1 against it)
   kiosk: "#2EC4B6",     // teal — kiosks / RVMs
   user: "#22C55E",      // bright green — user position
   cluster: "#2EC4B6",   // teal — cluster bubble

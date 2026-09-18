@@ -128,7 +128,7 @@ export function Navbar() {
         <div className="md:hidden flex items-center gap-2">
           <ThemeToggle />
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-            <SheetTrigger className="inline-flex items-center justify-center h-8 w-8 rounded-lg hover:bg-muted transition-colors text-foreground">
+            <SheetTrigger aria-label={t("nav.menu")} className="inline-flex items-center justify-center h-11 w-11 rounded-lg hover:bg-muted transition-colors text-foreground">
               {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </SheetTrigger>
             <SheetContent side="right" className="w-72 max-w-[82vw] rounded-l-2xl overflow-hidden pt-12 px-6">

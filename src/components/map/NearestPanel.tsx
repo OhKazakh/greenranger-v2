@@ -12,7 +12,7 @@ import type { LatLng, Location } from "@/types";
 
 const STATUS_STYLES = {
   open: "bg-accent/10 text-accent",
-  closed: "bg-destructive/10 text-destructive",
+  closed: "bg-red-600/10 text-red-700 dark:text-red-400",
   unknown: "bg-muted text-muted-foreground",
 } as const;
 
@@ -95,7 +95,7 @@ export function NearestPanel({
           <Search className={cn("w-3.5 h-3.5", searching && "animate-pulse")} />
         </button>
       </form>
-      <p className="text-[10px] text-muted-foreground/70 mt-1">{t("nearest.attribution")}</p>
+      <p className="text-[11px] text-muted-foreground mt-1">{t("nearest.attribution")}</p>
 
       <div className="flex flex-col gap-1.5 mt-2">
         <button
@@ -150,14 +150,14 @@ export function NearestPanel({
                         {i + 1}. {location.name[lang]}
                       </p>
                       <div className="flex flex-wrap items-center gap-x-1.5 gap-y-1 mt-1.5">
-                        <span className={cn("text-[10.5px] font-medium px-1.5 py-0.5 rounded", STATUS_STYLES[status])}>
+                        <span className={cn("text-[11.5px] font-medium px-1.5 py-0.5 rounded", STATUS_STYLES[status])}>
                           {t(`nearest.${status}`)}
                         </span>
-                        {hours && <span className="text-[10.5px] text-muted-foreground">{hours}</span>}
+                        {hours && <span className="text-[11.5px] text-muted-foreground">{hours}</span>}
                       </div>
                     </div>
                     <div className="flex flex-col items-end gap-1.5 shrink-0">
-                      <span className="text-[12px] font-semibold text-accent">
+                      <span className="text-[12.5px] font-semibold text-foreground">
                         {formatDistance(distanceKm, lang)}
                       </span>
                       <a

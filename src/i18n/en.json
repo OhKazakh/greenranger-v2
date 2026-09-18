@@ -9,7 +9,10 @@
     "logout": "Log out",
     "myProfile": "My profile",
     "admin": "Admin",
-    "profile": "Profile"
+    "profile": "Profile",
+    "menu": "Menu",
+    "themeLight": "Light theme",
+    "themeDark": "Dark theme"
   },
   "map": {
     "title": "Recycling Points Map",
@@ -35,7 +38,8 @@
     "loadError": "Failed to load Google Maps",
     "geoUnavailable": "Geolocation is not supported by your browser",
     "geoError": "Couldn't determine your location",
-    "dataError": "Failed to load points"
+    "dataError": "Failed to load points",
+    "searchAndFilters": "Search & filters"
   },
   "location": {
     "materials": "Accepted materials",
@@ -293,7 +297,7 @@
     "addressPlaceholder": "Address, e.g. Kabanbay Batyr 62",
     "search": "Search",
     "pickOnMap": "Pick on map",
-    "pickHint": "Click the spot on the map",
+    "pickHint": "Choose a spot on the map",
     "hint": "Search an address or pick a spot to see the three closest points that match your filters.",
     "notFound": "Couldn't find that address in Astana",
     "searchFailed": "Address search is unavailable right now",

@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { GoogleMap, useJsApiLoader, Marker, MarkerClusterer, OverlayView } from "@react-google-maps/api";
 import { useTheme } from "next-themes";
-import { SlidersHorizontal, X } from "lucide-react";
+import { Search, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { LocationDetailPanel } from "@/components/map/LocationDetailPanel";
@@ -23,22 +23,10 @@ import {
 } from "@/lib/constants";
 import { getLocations } from "@/lib/api";
 import { nearestTo } from "@/lib/geo";
+import { pinIconUrl, pinSize } from "@/lib/pins";
 import type { LatLng, Location, MaterialType, LocationCategory } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
-
-// viewBox is padded by 2px so the white stroke isn't clipped at the edges.
-function pinSvg(color: string, isSelected: boolean): string {
-  const stroke = isSelected ? 3 : 2;
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="-2 -2 32 40">
-      <path d="M14 0C6.268 0 0 6.268 0 14c0 9.333 14 22 14 22S28 23.333 28 14C28 6.268 21.732 0 14 0z"
-        fill="${color}" stroke="white" stroke-width="${stroke}"/>
-      <circle cx="14" cy="13" r="5" fill="white" fill-opacity="0.95"/>
-    </svg>
-  `;
-  return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
-}
 
 // Visual only — MarkerClusterer draws the count on top via its text styling.
 function clusterIconUrl(): string {
@@ -172,6 +160,7 @@ export default function MapContainer() {
     () => (origin ? nearestTo(origin, filtered, NEAREST_COUNT) : []),
     [origin, filtered]
   );
+  const nearIds = useMemo(() => new Set(nearest.map(({ location }) => location.id)), [nearest]);
 
   const focusOrigin = useCallback((pos: LatLng) => {
     setOrigin(pos);
@@ -376,35 +365,22 @@ export default function MapContainer() {
               <>
                 {filtered.map((loc) => {
                   const isSelected = selectedLocation?.id === loc.id;
-                  const color =
-                    loc.category === "hub" ? MARKER_COLORS.hub : MARKER_COLORS.kiosk;
+                  const emphasized = isSelected || nearIds.has(loc.id);
+                  const size = pinSize(emphasized);
                   return (
                     <Marker
                       key={loc.id}
                       position={{ lat: loc.position.lat, lng: loc.position.lng }}
                       clusterer={clusterer}
                       icon={{
-                        // viewBox is now -2 -2 32 40 → aspect 0.8.
-                        // scaledSize must match the same aspect, otherwise
-                        // the pin gets stretched.
-                        url: pinSvg(color, isSelected),
-                        scaledSize: new google.maps.Size(
-                          isSelected ? 44 : 36,
-                          isSelected ? 55 : 45
-                        ),
-                        // Anchor = pin tip in pixel space.
-                        // Pin tip in path coords is (14, 36).
-                        // In viewBox -2 -2 32 40 → x = (14+2)/32 = 0.5,
-                        //                           y = (36+2)/40 = 0.95.
-                        anchor: new google.maps.Point(
-                          isSelected ? 22 : 18,        // 0.5 × width
-                          isSelected ? 52 : 43         // 0.95 × height (rounded)
-                        ),
+                        url: pinIconUrl(loc.category, { dark: resolvedTheme === "dark", emphasized }),
+                        scaledSize: new google.maps.Size(size.width, size.height),
+                        anchor: new google.maps.Point(size.anchorX, size.anchorY),
                       }}
                       onClick={() => handleMarkerClick(loc)}
                       onMouseOver={() => setHoveredId(loc.id)}
                       onMouseOut={() => setHoveredId(null)}
-                      zIndex={isSelected ? 1000 : 1}
+                      zIndex={isSelected ? 1000 : emphasized ? 500 : 1}
                     />
                   );
                 })}
@@ -494,13 +470,13 @@ export default function MapContainer() {
           onClick={() => setFilterOpen(!filterOpen)}
           className={cn(
             "md:hidden absolute top-4 left-4 z-10",
-            "flex items-center gap-2 px-3 py-2 rounded-xl shadow-lg",
+            "flex items-center gap-2 px-3.5 min-h-11 rounded-xl shadow-lg",
             "bg-background/95 border border-border text-sm font-medium",
             filterOpen && "text-accent"
           )}
         >
-          <SlidersHorizontal className="w-4 h-4" />
-          {t("map.filterButton")}
+          <Search className="w-4 h-4" />
+          {t("map.searchAndFilters")}
           {selectedMaterials.length > 0 && (
             <span className="ml-1 bg-accent text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
               {selectedMaterials.length}
@@ -517,7 +493,7 @@ export default function MapContainer() {
             <div className="md:hidden absolute bottom-0 left-0 right-0 z-20 bg-background rounded-t-2xl border-t border-border max-h-[70vh] overflow-y-auto slide-up">
               <div className="flex items-center justify-between px-4 pt-4 pb-2">
                 <h3 className="heading text-sm font-bold">
-                  {t("map.filtersTitle")}
+                  {t("map.searchAndFilters")}
                 </h3>
                 <button onClick={() => setFilterOpen(false)}>
                   <X className="w-4 h-4 text-muted-foreground" />

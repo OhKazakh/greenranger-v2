@@ -13,7 +13,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { useLang } from "@/context/LangContext";
 import { getLocationBySlug } from "@/lib/api";
-import { MARKER_COLORS } from "@/lib/constants";
 import { wikimediaFilePage } from "@/lib/utils";
 import type { Location } from "@/types";
 import dynamic from "next/dynamic";
@@ -62,7 +61,7 @@ export default function LocationDetailPage() {
     );
   }
 
-  const dotColor = location.category === "hub" ? MARKER_COLORS.hub : MARKER_COLORS.kiosk;
+  const dotColor = location.category === "hub" ? "var(--pin-hub)" : "var(--pin-kiosk)";
   const hasPhotos = location.photos.length > 0;
 
   return (
@@ -85,8 +84,9 @@ export default function LocationDetailPage() {
       {/* Category + verified */}
       <div className="flex items-center gap-2 mb-2">
         <span
-          className="text-xs font-semibold uppercase tracking-wide"
-          style={{ color: dotColor }}
+          className={`text-xs font-semibold uppercase tracking-wide ${
+            location.category === "hub" ? "text-primary" : "text-accent"
+          }`}
         >
           {location.category === "hub" ? t("location.hub") : t("location.kiosk")}
         </span>
@@ -253,7 +253,7 @@ export default function LocationDetailPage() {
           {t("map.onMap")}
         </h2>
         <div className="h-48 rounded-xl overflow-hidden border border-border">
-          <MiniMap position={location.position} name={location.name[lang]} />
+          <MiniMap position={location.position} name={location.name[lang]} category={location.category} />
         </div>
       </div>
 

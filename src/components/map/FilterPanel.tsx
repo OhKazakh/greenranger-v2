@@ -62,7 +62,19 @@ export function FilterPanel({
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
-              {t(labelKey)}
+              <span className="flex items-center gap-2">
+                {value !== "all" && (
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "w-2.5 h-2.5 shrink-0 ring-1 ring-white/70",
+                      value === "hub" ? "rounded-[3px]" : "rounded-full"
+                    )}
+                    style={{ background: value === "hub" ? "var(--pin-hub)" : "var(--pin-kiosk)" }}
+                  />
+                )}
+                {t(labelKey)}
+              </span>
             </button>
           ))}
         </div>
@@ -80,7 +92,7 @@ export function FilterPanel({
                 ? onMaterialsChange([])
                 : onMaterialsChange([...ALL_MATERIALS])
             }
-            className="text-[11px] text-accent hover:underline font-mono"
+            className="text-[11px] text-accent hover:underline"
           >
             {noneSelected || !allSelected
               ? t("map.filterSelectAll")

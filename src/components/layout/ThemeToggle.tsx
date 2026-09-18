@@ -4,38 +4,38 @@ import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useLang } from "@/context/LangContext";
 
+// Follows the system appearance until someone picks one here; the pick is an
+// override for this site only, since visitors can't set appearance per site.
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const { t } = useLang();
   const [mounted, setMounted] = useState(false);
 
-  // Hydration guard
-  // The server has no access to localStorage, so it can't know
-  // whether the user prefers light or dark. We render a stable
-  // placeholder until mounted on the client.
+  // The server can't know the visitor's appearance, so render a stable placeholder until mounted.
   useEffect(() => setMounted(true), []);
+
+  const size = "h-11 w-11 md:h-8 md:w-8";
 
   if (!mounted) {
     return (
-      <Button variant="ghost" size="icon" className="h-8 w-8" aria-hidden="true">
+      <Button variant="ghost" size="icon" className={size} aria-hidden="true">
         <span className="w-4 h-4" />
       </Button>
     );
   }
 
+  const isDark = resolvedTheme === "dark";
   return (
     <Button
       variant="ghost"
       size="icon"
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-      className="h-8 w-8"
-      aria-label="Toggle theme"
+      onClick={() => setTheme(isDark ? "light" : "dark")}
+      className={size}
+      aria-label={isDark ? t("nav.themeLight") : t("nav.themeDark")}
     >
-      {theme === "dark" ? (
-        <Sun className="h-4 w-4" />
-      ) : (
-        <Moon className="h-4 w-4" />
-      )}
+      {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
     </Button>
   );
 }

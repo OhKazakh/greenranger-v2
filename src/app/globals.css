@@ -85,13 +85,18 @@
   --secondary-foreground: #1b4332;
   --muted: #eeeade;
   --muted-foreground: #5a6b5e;
-  --accent: #2ec4b6;             /* teal */
+  /* Brand teal (#2ec4b6) is 2.1:1 on the light surface, so text and filled
+     accents use a deeper teal here (5.2:1). Dark mode keeps the brand teal. */
+  --accent: #0f766e;
   --accent-foreground: #ffffff;
   --destructive: #dc2626;
 
   --border: #d4ccb4;
   --input: #d4ccb4;
-  --ring: #2ec4b6;
+  --ring: #0f766e;
+
+  --pin-hub: #1b4332;
+  --pin-kiosk: #2ec4b6;
   --radius: 0.625rem;
 }
 
@@ -118,6 +123,18 @@
   --input: rgba(255,255,255,0.1);
   --ring: #2ec4b6;
   --teal-soft: rgba(46,196,182,0.12);
+
+  --pin-hub: #40916c;
+  --pin-kiosk: #2ec4b6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ════════════════════════════════════════════════════════

@@ -6,7 +6,6 @@ import { ButtonLink } from "@/components/ui/button-link";
 import { Separator } from "@/components/ui/separator";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { useLang } from "@/context/LangContext";
-import { MARKER_COLORS } from "@/lib/constants";
 import { cn, wikimediaFilePage } from "@/lib/utils";
 import type { Location } from "@/types";
 
@@ -61,7 +60,7 @@ export function LocationDetailPanel({ location, onClose }: LocationDetailPanelPr
   if (!shown) return null;
 
   const isHub = shown.category === "hub";
-  const dotColor = isHub ? MARKER_COLORS.hub : MARKER_COLORS.kiosk;
+  const dotColor = isHub ? "var(--pin-hub)" : "var(--pin-kiosk)";
   const hasPhotos = shown.photos.length > 0;
 
   return (

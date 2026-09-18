@@ -3,7 +3,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { ButtonLink } from "@/components/ui/button-link";
 import { MaterialBadge } from "@/components/shared/MaterialBadge";
 import { useLang } from "@/context/LangContext";
-import { MARKER_COLORS } from "@/lib/constants";
 import { formatDistance } from "@/lib/geo";
 import type { Location } from "@/types";
 import { cn } from "@/lib/utils";
@@ -18,7 +17,7 @@ interface LocationCardProps {
 export function LocationCard({ location, compact = false, distanceKm = null }: LocationCardProps) {
   const { lang, t } = useLang();
   const isHub = location.category === "hub";
-  const dotColor = isHub ? MARKER_COLORS.hub : MARKER_COLORS.kiosk;
+  const dotColor = isHub ? "var(--pin-hub)" : "var(--pin-kiosk)";
 
   const todaySchedule = location.schedule?.weekdays ?? null;
 

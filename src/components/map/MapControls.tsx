@@ -27,7 +27,7 @@ function ControlButton({
       onClick={onClick}
       aria-label={label}
       className={cn(
-        "w-9 h-9 flex items-center justify-center rounded-lg",
+        "w-11 h-11 md:w-9 md:h-9 flex items-center justify-center rounded-lg",
         "bg-background/95 border border-border shadow-sm",
         "hover:bg-muted transition-colors text-foreground",
         className
