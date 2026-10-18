@@ -105,7 +105,7 @@ def card_html(rank, point, origin, now, lang):
     )
 
 
-st.set_page_config(page_title="GreenRanger — Astana", page_icon="♻️", layout="wide")
+st.set_page_config(page_title="GreenRanger — Astana", layout="wide")
 st.html(STYLES)
 
 st.session_state.setdefault("origin", None)
