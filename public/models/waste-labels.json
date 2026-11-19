@@ -1,0 +1,14 @@
+{
+  "classes": [
+    "cardboard",
+    "paper",
+    "plastic",
+    "glass",
+    "metal",
+    "textile",
+    "food",
+    "vegetation",
+    "trash"
+  ],
+  "threshold": 0.71
+}

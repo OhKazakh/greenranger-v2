@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import labels from "../../public/models/waste-labels.json";
 import { ALL_MATERIALS } from "@/lib/constants";
 import {
   CLASS_MATERIALS,
@@ -12,6 +13,12 @@ const probs = (values: Record<string, number>) =>
   WASTE_CLASSES.map((cls) => values[cls] ?? 0);
 
 describe("class to material mapping", () => {
+  it("uses the same class order as the exported model", () => {
+    expect([...WASTE_CLASSES]).toEqual(labels.classes);
+    expect(labels.threshold).toBeGreaterThan(0);
+    expect(labels.threshold).toBeLessThan(1);
+  });
+
   it("covers every model class", () => {
     expect(Object.keys(CLASS_MATERIALS).sort()).toEqual([...WASTE_CLASSES].sort());
   });
