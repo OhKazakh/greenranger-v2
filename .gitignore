@@ -51,3 +51,11 @@ CLAUDE.md
 __pycache__/
 *.pyc
 .streamlit/secrets.toml
+
+# ml
+ml/.venv/
+ml/data/
+ml/checkpoints/
+
+# hackathon submission draft
+DEVPOST.md
