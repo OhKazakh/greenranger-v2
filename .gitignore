@@ -58,4 +58,4 @@ ml/data/
 ml/checkpoints/
 
 # hackathon submission draft
-DEVPOST.md
+DEVPOST*.md
