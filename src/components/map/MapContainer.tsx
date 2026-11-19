@@ -11,6 +11,7 @@ import { LocationDetailPanel } from "@/components/map/LocationDetailPanel";
 import { FilterPanel } from "@/components/map/FilterPanel";
 import { MapControls } from "@/components/map/MapControls";
 import { NearestPanel } from "@/components/map/NearestPanel";
+import { WhatIsThis } from "@/components/map/WhatIsThis";
 import { useLang } from "@/context/LangContext";
 import {
   ASTANA_CENTER,
@@ -22,7 +23,7 @@ import {
   ALL_MATERIALS,
 } from "@/lib/constants";
 import { getLocations } from "@/lib/api";
-import { nearestTo } from "@/lib/geo";
+import { nearestOpenFirst } from "@/lib/geo";
 import { pinIconUrl, pinSize } from "@/lib/pins";
 import type { LatLng, Location, MaterialType, LocationCategory } from "@/types";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -157,7 +158,7 @@ export default function MapContainer() {
   }, [selectedCategory, selectedMaterials]);
 
   const nearest = useMemo(
-    () => (origin ? nearestTo(origin, filtered, NEAREST_COUNT) : []),
+    () => (origin ? nearestOpenFirst(origin, filtered, NEAREST_COUNT) : []),
     [origin, filtered]
   );
   const nearIds = useMemo(() => new Set(nearest.map(({ location }) => location.id)), [nearest]);
@@ -170,7 +171,7 @@ export default function MapContainer() {
 
     const map = mapRef.current;
     if (!map) return;
-    const top = nearestTo(pos, filtered, NEAREST_COUNT);
+    const top = nearestOpenFirst(pos, filtered, NEAREST_COUNT);
     if (top.length === 0) {
       map.panTo(pos);
       map.setZoom(14);
@@ -221,6 +222,24 @@ export default function MapContainer() {
       mapRef.current.panTo({ lat: loc.position.lat, lng: loc.position.lng });
     }
   }, []);
+
+  // After a photo sets the filter, frame the origin and its new nearest points.
+  const [photoApplied, setPhotoApplied] = useState(0);
+  useEffect(() => {
+    if (!photoApplied || !origin || nearest.length === 0 || !mapRef.current) return;
+    const bounds = new google.maps.LatLngBounds(origin);
+    nearest.forEach(({ location }) => bounds.extend(location.position));
+    mapRef.current.fitBounds(bounds, 80);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [photoApplied]);
+
+  const applyPhotoMaterials = useCallback((materials: MaterialType[]) => {
+    setSelectedMaterials(materials);
+    setSelectedCategory("all");
+    setPhotoApplied((n) => n + 1);
+  }, []);
+
+  const whatIsThis = <WhatIsThis hasOrigin={origin !== null} onApply={applyPhotoMaterials} />;
 
   const nearestPanel = (
     <NearestPanel
@@ -282,6 +301,8 @@ export default function MapContainer() {
           <h2 className="heading text-sm font-bold text-foreground mb-4">
             {t("map.title")}
           </h2>
+          {whatIsThis}
+          <div className="border-t border-border my-4" />
           {nearestPanel}
           <div className="border-t border-border my-4" />
           <FilterPanel
@@ -500,6 +521,8 @@ export default function MapContainer() {
                 </button>
               </div>
               <div className="px-4 pb-8">
+                {whatIsThis}
+                <div className="border-t border-border my-4" />
                 {nearestPanel}
                 <div className="border-t border-border my-4" />
                 <FilterPanel
