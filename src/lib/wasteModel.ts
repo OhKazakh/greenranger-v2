@@ -1,4 +1,4 @@
-import type { InferenceSession } from "onnxruntime-web";
+import type * as Ort from "onnxruntime-web";
 
 // Runs public/models/waste.onnx in the browser. The photo is read into a
 // canvas and never uploaded anywhere.
@@ -6,21 +6,38 @@ import type { InferenceSession } from "onnxruntime-web";
 const MODEL_URL = "/models/waste.onnx";
 const LABELS_URL = "/models/waste-labels.json";
 const SIZE = 224;
-// The runtime's .wasm (14 MB) comes from the CDN instead of our repo.
-// Keep the version in sync with package.json.
+// The runtime (JS and the 14 MB .wasm) comes from the CDN, not our bundle.
+// Keep the version in sync with onnxruntime-web in package.json (types only).
 const ORT_CDN = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.31.1/dist/";
+const IMPORT_ATTEMPTS = 3;
 
 interface Loaded {
-  ort: typeof import("onnxruntime-web/wasm");
-  session: InferenceSession;
+  ort: typeof Ort;
+  session: Ort.InferenceSession;
   threshold: number;
+}
+
+// The browser remembers a failed import() for that URL, so one dropped
+// connection would break the feature until a reload. Each retry uses a new URL.
+async function importOrt(): Promise<typeof Ort> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < IMPORT_ATTEMPTS; attempt++) {
+    const url = `${ORT_CDN}ort.wasm.min.mjs${attempt ? `?retry=${attempt}` : ""}`;
+    try {
+      return await import(/* webpackIgnore: true */ url);
+    } catch (err) {
+      lastError = err;
+      await new Promise((resolve) => setTimeout(resolve, 1000 * (attempt + 1)));
+    }
+  }
+  throw lastError;
 }
 
 let loading: Promise<Loaded> | null = null;
 
 export function loadWasteModel(): Promise<Loaded> {
   loading ??= (async () => {
-    const ort = await import("onnxruntime-web/wasm");
+    const ort = await importOrt();
     ort.env.wasm.wasmPaths = ORT_CDN;
     // Threads need cross-origin isolation, which the site doesn't have.
     ort.env.wasm.numThreads = 1;
