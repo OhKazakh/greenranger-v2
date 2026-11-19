@@ -1,4 +1,5 @@
 import type { LatLng, Lang, Location } from "@/types";
+import { openStatus, type OpenStatus } from "@/lib/hours";
 
 // Great-circle distance between two points in kilometres (haversine).
 export function haversineKm(a: LatLng, b: LatLng): number {
@@ -29,6 +30,25 @@ export function nearestTo(origin: LatLng, locations: Location[], count: number):
   return locations
     .map((location) => ({ location, distanceKm: haversineKm(origin, location.position) }))
     .sort((a, b) => a.distanceKm - b.distanceKm)
+    .slice(0, count);
+}
+
+const STATUS_RANK: Record<OpenStatus, number> = { open: 0, unknown: 1, closed: 2 };
+
+// Open points first, then ones with unknown hours, then closed; nearest first within each.
+export function nearestOpenFirst(
+  origin: LatLng,
+  locations: Location[],
+  count: number,
+  now = new Date()
+): (NearbyLocation & { status: OpenStatus })[] {
+  return locations
+    .map((location) => ({
+      location,
+      distanceKm: haversineKm(origin, location.position),
+      status: openStatus(location.schedule, now),
+    }))
+    .sort((a, b) => STATUS_RANK[a.status] - STATUS_RANK[b.status] || a.distanceKm - b.distanceKm)
     .slice(0, count);
 }
 
