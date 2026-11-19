@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback, useMemo, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { GoogleMap, useJsApiLoader, Marker, MarkerClusterer, OverlayView } from "@react-google-maps/api";
 import { useTheme } from "next-themes";
-import { Search, X } from "lucide-react";
+import { Camera, Search, X } from "lucide-react";
 import { toast } from "sonner";
 
 import { LocationDetailPanel } from "@/components/map/LocationDetailPanel";
@@ -503,6 +503,18 @@ export default function MapContainer() {
               {selectedMaterials.length}
             </span>
           )}
+        </button>
+
+        <button
+          onClick={() => setFilterOpen(true)}
+          className={cn(
+            "md:hidden absolute top-[4.25rem] left-4 z-10",
+            "flex items-center gap-2 px-3.5 min-h-11 rounded-xl shadow-lg",
+            "bg-primary text-primary-foreground text-sm font-medium"
+          )}
+        >
+          <Camera className="w-4 h-4" />
+          {t("classify.title")}
         </button>
 
         {filterOpen && (
