@@ -1,0 +1,10 @@
+{
+  "arch": "mobilenet_v3_large",
+  "shipped": "fp16_weights",
+  "val_accuracy_int8": 0.6700274977085243,
+  "val_accuracy_fp16_weights": 0.9349220898258478,
+  "val_accuracy_fp32": 0.9358386801099908,
+  "size_mb_int8": 4.73,
+  "size_mb_fp16_weights": 8.45,
+  "size_mb_fp32": 16.85
+}
