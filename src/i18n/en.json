@@ -288,7 +288,7 @@
     "hint": "Take or choose a photo of one item. I'll show which points take it.",
     "takePhoto": "Take or choose a photo",
     "privacy": "The photo is checked on your phone and never uploaded.",
-    "loading": "Loading the model…",
+    "loading": "Loading the model (8.5 MB, first time only)…",
     "analyzing": "Checking the photo…",
     "looksLike": "Looks like {{material}}",
     "sure": "{{percent}}% sure",
