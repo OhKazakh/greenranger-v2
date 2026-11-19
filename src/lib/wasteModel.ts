@@ -76,6 +76,9 @@ async function toTensorData(file: Blob): Promise<Float32Array> {
   canvas.height = SIZE;
   const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
   ctx.imageSmoothingQuality = "high";
+  // Transparent PNGs would otherwise read as black.
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, SIZE, SIZE);
   ctx.drawImage(source, (SIZE - w * scale) / 2, (SIZE - h * scale) / 2, w * scale, h * scale);
   bitmap.close();
 
