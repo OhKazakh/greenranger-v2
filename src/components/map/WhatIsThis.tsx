@@ -126,12 +126,16 @@ export function WhatIsThis({ hasOrigin, onApply }: WhatIsThisProps) {
                   {t("classify.looksLike", { material: classLabel(step.decision.top.cls) })}
                 </p>
                 <p className="text-[11.5px] text-muted-foreground">{percent(step.decision.top.prob)}</p>
-                <button
-                  onClick={() => step.decision.kind === "confident" && chooseClass(step.decision.top.cls)}
-                  className={cn(chip, "mt-2 border-accent/50 text-accent")}
-                >
-                  {t("classify.showPoints")}
-                </button>
+                {materialsFor(step.decision.top.cls).length === 0 ? (
+                  <p className="text-[12px] text-foreground leading-relaxed mt-2">{t("classify.notAccepted")}</p>
+                ) : (
+                  <button
+                    onClick={() => step.decision.kind === "confident" && chooseClass(step.decision.top.cls)}
+                    className={cn(chip, "mt-2 border-accent/50 text-accent")}
+                  >
+                    {t("classify.showPoints")}
+                  </button>
+                )}
               </>
             )}
 
