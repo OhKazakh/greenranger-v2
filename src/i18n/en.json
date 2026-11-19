@@ -282,5 +282,40 @@
     "youAreHere": "You are here",
     "attribution": "Address search © OpenStreetMap",
     "outsideCity": "Looks like you're not in Astana right now"
+  },
+  "classify": {
+    "title": "What is this?",
+    "hint": "Take or choose a photo of one item. I'll show which points take it.",
+    "takePhoto": "Take or choose a photo",
+    "privacy": "The photo is checked on your phone and never uploaded.",
+    "loading": "Loading the model…",
+    "analyzing": "Checking the photo…",
+    "looksLike": "Looks like {{material}}",
+    "sure": "{{percent}}% sure",
+    "unsure": "Not sure. Which one is it?",
+    "somethingElse": "Something else",
+    "pickMaterial": "Which material is it?",
+    "drinkQuestion": "Is it a drink bottle or can?",
+    "yes": "Yes",
+    "no": "No",
+    "showPoints": "Show points",
+    "notAccepted": "No point on this map takes this. It goes in general waste.",
+    "showing": "The map shows points that take: {{material}}.",
+    "setLocation": "Set your location below to see the nearest open point.",
+    "another": "Try another photo",
+    "loadFailed": "Couldn't load the model. Check your connection and try again.",
+    "readFailed": "Couldn't read this photo. Try another one.",
+    "photoAlt": "Your photo",
+    "classes": {
+      "cardboard": "Cardboard",
+      "paper": "Paper",
+      "plastic": "Plastic",
+      "glass": "Glass",
+      "metal": "Metal",
+      "textile": "Textile",
+      "food": "Food waste",
+      "vegetation": "Plants and leaves",
+      "trash": "Mixed trash"
+    }
   }
 }
