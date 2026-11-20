@@ -54,6 +54,7 @@ __pycache__/
 
 # ml
 ml/.venv/
+insights/.venv/
 ml/data/
 ml/checkpoints/
 
