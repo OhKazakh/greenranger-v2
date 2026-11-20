@@ -1,5 +1,6 @@
 import hashlib
 import io
+from pathlib import Path
 from base64 import b64encode
 from html import escape
 
@@ -14,6 +15,8 @@ from i18n import LANGUAGES, MATERIALS, current_language, format_distance, materi
 from map_view import map_view
 
 MAP_HEIGHT = 640
+# The website's own favicon, so the browser tab shows the same leaf logo.
+FAVICON = Path(__file__).resolve().parent.parent / "src" / "app" / "icon.svg"
 NEAREST_COUNT = 3
 
 LEAF = (
@@ -242,7 +245,7 @@ def show_button(materials, origin):
         st.button(t("wit_show"), on_click=apply_materials, args=(materials,), type="primary", icon=":material/map:")
 
 
-st.set_page_config(page_title="GreenRanger — Astana", layout="wide")
+st.set_page_config(page_title="GreenRanger — Astana", page_icon=str(FAVICON), layout="wide")
 st.html(STYLES)
 
 st.session_state.setdefault("origin", None)
