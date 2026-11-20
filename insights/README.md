@@ -4,6 +4,8 @@ A Streamlit version of the site's "nearest points" finder: search an address or 
 
 **What is this?** Upload a photo of an item (or take one with the camera). The same ONNX model the website ships (`../public/models/waste.onnx`) runs here with onnxruntime and names the material. At 71% confidence or more it answers; below that it shows the top three and you pick, so the map is never filtered on a guess. For plastic and metal it asks whether it's a drink bottle or can and adds the bottle machines; for food, plants and mixed trash it says no point takes it. Then the nearest points and the map are filtered to that material. The model code is in `classifier.py`; the photo isn't saved.
 
+The theme follows the device's light or dark setting; the sun/moon button next to the language switch overrides it, the same way Streamlit's own settings menu does (it saves the choice in the browser and reloads the page, keeping the language).
+
 Data comes from the public API (`https://api.greenranger.kz/api/locations`), falling back to `../backend/prisma/locations.json` if the API is unreachable. Map tiles are from OpenFreeMap, address search from OpenStreetMap's Nominatim.
 
 ## Run locally
