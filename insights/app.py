@@ -220,11 +220,12 @@ def photo_section(origin):
             t("wit_drink"),
             ["yes", "no"],
             selection_mode="single",
-            format_func=t,
+            format_func=lambda answer: t(f"wit_{answer}_{cls}"),   # e.g. "Yes, a drink bottle" / "No, other plastic"
             key=key,
             on_change=apply_drink_answer,
             args=(cls, key),
         )
+        st.html(f'<div class="gr-tiny">{escape(t("wit_drink_hint"))}</div>')
         if st.session_state.get("photo_applied"):
             show_button(st.session_state["photo_applied"], origin)
         return
