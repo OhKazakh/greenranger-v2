@@ -145,7 +145,7 @@ function render(maplibregl, component) {
     const fill = hub ? (dark ? data.hubColorDark : data.hubColor) : data.kioskColor;
     const el = pinElement(fill, dark ? "#ffffff" : data.hubColor, hub, p.near);
     el.addEventListener("mouseenter", () => {
-      state.tip.setOffset([0, p.near ? -56 : -46]).setLngLat([p.lng, p.lat]).setText(p.name).addTo(state.map);
+      state.tip.setOffset(tipOffset(p.near ? 56 : 46)).setLngLat([p.lng, p.lat]).setText(p.name).addTo(state.map);
     });
     el.addEventListener("mouseleave", () => state.tip.remove());
     state.markers.push(
@@ -177,6 +177,17 @@ function render(maplibregl, component) {
     }
   }
   state.fittedTo = fitKey;
+}
+
+// The pin stands above its point (anchor "bottom"), `lift` px tall. MapLibre puts the label above the point
+// when there's room and flips it below near the top edge; each side gets its own offset so the label clears the pin.
+function tipOffset(lift) {
+  const above = [0, -lift], below = [0, 8], side = -lift / 2;
+  return {
+    bottom: above, "bottom-left": above, "bottom-right": above,
+    top: below, "top-left": below, "top-right": below,
+    left: [16, side], right: [-16, side], center: [0, side],
+  };
 }
 
 export default function (component) {
