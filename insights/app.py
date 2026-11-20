@@ -1,9 +1,13 @@
+import hashlib
+import io
 from base64 import b64encode
 from html import escape
 
 import requests
 import streamlit as st
+from PIL import UnidentifiedImageError
 
+from classifier import asks_drink, classify, decide, materials_for, open_photo, threshold
 from data import astana_now, filter_points, geocode, load_locations, open_status, todays_hours
 from geo import CITY_CENTER, directions_url, haversine_km
 from i18n import LANGUAGES, MATERIALS, current_language, format_distance, material_label, t
@@ -20,6 +24,7 @@ LEAF = (
 
 
 def svg_image(svg, size):
+    """Embed an SVG as a base64 <img>, because st.html strips inline SVG."""
     encoded = b64encode(svg.encode()).decode()
     return f'<img src="data:image/svg+xml;base64,{encoded}" width="{size}" height="{size}" alt="">'
 
@@ -73,11 +78,15 @@ STYLES = """
 .gr-dir { display: flex; align-items: center; gap: 4px; font-size: 12px; color: var(--gr-muted); text-decoration: none; }
 .gr-dir:hover { color: var(--gr-accent); }
 @media (prefers-reduced-motion: reduce) { .gr-card { transition: none; } }
+.gr-result { font-size: 15px; font-weight: 600; color: var(--gr-text); line-height: 1.35; }
+.gr-sure { font-size: 13px; color: var(--gr-muted); margin-top: 2px; }
+.gr-note { font-size: 13px; color: var(--gr-text); line-height: 1.5; }
 </style>
 """
 
 
 def brand_html():
+    """The header: logo, name and the page title in the current language."""
     return (
         '<div class="gr-brand">'
         f'<a href="https://greenranger.kz" target="_blank"><span class="gr-logo">{LEAF_IMG}</span>'
@@ -88,6 +97,7 @@ def brand_html():
 
 
 def card_html(rank, point, origin, now, lang):
+    """HTML for one nearest-point card: name, open status, today's hours, distance and directions."""
     status = open_status(point, now)
     hours = todays_hours(point, now)
     name = escape(point[f"name_{lang}"])
@@ -103,6 +113,130 @@ def card_html(rank, point, origin, now, lang):
         f'<a class="gr-dir" href="{route}" target="_blank">↗ {t("directions")}</a>'
         "</div></div>"
     )
+
+
+def apply_materials(materials):
+    """Button callback: filter the nearest list and the map to these materials."""
+    # Callbacks run before the next rerun, so the material pills further down already show the new filter.
+    st.session_state["materials"] = list(materials)
+    st.session_state["photo_applied"] = list(materials)
+
+
+def apply_drink_answer(cls, key):
+    """Pills callback for "Is it a drink bottle or can?": filter right away with or without the bottle machines."""
+    answer = st.session_state.get(key)
+    if answer is not None:
+        apply_materials(materials_for(cls, drink=answer == "yes"))
+
+
+@st.cache_data(show_spinner=False, max_entries=20)
+def classify_bytes(data):
+    """Classify a photo given as bytes. Cached, so a rerun doesn't run the model again on the same photo."""
+    return classify(open_photo(io.BytesIO(data)))
+
+
+def photo_section(origin):
+    """The "What is this?" section: a photo goes in, a material comes out, then the map is filtered.
+
+    Above the model's threshold it answers; below it, it shows the top three and the user picks.
+    The filter is only ever set by a button or answer the user clicks, never by a guess.
+    """
+    st.html(f'<div class="gr-label">{escape(t("wit_title"))}</div>')
+    source = st.segmented_control(
+        t("wit_title"),
+        ["upload", "camera"],
+        format_func=lambda option: t(f"wit_{option}"),
+        default="upload",
+        required=True,
+        key="photo_source",
+        label_visibility="collapsed",
+    )
+    if source == "camera":
+        photo = st.camera_input(t("wit_camera"), key="camera_photo", label_visibility="collapsed")
+    else:
+        photo = st.file_uploader(
+            t("wit_upload"), type=["jpg", "jpeg", "png", "webp"], key="upload_photo", label_visibility="collapsed"
+        )
+    if photo is None:
+        st.html(f'<div class="gr-muted">{escape(t("wit_hint"))} {escape(t("wit_saved"))}</div>')
+        return
+
+    data = photo.getvalue()
+    photo_id = hashlib.sha1(data).hexdigest()[:12]
+    if st.session_state.get("photo_id") != photo_id:
+        # A new photo starts the questions over.
+        st.session_state["photo_id"] = photo_id
+        st.session_state["photo_applied"] = None
+    try:
+        ranked = classify_bytes(data)
+    except (UnidentifiedImageError, OSError):
+        st.warning(t("wit_read_failed"))
+        return
+
+    kind, options = decide(ranked, threshold())
+    # The photo and the answer sit side by side; the choices and questions go full width below them.
+    thumb, body = st.columns([1, 2.4], vertical_alignment="center")
+    thumb.image(data, width="stretch")
+    if kind == "confident":
+        cls, prob = options[0]
+        body.html(
+            f'<div class="gr-result">{escape(t("wit_looks", label=t("class_" + cls)))}</div>'
+            f'<div class="gr-sure">{escape(t("wit_sure", percent=round(prob * 100)))}</div>'
+        )
+    else:
+        body.html(f'<div class="gr-result">{escape(t("wit_unsure"))}</div>')
+        percent = dict(options)
+        cls = st.pills(
+            t("wit_unsure"),
+            [c for c, _ in options] + ["other"],
+            selection_mode="single",
+            format_func=lambda c: t("wit_other") if c == "other" else f"{t('class_' + c)} {round(percent[c] * 100)}%",
+            key=f"pick_{photo_id}",
+            label_visibility="collapsed",
+        )
+        if cls == "other":
+            # None of the three: the user picks any material, including ones the model can't see (batteries).
+            material = st.pills(
+                t("wit_pick_material"),
+                list(MATERIALS),
+                selection_mode="single",
+                format_func=material_label,
+                key=f"material_{photo_id}",
+            )
+            if material:
+                show_button([material], origin)
+            return
+        if cls is None:
+            return
+
+    if not materials_for(cls):
+        st.html(f'<div class="gr-note">{escape(t("wit_none"))}</div>')
+        return
+    if asks_drink(cls):
+        key = f"drink_{photo_id}_{cls}"
+        st.pills(
+            t("wit_drink"),
+            ["yes", "no"],
+            selection_mode="single",
+            format_func=t,
+            key=key,
+            on_change=apply_drink_answer,
+            args=(cls, key),
+        )
+        if st.session_state.get("photo_applied"):
+            show_button(st.session_state["photo_applied"], origin)
+        return
+    show_button(materials_for(cls), origin)
+
+
+def show_button(materials, origin):
+    """Offer "Show points" for these materials, or say what the map shows once it's applied."""
+    if st.session_state.get("photo_applied") == list(materials):
+        names = ", ".join(MATERIALS[m][current_language()] for m in materials)
+        hint = "" if origin else " " + t("wit_set_origin")
+        st.html(f'<div class="gr-muted">{escape(t("wit_showing", materials=names) + hint)}</div>')
+    else:
+        st.button(t("wit_show"), on_click=apply_materials, args=(materials,), type="primary", icon=":material/map:")
 
 
 st.set_page_config(page_title="GreenRanger — Astana", layout="wide")
@@ -136,6 +270,9 @@ shown = filter_points(table, category, materials)
 panel, map_column = st.columns([1.15, 2.2], gap="medium")
 
 with panel, st.container(border=True, height=MAP_HEIGHT):
+    photo_section(st.session_state["origin"])
+    st.divider()
+
     title, clear = st.columns([2, 1.3], vertical_alignment="center")
     title.html(f'<div class="gr-label">{escape(t("title"))}</div>')
     if st.session_state["origin"] and clear.button(t("clear"), type="tertiary", icon=":material/close:"):
@@ -156,12 +293,15 @@ with panel, st.container(border=True, height=MAP_HEIGHT):
         else:
             if found:
                 st.session_state["origin"] = found
+                # Rerun so the sections drawn above this form (the photo section) see the new start point too.
+                st.rerun()
             else:
                 st.toast(t("not_found"))
 
     origin = st.session_state["origin"]
     nearest = shown.iloc[0:0]
     if origin and not shown.empty:
+        # Distance to every shown point at once (numpy arrays), then keep the closest three.
         distances = haversine_km(origin[0], origin[1], shown["lat"].to_numpy(), shown["lng"].to_numpy())
         nearest = shown.assign(distance_km=distances).nsmallest(NEAREST_COUNT, "distance_km")
 
@@ -218,6 +358,7 @@ with map_column:
     ]
     result = map_view(points, origin, CITY_CENTER, lang, t("you_are_here"), MAP_HEIGHT)
 
+# A click on the map becomes the new start point.
 if result.click:
     st.session_state["origin"] = (result.click["lat"], result.click["lng"])
     st.rerun()

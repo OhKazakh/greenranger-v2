@@ -42,6 +42,33 @@ TEXT = {
         "snapshot": "Сайт недоступен, показана сохранённая копия данных.",
         "retry": "Повторить",
         "site": "Открыть сайт",
+        "wit_title": "Что это?",
+        "wit_hint": "Загрузите или сделайте фото одной вещи. Я покажу, какие пункты её принимают.",
+        "wit_upload": "Загрузить фото",
+        "wit_camera": "Камера",
+        "wit_saved": "Фото нигде не сохраняется.",
+        "wit_looks": "Похоже на: {label}",
+        "wit_sure": "Уверенность {percent}%",
+        "wit_unsure": "Не уверен. Что это?",
+        "wit_other": "Другое",
+        "wit_pick_material": "Какой это материал?",
+        "wit_drink": "Это бутылка или банка из-под напитка?",
+        "yes": "Да",
+        "no": "Нет",
+        "wit_show": "Показать пункты",
+        "wit_none": "Ни один пункт на карте это не принимает. Это в обычный мусор.",
+        "wit_showing": "На карте пункты, которые принимают: {materials}.",
+        "wit_set_origin": "Найдите адрес или нажмите на карту, чтобы увидеть ближайшие.",
+        "wit_read_failed": "Не удалось прочитать фото. Попробуйте другое.",
+        "class_cardboard": "Картон",
+        "class_paper": "Бумага",
+        "class_plastic": "Пластик",
+        "class_glass": "Стекло",
+        "class_metal": "Металл",
+        "class_textile": "Ткань",
+        "class_food": "Пищевые отходы",
+        "class_vegetation": "Растения и листья",
+        "class_trash": "Смешанный мусор",
         "m": "м",
         "km": "км",
     },
@@ -71,6 +98,33 @@ TEXT = {
         "snapshot": "The site is unreachable, showing a saved copy of the data.",
         "retry": "Retry",
         "site": "Open the site",
+        "wit_title": "What is this?",
+        "wit_hint": "Upload or take a photo of one item. I'll show which points take it.",
+        "wit_upload": "Upload a photo",
+        "wit_camera": "Camera",
+        "wit_saved": "The photo isn't saved anywhere.",
+        "wit_looks": "Looks like {label}",
+        "wit_sure": "{percent}% sure",
+        "wit_unsure": "Not sure. Which one is it?",
+        "wit_other": "Something else",
+        "wit_pick_material": "Which material is it?",
+        "wit_drink": "Is it a drink bottle or can?",
+        "yes": "Yes",
+        "no": "No",
+        "wit_show": "Show points",
+        "wit_none": "No point on this map takes this. It goes in general waste.",
+        "wit_showing": "The map shows points that take: {materials}.",
+        "wit_set_origin": "Search an address or click the map to see the nearest ones.",
+        "wit_read_failed": "Couldn't read this photo. Try another one.",
+        "class_cardboard": "Cardboard",
+        "class_paper": "Paper",
+        "class_plastic": "Plastic",
+        "class_glass": "Glass",
+        "class_metal": "Metal",
+        "class_textile": "Textile",
+        "class_food": "Food waste",
+        "class_vegetation": "Plants and leaves",
+        "class_trash": "Mixed trash",
         "m": "m",
         "km": "km",
     },
@@ -100,6 +154,33 @@ TEXT = {
         "snapshot": "Сайт қолжетімсіз, деректердің сақталған көшірмесі көрсетілді.",
         "retry": "Қайталау",
         "site": "Сайтты ашу",
+        "wit_title": "Бұл не?",
+        "wit_hint": "Бір заттың суретін жүктеңіз немесе түсіріңіз. Оны қай пункттер қабылдайтынын көрсетемін.",
+        "wit_upload": "Сурет жүктеу",
+        "wit_camera": "Камера",
+        "wit_saved": "Сурет ешқайда сақталмайды.",
+        "wit_looks": "Ұқсайды: {label}",
+        "wit_sure": "Сенімділік {percent}%",
+        "wit_unsure": "Сенімді емеспін. Бұл қайсысы?",
+        "wit_other": "Басқа",
+        "wit_pick_material": "Бұл қай материал?",
+        "wit_drink": "Бұл сусын бөтелкесі ме, әлде банкасы ма?",
+        "yes": "Иә",
+        "no": "Жоқ",
+        "wit_show": "Пункттерді көрсету",
+        "wit_none": "Картадағы бірде-бір пункт мұны қабылдамайды. Бұл кәдімгі қоқысқа.",
+        "wit_showing": "Картада мынаны қабылдайтын пункттер: {materials}.",
+        "wit_set_origin": "Ең жақындарын көру үшін мекенжайды іздеңіз немесе картаны басыңыз.",
+        "wit_read_failed": "Суретті оқу мүмкін болмады. Басқасын көріңіз.",
+        "class_cardboard": "Картон",
+        "class_paper": "Қағаз",
+        "class_plastic": "Пластик",
+        "class_glass": "Шыны",
+        "class_metal": "Металл",
+        "class_textile": "Мата",
+        "class_food": "Тамақ қалдықтары",
+        "class_vegetation": "Өсімдіктер мен жапырақтар",
+        "class_trash": "Аралас қоқыс",
         "m": "м",
         "km": "км",
     },
@@ -107,19 +188,23 @@ TEXT = {
 
 
 def current_language():
+    """The language picked in the header switch, English by default."""
     return st.session_state.get("lang") or "en"
 
 
 def t(key, **values):
+    """Translate a text key into the current language, filling in {placeholders}."""
     return TEXT[current_language()][key].format(**values)
 
 
 def material_label(code):
+    """A material's name with its icon, for the filter pills."""
     material = MATERIALS[code]
     return f":material/{material['icon']}: {material[current_language()]}"
 
 
 def format_distance(km):
+    """"650 m" under a kilometre, "1.2 km" above it."""
     if km < 1:
         return f"{round(km * 1000)} {t('m')}"
     return f"{km:.1f} {t('km')}"
