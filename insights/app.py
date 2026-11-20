@@ -13,6 +13,7 @@ from data import astana_now, filter_points, geocode, load_locations, open_status
 from geo import CITY_CENTER, directions_url, haversine_km
 from i18n import LANGUAGES, MATERIALS, current_language, format_distance, material_label, t
 from map_view import map_view
+from theme_toggle import theme_toggle
 
 MAP_HEIGHT = 640
 # The website's own favicon, so the browser tab shows the same leaf logo.
@@ -118,6 +119,17 @@ def card_html(rank, point, origin, now, lang):
         f'<a class="gr-dir" href="{route}" target="_blank">↗ {t("directions")}</a>'
         "</div></div>"
     )
+
+
+def themed(css, theme_type):
+    """Make the light-theme CSS block follow the theme Streamlit reports, so it matches a theme picked with the button."""
+    # STYLES switches to light colours with a prefers-color-scheme query (the OS setting). When Streamlit
+    # tells us its theme, that query is swapped for one that is always true (light) or never true (dark).
+    if theme_type == "light":
+        return css.replace("@media (prefers-color-scheme: light)", "@media all")
+    if theme_type == "dark":
+        return css.replace("@media (prefers-color-scheme: light)", "@media not all")
+    return css
 
 
 def apply_materials(materials):
@@ -246,17 +258,20 @@ def show_button(materials, origin):
 
 
 st.set_page_config(page_title="GreenRanger — Astana", page_icon=str(FAVICON), layout="wide")
-st.html(STYLES)
+theme_type = st.context.theme.type  # "light", "dark", or None before the browser has reported it
+st.html(themed(STYLES, theme_type))
 
 st.session_state.setdefault("origin", None)
 
-brand, switch = st.columns([3, 1], vertical_alignment="center")
+# The theme button reloads the page, which starts a new session; the language survives it in the URL.
+start_lang = st.query_params.get("lang")
+brand, switch, theme = st.columns([3, 1, 0.14], vertical_alignment="center")
 with switch:
     st.segmented_control(
         "lang",
         list(LANGUAGES),
         format_func=LANGUAGES.get,
-        default="en",
+        default=start_lang if start_lang in LANGUAGES else "en",
         required=True,
         key="lang",
         label_visibility="collapsed",
@@ -266,6 +281,12 @@ with brand:
     st.html(brand_html())
 
 lang = current_language()
+st.query_params["lang"] = lang
+dark = theme_type == "dark" if theme_type else None
+with theme:
+    # Until the browser reports a theme, treat it as dark: the button then offers the light one.
+    shows_dark = dark is not False
+    theme_toggle(shows_dark, t("theme_light") if shows_dark else t("theme_dark"))
 with st.spinner(t("loading")):
     table, source = load_locations()
 
@@ -363,7 +384,7 @@ with map_column:
         }
         for _, point in shown.iterrows()
     ]
-    result = map_view(points, origin, CITY_CENTER, lang, t("you_are_here"), MAP_HEIGHT)
+    result = map_view(points, origin, CITY_CENTER, lang, t("you_are_here"), MAP_HEIGHT, dark=dark)
 
 # A click on the map becomes the new start point.
 if result.click:

@@ -93,7 +93,8 @@ function pinElement(color, stroke, hub, big) {
 
 function render(maplibregl, component) {
   const { data, parentElement, setTriggerValue } = component;
-  const dark = darkQuery.matches;
+  // The theme Streamlit reports (it can differ from the OS when picked with the theme button); OS setting as fallback.
+  const dark = data.dark ?? darkQuery.matches;
   let state = parentElement.__gr;
 
   if (!state) {
@@ -114,6 +115,7 @@ function render(maplibregl, component) {
     map.getCanvas().style.cursor = "crosshair";
 
     state = {
+      container,
       map,
       lang: data.lang,
       dark,
@@ -128,6 +130,7 @@ function render(maplibregl, component) {
   }
 
   state.component = component;
+  state.container.classList.toggle("gr-light", !dark);
 
   state.onClick = (e) => setTriggerValue("click", { lat: e.lngLat.lat, lng: e.lngLat.lng });
 
@@ -267,11 +270,9 @@ CSS = """
   overflow: hidden;
   border: 1px solid var(--gr-map-border);
 }
-@media (prefers-color-scheme: light) {
-  .gr-map {
-    --gr-map-surface: #ffffff; --gr-map-text: #0d2818; --gr-map-muted: #5a6b5e;
-    --gr-map-border: #d4ccb4; --gr-map-icon: none;
-  }
+.gr-map.gr-light {
+  --gr-map-surface: #ffffff; --gr-map-text: #0d2818; --gr-map-muted: #5a6b5e;
+  --gr-map-border: #d4ccb4; --gr-map-icon: none;
 }
 .gr-pin { cursor: pointer; }
 .gr-pin svg { transition: transform .15s ease-out; transform-origin: 50% 100%; }
@@ -313,8 +314,11 @@ CSS = """
 _component = st.components.v2.component("greenranger_map", js=JS, css=CSS, isolate_styles=False)
 
 
-def map_view(points, origin, center, lang, you_are_here, height):
-    """Draw the MapLibre map with the points and the start point. Returns the result, with .click when the map is clicked."""
+def map_view(points, origin, center, lang, you_are_here, height, dark=None):
+    """Draw the MapLibre map with the points and the start point. Returns the result, with .click when the map is clicked.
+
+    dark: the theme Streamlit reports (True/False), or None to follow the OS setting.
+    """
     return _component(
         key="map",
         data={
@@ -324,6 +328,7 @@ def map_view(points, origin, center, lang, you_are_here, height):
             "lang": lang,
             "youAreHere": you_are_here,
             "height": height,
+            "dark": dark,
             "hubColor": HUB_COLOR,
             "hubColorDark": HUB_COLOR_DARK,
             "kioskColor": KIOSK_COLOR,
