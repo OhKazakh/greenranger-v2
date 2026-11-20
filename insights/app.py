@@ -81,6 +81,8 @@ STYLES = """
 .gr-result { font-size: 15px; font-weight: 600; color: var(--gr-text); line-height: 1.35; }
 .gr-sure { font-size: 13px; color: var(--gr-muted); margin-top: 2px; }
 .gr-note { font-size: 13px; color: var(--gr-text); line-height: 1.5; }
+.gr-card { cursor: pointer; }
+.gr-card:focus-visible { outline: 2px solid var(--gr-accent); outline-offset: 2px; }
 </style>
 """
 
@@ -105,7 +107,7 @@ def card_html(rank, point, origin, now, lang):
     route = directions_url(origin, point["lat"], point["lng"])
     hours_html = f'<span class="gr-hours">{escape(hours)}</span>' if hours else ""
     return (
-        '<div class="gr-card"><div>'
+        f'<div class="gr-card" data-slug="{escape(point["slug"])}" tabindex="0"><div>'
         f'<a class="gr-card-name" href="{details}" target="_blank">{rank}. {name}</a>'
         f'<div class="gr-meta"><span class="gr-badge gr-{status}">{t("status_" + status)}</span>{hours_html}</div>'
         '</div><div class="gr-side">'
@@ -353,6 +355,7 @@ with map_column:
             "name": point[f"name_{lang}"],
             "category": point["category"],
             "near": point["slug"] in near_slugs,
+            "slug": point["slug"],
         }
         for _, point in shown.iterrows()
     ]

@@ -139,6 +139,7 @@ function render(maplibregl, component) {
 
   state.markers.forEach((marker) => marker.remove());
   state.markers = [];
+  state.bySlug = {};
   const ordered = [...data.points].sort((a, b) => Number(a.near) - Number(b.near));
   for (const p of ordered) {
     const hub = p.category === "hub";
@@ -147,11 +148,19 @@ function render(maplibregl, component) {
     el.addEventListener("mouseenter", () => {
       state.tip.setOffset(tipOffset(p.near ? 56 : 46)).setLngLat([p.lng, p.lat]).setText(p.name).addTo(state.map);
     });
-    el.addEventListener("mouseleave", () => state.tip.remove());
+    // Leaving a pin brings back the label of a card the user tapped, if there is one.
+    el.addEventListener("mouseleave", () => (state.pinned ? showPin(state, state.pinned, false) : state.tip.remove()));
+    state.bySlug[p.slug] = { el, p };
     state.markers.push(
       new maplibregl.Marker({ element: el, anchor: "bottom" }).setLngLat([p.lng, p.lat]).addTo(state.map)
     );
   }
+  if (!state.cardsHooked) {
+    hookCards(state);
+    state.cardsHooked = true;
+  }
+  // The pins were just rebuilt: put the tapped card's highlight back.
+  if (state.pinned && state.bySlug[state.pinned]) showPin(state, state.pinned, false);
 
   if (state.origin) {
     state.origin.remove();
@@ -190,6 +199,60 @@ function tipOffset(lift) {
   };
 }
 
+// Highlight one pin: bigger, on top, with its name. pan=true also brings it into view if it's off the map.
+function showPin(state, slug, pan) {
+  const entry = state.bySlug[slug];
+  if (!entry) return;
+  if (state.active && state.active !== slug && state.bySlug[state.active]) {
+    state.bySlug[state.active].el.classList.remove("gr-pin-active");
+  }
+  state.active = slug;
+  const { el, p } = entry;
+  el.classList.add("gr-pin-active");
+  state.tip.setOffset(tipOffset((p.near ? 56 : 46) * 1.25)).setLngLat([p.lng, p.lat]).setText(p.name).addTo(state.map);
+  if (pan && !state.map.getBounds().contains([p.lng, p.lat])) {
+    state.map.easeTo({ center: [p.lng, p.lat], duration: 600 });
+  }
+}
+
+function hidePin(state) {
+  if (state.active && state.bySlug[state.active]) state.bySlug[state.active].el.classList.remove("gr-pin-active");
+  state.active = null;
+  state.tip.remove();
+}
+
+// The nearest-point cards are plain HTML in the same page, marked with data-slug. Events are caught on the
+// document, because Streamlit redraws the cards on every rerun. Hover or focus shows the pin while the card
+// is under the pointer; a tap or click keeps it shown until the next tap somewhere else.
+function hookCards(state) {
+  const cardOf = (e) => (e.target instanceof Element ? e.target.closest(".gr-card[data-slug]") : null);
+  document.addEventListener("mouseover", (e) => {
+    const card = cardOf(e);
+    if (card) showPin(state, card.dataset.slug, false);
+  });
+  document.addEventListener("mouseout", (e) => {
+    const card = cardOf(e);
+    if (card && !card.contains(e.relatedTarget)) {
+      state.pinned ? showPin(state, state.pinned, false) : hidePin(state);
+    }
+  });
+  document.addEventListener("focusin", (e) => {
+    const card = cardOf(e);
+    if (card) showPin(state, card.dataset.slug, true);
+  });
+  document.addEventListener("click", (e) => {
+    const card = cardOf(e);
+    if (card) {
+      if (e.target.closest("a")) return;   // the name and Directions are links; let them open
+      state.pinned = card.dataset.slug;
+      showPin(state, state.pinned, true);
+    } else if (state.pinned && !(e.target instanceof Element && e.target.closest(".gr-map"))) {
+      state.pinned = null;
+      hidePin(state);
+    }
+  });
+}
+
 export default function (component) {
   loadLibrary().then((maplibregl) => render(maplibregl, component));
 }
@@ -211,6 +274,10 @@ CSS = """
   }
 }
 .gr-pin { cursor: pointer; }
+.gr-pin svg { transition: transform .15s ease-out; transform-origin: 50% 100%; }
+.gr-pin.gr-pin-active { z-index: 5 !important; }
+.gr-pin.gr-pin-active svg { transform: scale(1.25); }
+@media (prefers-reduced-motion: reduce) { .gr-pin svg { transition: none; } }
 .gr-origin {
   width: 16px;
   height: 16px;
