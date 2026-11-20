@@ -7,7 +7,9 @@ CITY_BOUNDS = {"south": 50.95, "north": 51.32, "west": 71.15, "east": 71.65}
 
 
 def haversine_km(lat1, lng1, lat2, lng2):
+    """Distance in km between two points on the Earth. Works on whole numpy arrays at once."""
     lat1, lng1, lat2, lng2 = (np.radians(value) for value in (lat1, lng1, lat2, lng2))
+    # Haversine formula: h is the squared half-chord length between the two points on a unit sphere.
     h = (
         np.sin((lat2 - lat1) / 2) ** 2
         + np.cos(lat1) * np.cos(lat2) * np.sin((lng2 - lng1) / 2) ** 2
@@ -16,6 +18,7 @@ def haversine_km(lat1, lng1, lat2, lng2):
 
 
 def directions_url(origin, lat, lng):
+    """A Google Maps directions link from the start point to a recycling point."""
     return (
         "https://www.google.com/maps/dir/?api=1"
         f"&origin={origin[0]},{origin[1]}&destination={lat},{lng}"

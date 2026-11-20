@@ -236,6 +236,7 @@ _component = st.components.v2.component("greenranger_map", js=JS, css=CSS, isola
 
 
 def map_view(points, origin, center, lang, you_are_here, height):
+    """Draw the MapLibre map with the points and the start point. Returns the result, with .click when the map is clicked."""
     return _component(
         key="map",
         data={

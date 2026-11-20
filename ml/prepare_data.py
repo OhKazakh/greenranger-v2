@@ -17,6 +17,7 @@ IMAGE_EXT = {".jpg", ".jpeg", ".png"}
 
 
 def index(root, folders, source):
+    """List every image in a dataset's class folders as {path, source, label} rows."""
     rows = []
     for folder, label in folders.items():
         directory = root / folder
@@ -29,6 +30,7 @@ def index(root, folders, source):
 
 
 def split(rows):
+    """Mark each row train, val or test, 70/15/15 within each (source, class) group."""
     groups = defaultdict(list)
     for row in rows:
         groups[(row["source"], row["label"])].append(row)
@@ -36,6 +38,7 @@ def split(rows):
     rng = random.Random(SEED)
     for group in groups.values():
         rng.shuffle(group)
+        # Every (dataset, class) group is split on its own, so each split has the same mix.
         n_test = round(len(group) * 0.15)
         n_val = round(len(group) * 0.15)
         for i, row in enumerate(group):
@@ -44,6 +47,7 @@ def split(rows):
 
 
 def main():
+    """Index both datasets, split them and write data/splits.csv."""
     rows = index(DATA / "realwaste" / "realwaste-main" / "RealWaste", REALWASTE, "realwaste")
     rows += index(DATA / "trashnet" / "dataset-resized", TRASHNET, "trashnet")
     rows = split(rows)

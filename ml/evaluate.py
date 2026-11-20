@@ -29,13 +29,16 @@ TARGET_PRECISION = 0.98
 
 
 def predict(session, rows):
+    """Run the ONNX session on every row. Returns (probabilities, true class indices) as arrays."""
     probs = np.concatenate([session.run(None, {"image": x})[0] for x, _ in load_images(rows)])
     labels = np.array([CLASSES.index(row["label"]) for row in rows])
     return probs, labels
 
 
 def pick_threshold(probs, labels):
+    """The lowest confidence at which kept answers are at least TARGET_PRECISION correct."""
     confidence, correct = probs.max(1), probs.argmax(1) == labels
+    # Raise the threshold step by step until the answers it keeps are right often enough.
     for t in np.arange(0.30, 0.96, 0.01):
         kept = confidence >= t
         if kept.any() and correct[kept].mean() >= TARGET_PRECISION:
@@ -44,6 +47,7 @@ def pick_threshold(probs, labels):
 
 
 def main():
+    """Pick the threshold on val, score the test set once, write metrics, labels and the confusion matrix."""
     session = ort.InferenceSession(str(PUBLIC / "waste.onnx"), providers=["CPUExecutionProvider"])
 
     val_probs, val_labels = predict(session, read_split("val"))

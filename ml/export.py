@@ -43,17 +43,21 @@ RAW_TRANSFORM = transforms.Compose([
 
 
 class Exported(nn.Module):
+    """The trained model wrapped for export: takes 0..1 RGB, normalises it inside, returns probabilities."""
     def __init__(self, model):
+        """Keep the model and ImageNet's mean and std as buffers, so they're exported with the graph."""
         super().__init__()
         self.model = model
         self.register_buffer("mean", torch.tensor(MEAN).view(1, 3, 1, 1))
         self.register_buffer("std", torch.tensor(STD).view(1, 3, 1, 1))
 
     def forward(self, x):
+        """Normalise the 0..1 input, run the model, return softmax probabilities."""
         return torch.softmax(self.model((x - self.mean) / self.std), dim=1)
 
 
 def load_images(rows):
+    """Yield (1x3x224x224 array, class index) for each row, preprocessed like evaluation."""
     from PIL import Image
     for row in rows:
         image = Image.open(DATA / row["path"]).convert("RGB")
@@ -61,6 +65,7 @@ def load_images(rows):
 
 
 def accuracy(path, rows):
+    """Top-1 accuracy of an ONNX file on the given rows."""
     session = ort.InferenceSession(str(path), providers=["CPUExecutionProvider"])
     name = session.get_inputs()[0].name
     correct = sum(int(session.run(None, {name: x})[0].argmax() == y) for x, y in load_images(rows))
@@ -68,10 +73,13 @@ def accuracy(path, rows):
 
 
 class Calibration(CalibrationDataReader):
+    """Feeds sample images to onnxruntime's int8 calibration, one at a time."""
     def __init__(self, rows, name):
+        """Make a generator of {input name: image} feeds over the given rows."""
         self.items = ({name: x} for x, _ in load_images(rows))
 
     def get_next(self):
+        """The next feed, or None when there are no images left."""
         return next(self.items, None)
 
 
@@ -96,6 +104,7 @@ def fp16_weights(src, dst):
 
 
 def main():
+    """Export to ONNX, check it against PyTorch, build int8 and fp16 versions, ship the best one."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--arch", default="mobilenet_v3_large")
     args = parser.parse_args()

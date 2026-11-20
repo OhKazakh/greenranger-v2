@@ -24,6 +24,7 @@ CHECKPOINTS = Path(__file__).parent / "checkpoints"
 
 
 def build_model(arch, pretrained=True):
+    """A pretrained network with a new last layer for our classes. Returns (model, head)."""
     if arch == "mobilenet_v3_large":
         weights = models.MobileNet_V3_Large_Weights.IMAGENET1K_V2 if pretrained else None
         model = models.mobilenet_v3_large(weights=weights)
@@ -40,6 +41,7 @@ def build_model(arch, pretrained=True):
 
 
 def run_epoch(model, loader, device, loss_fn, optimizer=None, scheduler=None):
+    """One pass over the loader; trains if an optimizer is given. Returns (mean loss, accuracy)."""
     training = optimizer is not None
     model.train(training)
     total, correct, loss_sum = 0, 0, 0.0
@@ -60,6 +62,7 @@ def run_epoch(model, loader, device, loss_fn, optimizer=None, scheduler=None):
 
 
 def main():
+    """Train the head, then the whole network, keeping the checkpoint with the best val accuracy."""
     parser = argparse.ArgumentParser()
     parser.add_argument("--arch", default="mobilenet_v3_large")
     parser.add_argument("--head-epochs", type=int, default=3)

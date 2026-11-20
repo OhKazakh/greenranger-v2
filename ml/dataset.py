@@ -32,19 +32,24 @@ TRAIN_TRANSFORM = transforms.Compose([
 
 
 def read_split(name):
+    """The rows of data/splits.csv for one split: train, val or test."""
     with open(DATA / "splits.csv") as f:
         return [row for row in csv.DictReader(f) if row["split"] == name]
 
 
 class WasteImages(Dataset):
+    """A PyTorch dataset of one split: (image tensor, class index) pairs."""
     def __init__(self, split, transform):
+        """Read the split's rows and keep the transform to apply to each image."""
         self.rows = read_split(split)
         self.transform = transform
 
     def __len__(self):
+        """Number of images in the split."""
         return len(self.rows)
 
     def __getitem__(self, i):
+        """Load image i as RGB, transform it, and return it with its class index."""
         row = self.rows[i]
         image = Image.open(DATA / row["path"]).convert("RGB")
         return self.transform(image), CLASSES.index(row["label"])

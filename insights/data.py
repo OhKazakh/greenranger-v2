@@ -31,6 +31,7 @@ COLUMNS = {
 
 @st.cache_data(ttl=3600, show_spinner=False)
 def load_locations():
+    """Load all points from the live API, or from the saved snapshot if the API is down. Cached for an hour."""
     try:
         response = requests.get(API_URL, timeout=90)
         response.raise_for_status()
@@ -47,6 +48,7 @@ def load_locations():
 
 @st.cache_data(ttl=86400, show_spinner=False)
 def geocode(address, lang):
+    """Find an address in Astana with OpenStreetMap Nominatim. Returns (lat, lng) or None."""
     viewbox = f"{CITY_BOUNDS['west']},{CITY_BOUNDS['north']},{CITY_BOUNDS['east']},{CITY_BOUNDS['south']}"
     response = requests.get(
         "https://nominatim.openstreetmap.org/search",
@@ -70,20 +72,24 @@ def geocode(address, lang):
 
 
 def filter_points(table, category, materials):
+    """Keep the points of the chosen type that take at least one of the chosen materials."""
     keep = pd.Series(True, index=table.index)
     if category != "all":
         keep &= table["category"] == category
     if materials:
         wanted = set(materials)
+        # A point matches if it takes any of the chosen materials (the two sets overlap).
         keep &= table["materials"].apply(lambda accepted: bool(wanted & set(accepted)))
     return table[keep]
 
 
 def astana_now():
+    """The current time in Astana (UTC+5), whatever the server's timezone."""
     return datetime.now(ASTANA_TIME)
 
 
 def todays_hours(point, now):
+    """Today's opening hours for a point, e.g. "09:00–18:00", or None if it's closed today."""
     if now.weekday() < 5:
         hours = point["weekdays"]
     elif now.weekday() == 5:
@@ -94,6 +100,7 @@ def todays_hours(point, now):
 
 
 def open_status(point, now):
+    """"open", "closed" or "unknown" for a point at the given time."""
     if all(pd.isna(point[day]) for day in ("weekdays", "saturday", "sunday")):
         return "unknown"
 
@@ -106,6 +113,7 @@ def open_status(point, now):
         return "unknown"
 
     open_h, open_m, close_h, close_m = (int(part) for part in match.groups())
+    # Compare as minutes since midnight: open at the opening minute, closed from the closing minute.
     minutes_now = now.hour * 60 + now.minute
     if open_h * 60 + open_m <= minutes_now < close_h * 60 + close_m:
         return "open"
